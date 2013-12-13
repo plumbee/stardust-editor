@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          verticalAlign="middle">
+
+    <fx:Script><![CDATA[
+
+        import idv.cjcat.stardust.common.clocks.SteadyClock;
+
+        private var clock:SteadyClock;
+
+        public function setData(d:SteadyClock):void
+        {
+            clock = d;
+            stepsTextInput.text = clock.ticksPerCall.toString();
+        }
+
+        public function getData():SteadyClock
+        {
+            return clock;
+        }
+
+        private function updateData():void
+        {
+            var numSteps:Number = Number(stepsTextInput.text);
+            if (numSteps > 50)
+            {
+                numSteps = 50;
+                stepsTextInput.text = numSteps.toString();
+            }
+            clock.ticksPerCall = numSteps;
+        }
+        ]]></fx:Script>
+
+    <s:Label text="particles/frame" />
+    <s:TextInput id="stepsTextInput" restrict="0-9." change="updateData()" />
+
+</s:HGroup>

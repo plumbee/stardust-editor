@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:s="library://ns.adobe.com/flex/spark"
+                toolTip="Collision radius is determined by the collision radius initializer">
+
+    <fx:Script><![CDATA[
+        import spark.components.List;
+        ]]></fx:Script>
+
+    <s:layout>
+        <s:HorizontalLayout verticalAlign="middle"/>
+    </s:layout>
+    <s:Label text="Particles will collide with each other." />
+    <s:Spacer width="100%"/>
+    <s:Button label="remove" click="List(owner).dataProvider.removeItemAt( List(owner).dataProvider.getItemIndex(data) )" height="100%"/>
+</s:ItemRenderer>

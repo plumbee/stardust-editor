@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+                toolTip="Limits a particle's maximum traveling speed.">
+
+    <fx:Script><![CDATA[
+        import helpers.Globals;
+
+        import idv.cjcat.stardust.twoD.actions.SpeedLimit;
+
+        import spark.components.List;
+
+        private function updateData(e:Event):void {
+            var dat:SpeedLimit = data as SpeedLimit;
+            dat.limit = Number(textInput.text);
+        }
+
+        override public function set data(d:Object):void {
+            super.data = d;
+            if (d == null) return;
+            var dat:SpeedLimit = data as SpeedLimit;
+            textInput.text = dat.limit.toString();
+        }
+        ]]></fx:Script>
+    <s:layout>
+        <s:HorizontalLayout verticalAlign="middle"/>
+    </s:layout>
+    <s:Label text="Speed limit" />
+    <s:TextInput id="textInput" text="10" restrict="0-9." width="200" change="updateData(event)"/>
+    <s:Spacer width="100%"/>
+    <s:Button label="remove" height="100%"
+              click="List(owner).dataProvider.removeItemAt( List(owner).dataProvider.getItemIndex(data) )"/>
+</s:ItemRenderer>

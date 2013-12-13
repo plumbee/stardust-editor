@@ -1,0 +1,253 @@
+<?xml version="1.0"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+               xmlns:s="library://ns.adobe.com/flex/spark"
+               xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:clocks="view.stardust.common.clocks.*"
+               xmlns:view="view.*" backgroundColor="0x353D3F"
+               creationComplete="init()" frameRate="30" preinitialize="Globals.init()">
+
+    <fx:Script><![CDATA[
+        import helpers.Globals;
+        import helpers.IOHelper;
+        import helpers.LocalConfig;
+        import helpers.LocalConfigEnum;
+        import helpers.StadustElementParser;
+        import helpers.Stats;
+        import helpers.ZoneDrawer;
+
+        import idv.cjcat.stardust.common.actions.Action;
+        import idv.cjcat.stardust.common.actions.Age;
+        import idv.cjcat.stardust.common.actions.DeathLife;
+        import idv.cjcat.stardust.common.clocks.Clock;
+        import idv.cjcat.stardust.common.clocks.SteadyClock;
+        import idv.cjcat.stardust.common.emitters.Emitter;
+        import idv.cjcat.stardust.common.initializers.Initializer;
+        import idv.cjcat.stardust.common.initializers.Life;
+        import idv.cjcat.stardust.common.math.UniformRandom;
+        import idv.cjcat.stardust.sd;
+        import idv.cjcat.stardust.twoD.actions.Move;
+        import idv.cjcat.stardust.twoD.emitters.Emitter2D;
+        import idv.cjcat.stardust.twoD.initializers.PooledDisplayObjectClass;
+        import idv.cjcat.stardust.twoD.initializers.Position;
+        import idv.cjcat.stardust.twoD.initializers.Velocity;
+        import idv.cjcat.stardust.twoD.zones.Line;
+        import idv.cjcat.stardust.twoD.zones.SinglePoint;
+
+        import mx.collections.ArrayCollection;
+        import mx.events.CollectionEvent;
+        import mx.events.CollectionEventKind;
+
+        private var emitter : Emitter2D;
+        private const canvasSP : Sprite = new Sprite();
+        private const initializerAC : ArrayCollection = new ArrayCollection();
+        private const actionAC : ArrayCollection = new ArrayCollection();
+        private var calcTime : int = 0;
+
+        private function init() : void
+        {
+            statsHolder.mx_internal::$addChild( new Stats() );
+            previewGroup.mx_internal::$addChild( canvasSP );
+            canvasSP.mouseChildren = canvasSP.mouseEnabled = false;
+
+            addEventListener( Event.ENTER_FRAME, loop );
+            actionAC.addEventListener( CollectionEvent.COLLECTION_CHANGE, onActionACChange );
+            initializerAC.addEventListener( CollectionEvent.COLLECTION_CHANGE, onInitializerACChange );
+            zonesVisibleCheckBox.selected = Boolean( LocalConfig.getProperty(LocalConfigEnum.ZONES_VISIBLE) );
+
+            var e : Emitter2D = new Emitter2D();
+            e.clock = new SteadyClock( 1 );
+            e.addInitializer( new PooledDisplayObjectClass() );
+            e.addInitializer( new Position( new Line( 10, 10, 300, 10 ) ) );
+            e.addInitializer( new Velocity( new SinglePoint( 0, 2 ) ) );
+            e.addInitializer( new Life( new UniformRandom( 200, 50 ) ) );
+            e.addAction( new Move() );
+            e.addAction( new Age( 1 ) );
+            e.addAction( new DeathLife() );
+
+            parseStardustSim( e );
+        }
+
+        /** Parses and displays a stardust emitter */
+        private function parseStardustSim( e : Emitter ) : void
+        {
+            actionAC.removeAll();
+            actionAC.source = e.sd::actions;
+
+            initializerAC.removeAll();
+            initializerAC.source = e.sd::initializers;
+
+            callLater( startSim );
+        }
+
+        public function startSim() : void
+        {
+            calcTime = 0;
+            var clock : Clock = new SteadyClock(1);
+            if ( emitter )
+            {
+                emitter.clearActions();
+                emitter.clearInitializers();
+                emitter.clearParticles();
+                clock = emitter.clock;
+            }
+
+            emitter = new Emitter2D( clock );
+            clockContainer.setData( emitter );
+
+            for each ( var init : Initializer in initializerAC )
+            {
+                emitter.addInitializer( init );
+            }
+            particleHandlerContainer.setData( emitter, canvasSP );
+
+            for ( var j : int = 0; j < actionAC.length; j++ )
+            {
+                emitter.addAction( actionAC.getItemAt( j ) as Action );
+            }
+            ZoneDrawer.init( emitter, zonesGroup.graphics );
+            ZoneDrawer.drawZones();
+        }
+
+        private function loop( e : Event ) : void
+        {
+            if ( calcTime > 1000 )
+            {
+                infoLabel.text = "ERROR:Simulation time above 1000ms (" + calcTime + "ms), stopping. Change the sim and restart";
+                return;
+            }
+            var startTime : Number = getTimer();
+            var str : String = "num particles: " + emitter.numParticles;
+            try
+            {
+                if ( particleHandlerContainer.isRenderingToBitmap == true )
+                {
+                    var bd : BitmapData = Globals.bitmapData;
+                    bd.lock();
+                    bd.fillRect( bd.rect, 0xFFFFFF );
+                    emitter.step();
+                    bd.unlock();
+                }
+                else
+                {
+                    emitter.step();
+                }
+            }
+            catch ( err : Error )
+            {
+                str = str + " ERROR " + err.message;
+                trace( err.getStackTrace() );
+            }
+            calcTime = getTimer() - startTime;
+            infoLabel.text = str + " sim time: " + calcTime + "ms";
+        }
+
+        private function onActionACChange( e : CollectionEvent ) : void
+        {
+            if ( e.kind == CollectionEventKind.ADD )
+            {
+                emitter.addAction( Action( e.items[0] ) );
+            }
+            if ( e.kind == CollectionEventKind.REMOVE )
+            {
+                emitter.removeAction( Action( e.items[0] ) );
+            }
+            ZoneDrawer.drawZones();
+        }
+
+        private function onInitializerACChange( e : CollectionEvent ) : void
+        {
+            if ( e.kind == CollectionEventKind.ADD )
+            {
+                emitter.addInitializer( Initializer( e.items[0] ) );
+            }
+            if ( e.kind == CollectionEventKind.REMOVE )
+            {
+                emitter.removeInitializer( Initializer( e.items[0] ) );
+            }
+            ZoneDrawer.drawZones();
+        }
+
+        private function getSource() : void
+        {
+            var src : String = StadustElementParser.parseStardustSim( emitter );
+            codeView.visible = true;
+            codeView.textArea.text = src;
+        }
+        ]]></fx:Script>
+
+    <s:Group left="615" right="100" height="100%">
+        <mx:UIComponent width="100%" height="100%" id="background" />
+        <s:Group id="zonesGroup" visible="{zonesVisibleCheckBox.selected}" mouseEnabled="false"
+                 mouseChildren="false"/>
+        <s:Group id="previewGroup"/>
+        <view:CodeView id="codeView" width="100%" bottom="0" height="65%" visible="false"/>
+    </s:Group>
+
+    <s:VGroup height="100%" width="615" paddingLeft="3" paddingTop="3" paddingBottom="3">
+
+        <clocks:ClockContainer id="clockContainer"/>
+
+        <view:ParticleHandlerContainer id="particleHandlerContainer" visible="false" includeInLayout="false"/>
+
+        <view:StardustElementContainer label="Initializers"
+                                        dataProviderAC="{initializerAC}"
+                                        dropdownListAC="{Globals.initializerDDLAC}"
+                                        dataproviderDict="{Globals.initalizerDict}"
+                                        height="100%" width="100%"/>
+
+        <view:StardustElementContainer label="Actions"
+                                        dataProviderAC="{actionAC}"
+                                        dropdownListAC="{Globals.actionsDDLAC}"
+                                        dataproviderDict="{Globals.actionDict}"
+                                        height="100%" width="100%"/>
+    </s:VGroup>
+
+    <s:VGroup height="100%" right="0">
+        <s:Button label="Restart sim" click="startSim()" width="100%"/>
+        <s:Button label="Get source" click="getSource()" width="100%"/>
+        <s:Button label="Save as.." click="IOHelper.saveSim( emitter )" width="100%"/>
+        <s:Button label="Load" click="IOHelper.loadSim( parseStardustSim )" width="100%"/>
+        <s:CheckBox label="Zones visible" id="zonesVisibleCheckBox"
+                change="LocalConfig.saveProperty(LocalConfigEnum.ZONES_VISIBLE, zonesVisibleCheckBox.selected)"/>
+        <view:BackgroundProvider background="{background}" width="100%"/>
+        <s:Spacer height="100%"/>
+        <mx:UIComponent id="statsHolder" height="125"/>
+    </s:VGroup>
+
+    <s:Label id="infoLabel" bottom="5" right="5" backgroundColor="0x11183D"
+             paddingBottom="3" paddingLeft="3" paddingRight="3" paddingTop="3"/>
+
+    <fx:Style>
+        @namespace mx "library://ns.adobe.com/flex/mx";
+        @namespace s "library://ns.adobe.com/flex/spark";
+
+        mx|ToolTip {
+            fontSize: 14px;
+            backgroundColor: #7FB290;
+        }
+
+        s|DropDownList {
+            skinClass: ClassReference("view.skins.DropdownListSkin");
+        }
+
+        s|List {
+            contentBackgroundColor: #2F3B3F;
+            selectionColor: #11183D;
+            rollOverColor: #696969;
+        }
+
+        s|Label {
+            color: #D0D0D0;
+        }
+
+        s|TextInput {
+            color: #DADADA;
+            contentBackgroundColor: #0E2D38;
+        }
+
+        s|Button {
+            color: #D0D0D0;
+            skinClass: ClassReference("view.skins.ButtonSkin");
+        }
+
+    </fx:Style>
+</s:Application>

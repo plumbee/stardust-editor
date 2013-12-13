@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:sparkcolorpicker="view.components.sparkcolorpicker.*"
+          paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4"
+          creationComplete="creationCompleteHandler(event)">
+
+    <fx:Script><![CDATA[
+        import helpers.LocalConfig;
+        import helpers.LocalConfigEnum;
+
+        import mx.core.UIComponent;
+        import mx.events.FlexEvent;
+        import mx.events.ResizeEvent;
+
+        private var _loadFile:FileReference;
+        private var _background:UIComponent;
+
+        private function creationCompleteHandler(event:FlexEvent):void {
+            if ( LocalConfig.getProperty( LocalConfigEnum.BACKGROUND_COLOR ) )
+            {
+                colorPicker.current.color = uint(LocalConfig.getProperty( LocalConfigEnum.BACKGROUND_COLOR ));
+                onColorPickerChange();
+            }
+        }
+
+        public function set background(bg:UIComponent):void {
+            if (_background) {
+                _background.removeEventListener(ResizeEvent.RESIZE, onBackgroundResize);
+            }
+            _background = bg;
+        }
+
+        private function onColorPickerChange():void {
+            _background.removeChildren();
+            _background.graphics.clear();
+            _background.graphics.beginFill(colorPicker.selectedColor);
+            _background.graphics.drawRect(0, 0, _background.width, _background.height);
+            _background.addEventListener(ResizeEvent.RESIZE, onBackgroundResize);
+            LocalConfig.saveProperty(LocalConfigEnum.BACKGROUND_COLOR, colorPicker.selectedColor);
+        }
+
+        private function onBackgroundResize(e:Event):void {
+            _background.graphics.clear();
+            _background.graphics.beginFill(colorPicker.selectedColor);
+            _background.graphics.drawRect(0, 0, _background.width, _background.height);
+        }
+
+        private function loadImage():void {
+            _loadFile = new FileReference();
+            _loadFile.addEventListener(Event.SELECT, selectHandler);
+            var fileFilter:FileFilter = new FileFilter("Images: (*.jpeg, *.jpg, *.gif, *.png)", "*.jpeg; *.jpg; *.gif; *.png");
+            _loadFile.browse([fileFilter]);
+        }
+
+        private function selectHandler(event:Event):void {
+            _loadFile.removeEventListener(Event.SELECT, selectHandler);
+            _loadFile.addEventListener(Event.COMPLETE, loadCompleteHandler);
+            _loadFile.load();
+        }
+
+        private function loadCompleteHandler(event:Event):void {
+            _loadFile.removeEventListener(Event.COMPLETE, loadCompleteHandler);
+            var loader:Loader = new Loader();
+            loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadBytesHandler);
+            loader.loadBytes(_loadFile.data);
+        }
+
+        private function loadBytesHandler(event:Event):void {
+            var loaderInfo:LoaderInfo = (event.target as LoaderInfo);
+            loaderInfo.removeEventListener(Event.COMPLETE, loadBytesHandler);
+            _background.removeChildren();
+            _background.graphics.clear();
+            _background.removeEventListener(ResizeEvent.RESIZE, onBackgroundResize);
+            _background.addChild(loaderInfo.content);
+            LocalConfig.deleteProperty( LocalConfigEnum.BACKGROUND_COLOR );
+        }
+
+        ]]></fx:Script>
+
+    <s:Rect includeInLayout="false" width="{width}" height="{height}">
+        <s:stroke><s:SolidColorStroke color="0x787878" /></s:stroke>
+        <s:fill><s:SolidColor color="0x2F3B3F"/></s:fill>
+    </s:Rect>
+
+    <s:Label text="Background" />
+
+    <s:HGroup verticalAlign="middle" >
+        <s:Label text="color" />
+        <sparkcolorpicker:SparkColorPicker id="colorPicker" change="onColorPickerChange()"
+                skinClass="view.components.sparkcolorpicker.ColorPickerListSkin"/>
+    </s:HGroup>
+
+    <s:Button label="..or image" click="loadImage()" width="100%"/>
+
+</s:VGroup>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:math="view.stardust.common.math.*"
+                toolTip="Sets a particle's angular velocity, in degrees per emitter step. Has only effect, if it has a 'spin' action">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardust.common.math.UniformRandom;
+        import idv.cjcat.stardust.twoD.initializers.Omega;
+
+        import spark.components.List;
+
+        override public function set data(d:Object):void {
+            super.data = d;
+            if (d == null) return;
+            var dat:Omega = data as Omega;
+            if (dat.random is UniformRandom) {
+                randomMath.setData(dat.random as UniformRandom);
+            }
+        }
+        ]]></fx:Script>
+    <s:layout>
+        <s:HorizontalLayout verticalAlign="middle"/>
+    </s:layout>
+
+    <s:Label text="Angular velocity" />
+    <math:UniformRandomMath id="randomMath" />
+    <s:Spacer width="100%" />
+    <s:Button label="remove" height="100%"
+              click="List(owner).dataProvider.removeItemAt( List(owner).dataProvider.getItemIndex(data) )"/>
+</s:ItemRenderer>

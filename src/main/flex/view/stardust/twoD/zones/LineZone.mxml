@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          verticalAlign="middle" >
+
+    <fx:Script><![CDATA[
+        import helpers.ZoneDrawer;
+
+        import idv.cjcat.stardust.twoD.zones.Line;
+
+        private var zone:Line;
+
+        public function setData(d:Line):void
+        {
+            zone = d;
+            x1.text = d.x1.toString();
+            y1.text = d.y1.toString();
+            x2.text = d.x2.toString();
+            y2.text = d.y2.toString();
+        }
+
+        public function getData():Line
+        {
+            return zone;
+        }
+
+        private function updateData() : void
+        {
+            zone.x1 = Number(x1.text);
+            zone.y1 = Number(y1.text);
+            zone.x2 = Number(x2.text);
+            zone.y2 = Number(y2.text);
+            ZoneDrawer.drawZones();
+        }
+        ]]></fx:Script>
+
+   <s:Label text="x1" />
+   <s:TextInput id="x1" restrict="0-9.\-" width="50" change="updateData()"/>
+
+    <s:Label text="y1" />
+    <s:TextInput id="y1" restrict="0-9.\-" width="50" change="updateData()"/>
+
+    <s:Label text="x2" />
+    <s:TextInput id="x2" restrict="0-9.\-" width="50" change="updateData()"/>
+
+    <s:Label text="y2" />
+    <s:TextInput id="y2" restrict="0-9.\-" width="50" change="updateData()"/>
+
+</s:HGroup>

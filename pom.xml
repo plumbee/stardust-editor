@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.plumbee</groupId>
+	<artifactId>stardust-editor</artifactId>
+	<version>2</version>
+	<packaging>swf</packaging>
+
+	<name>Stardust editor</name>
+	<description>Stardust editor</description>
+
+    <repositories>
+        <repository>
+            <id>flex-mojos-repository</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+        </repository>
+
+        <repository>
+            <id>plumbee-maven-repo</id>
+            <name>S3 main repo repo</name>
+            <url>s3://plumbee-maven-repo/mainrepo</url>
+        </repository>
+
+        <!-- this is NOT an official starling repo. It does not even have the latest version -->
+        <repository>
+            <id>starling-repository-trylogic</id>
+            <url>http://repository-trylogic.forge.cloudbees.com/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>flex-mojos-plugin-repository</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+	<properties>
+		<flexmojos.version>6.0.1</flexmojos.version>
+		<flex.version>4.6.0.23201</flex.version>
+        <swf.version>17</swf.version>
+        <flash.player.version>11.4</flash.player.version>
+	</properties>
+
+    <!-- Change this part to your own S3 repository details -->
+    <distributionManagement>
+        <repository>
+            <id>s3account</id>
+            <name>S3 Release repo</name>
+            <url>s3://plumbee-maven-repo/mainrepo</url>
+        </repository>
+        <snapshotRepository>
+            <id>s3account</id>
+            <name>S3 Snapshot repo</name>
+            <url>s3://plumbee-maven-repo/mainrepo</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+	<build>
+
+        <extensions>
+            <extension>
+                <groupId>org.springframework.build</groupId>
+                <artifactId>aws-maven</artifactId>
+                <version>4.4.0.RELEASE</version>
+            </extension>
+        </extensions>
+
+		<sourceDirectory>src/main/flex</sourceDirectory>
+		<testSourceDirectory>src/test/flex</testSourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>net.flexmojos.oss</groupId>
+				<artifactId>flexmojos-maven-plugin</artifactId>
+				<version>${flexmojos.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<testTimeout>200000</testTimeout>
+					<footer>Stardust editor. Plumbee ltd.</footer>
+					<leftFramesetWidth>320</leftFramesetWidth>
+					<mainTitle>Stardust editor API documentation</mainTitle>
+					<windowTitle>Stardust editor API documentation</windowTitle>
+					<targetPlayer>${flash.player.version}</targetPlayer>
+					<swfVersion>${swf.version}</swfVersion>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.adobe.flex</groupId>
+						<artifactId>compiler</artifactId>
+						<version>${flex.version}</version>
+						<type>pom</type>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>flex-framework</artifactId>
+            <version>${flex.version}</version>
+            <type>pom</type>
+        </dependency>
+		
+		<dependency>
+			<groupId>com.plumbee</groupId>
+			<artifactId>stardust-library</artifactId>
+			<version>2</version>
+			<type>swc</type>
+		</dependency>
+
+    </dependencies>
+
+</project>

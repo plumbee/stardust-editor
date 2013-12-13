@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:s="library://ns.adobe.com/flex/spark"
+                addedToStage="init()"
+                removedFromStage="destroy()">
+
+    <fx:Script><![CDATA[
+        import helpers.CenteredBitmap;
+        import helpers.SpriteSheetBitmap;
+
+        import idv.cjcat.stardust.twoD.display.Square;
+        import idv.cjcat.stardust.twoD.initializers.PooledDisplayObjectClass;
+
+        import mx.core.FlexGlobals;
+
+        private const fileReference : FileReference = new FileReference();
+        [Bindable] private var sourceBD : BitmapData;
+
+        private function init():void
+        {
+            fileReference.addEventListener(Event.SELECT, fileReference_select);
+            fileReference.addEventListener(Event.COMPLETE, fileReference_complete);
+        }
+
+        private function destroy():void
+        {
+            fileReference.removeEventListener(Event.SELECT, fileReference_select);
+            fileReference.removeEventListener(Event.COMPLETE, fileReference_complete);
+        }
+
+        override public function set data(d:Object):void
+        {
+            super.data = d;
+            var dat : PooledDisplayObjectClass = PooledDisplayObjectClass( super.data );
+            if ( dat == null )
+            {
+                return;
+            }
+            validateNow(); // radio buttons suck
+            if ( dat.displayObjectClass == SpriteSheetBitmap )
+            {
+                spriteSheetRadioButton.selected = true;
+                sourceBD = dat.constructorParams[0];
+                widthTextInput.text = dat.constructorParams[1];
+                heightTextInput.text = dat.constructorParams[2];
+                speedTextInput.text = dat.constructorParams[3];
+                randomFrameCB.selected = dat.constructorParams[4];
+            }
+            else if ( dat.displayObjectClass == CenteredBitmap )
+            {
+                singleImageRadioButton.selected = true;
+                sourceBD = dat.constructorParams[0];
+            }
+            else
+            {
+                // add some initial stuff if nothing is set
+                dat.displayObjectClass = Square;
+                dat.constructorParams = [10,0xc5c5c5,1,0];
+            }
+        }
+
+        private function browseBtn_clickHandler():void
+        {
+            var arr:Array = [ new FileFilter("Images", ".gif;*.jpeg;*.jpg;*.png") ];
+            fileReference.browse(arr);
+        }
+
+        private function fileReference_select(evt:Event) : void
+        {
+            fileReference.load();
+        }
+
+        private function fileReference_complete(event:Event) : void
+        {
+            var loader:Loader = new Loader();
+            loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loader_complete);
+            loader.loadBytes(fileReference.data);
+        }
+
+        public function loader_complete(event:Event) : void
+        {
+            sourceBD = (event.currentTarget.loader.content as Bitmap).bitmapData;
+            widthTextInput.text = sourceBD.width.toString();
+            heightTextInput.text = sourceBD.height.toString();
+            onImagePropsChange();
+        }
+
+        private function onImagePropsChange() : void
+        {
+            if ( int(widthTextInput.text) < 1 )
+            {
+                widthTextInput.text = "1";
+            }
+            if ( int(heightTextInput.text) < 1 )
+            {
+                heightTextInput.text = "1";
+            }
+            if ( sourceBD == null )
+            {
+                return;
+            }
+            var dat:PooledDisplayObjectClass = PooledDisplayObjectClass( super.data );
+            dat.displayObjectClass = null;
+            if ( spriteSheetRadioButton.selected )
+            {
+                dat.constructorParams = [sourceBD,
+                                         int(widthTextInput.text),
+                                         int(heightTextInput.text),
+                                         uint(speedTextInput.text),
+                                         randomFrameCB.selected];
+                dat.displayObjectClass = SpriteSheetBitmap;
+            }
+            else
+            {
+                dat.constructorParams = [sourceBD];
+                dat.displayObjectClass = CenteredBitmap;
+            }
+            callLater( Stardusttool(FlexGlobals.topLevelApplication).startSim );
+        }
+
+        ]]></fx:Script>
+
+    <s:layout>
+        <s:VerticalLayout />
+    </s:layout>
+
+    <s:HGroup verticalAlign="middle">
+        <s:Label text="Graphic asset" />
+
+        <s:Image maxWidth="40" maxHeight="40" source="{sourceBD}" />
+
+        <s:Button label="Browse" click="browseBtn_clickHandler()"/>
+
+        <s:RadioButton groupName="rbg" label="Single image" selected="true" enabled="{sourceBD != null}"
+                       id="singleImageRadioButton" change="callLater(onImagePropsChange)" />
+        <s:RadioButton groupName="rbg" label="Sprite sheet" enabled="{sourceBD != null}"
+                       id="spriteSheetRadioButton" change="callLater(onImagePropsChange)"/>
+    </s:HGroup>
+
+    <s:HGroup visible="{spriteSheetRadioButton.selected}" verticalAlign="middle"
+              includeInLayout="{spriteSheetRadioButton.selected}">
+        <s:Label text="Single image width" />
+        <s:TextInput id="widthTextInput" restrict="0-9" width="50"  change="onImagePropsChange()" />
+
+        <s:Label text="height" />
+        <s:TextInput id="heightTextInput" restrict="0-9" width="50"  change="onImagePropsChange()" />
+
+        <s:Label text="anim. speed" />
+        <s:TextInput id="speedTextInput" text="1" restrict="0-9" width="50" change="onImagePropsChange()" />
+
+        <s:CheckBox label="start at random frame?" id="randomFrameCB" change="onImagePropsChange()"/>
+    </s:HGroup>
+
+</s:ItemRenderer>

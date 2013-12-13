@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:s="library://ns.adobe.com/flex/spark"
+                xmlns:math="view.stardust.common.math.*"
+                toolTip="Sets the scale of a particle.">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardust.common.initializers.Scale;
+        import idv.cjcat.stardust.common.math.UniformRandom;
+
+        import spark.components.List;
+
+        override public function set data(d:Object):void
+        {
+            super.data = d;
+            if (d == null) return;
+            var dat:Scale = data as Scale;
+            if (dat.random is UniformRandom)
+            {
+                randomMath.setData(dat.random as UniformRandom);
+            }
+        }
+
+        ]]></fx:Script>
+
+    <s:layout>
+        <s:HorizontalLayout verticalAlign="middle"/>
+    </s:layout>
+
+    <s:Label text="Scale" />
+    <math:UniformRandomMath id="randomMath" width="100%"/>
+    <s:Button label="remove" height="100%"
+              click="List(owner).dataProvider.removeItemAt( List(owner).dataProvider.getItemIndex(data) )"/>
+</s:ItemRenderer>

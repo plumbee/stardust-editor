@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:math="view.stardust.common.math.*"
+                toolTip="Applies acceleration perpendicular to a particle's heading.">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardust.common.math.UniformRandom;
+        import idv.cjcat.stardust.twoD.actions.NormalDrift;
+
+        import spark.components.List;
+
+        override public function set data(d:Object):void
+        {
+            super.data = d;
+            if (d == null) return;
+            var dat:NormalDrift = data as NormalDrift;
+            maxInput.text = dat.max.toString();
+            massCheckBox.selected = dat.massless;
+            if (dat.random is UniformRandom) {
+                randomMath.setData(dat.random as UniformRandom);
+            }
+        }
+
+        private function updateData(e:Event):void
+        {
+            var dat:NormalDrift = data as NormalDrift;
+            dat.max = Number(maxInput.text);
+            dat.massless = massCheckBox.selected;
+        }
+
+        ]]></fx:Script>
+    <s:layout>
+        <s:HorizontalLayout verticalAlign="middle"/>
+    </s:layout>
+
+    <s:Label text="Perp. accel." />
+
+    <s:Label text="max" />
+    <s:TextInput id="maxInput" restrict="0-9.\-" width="50" change="updateData(event)"
+                 toolTip="The acceleration ranges from -max to max."/>
+
+    <s:CheckBox label="massless?" id="massCheckBox" change="updateData(event)" />
+    <math:UniformRandomMath id="randomMath" />
+
+    <s:Spacer width="100%" />
+    <s:Button label="remove" height="100%"
+              click="List(owner).dataProvider.removeItemAt( List(owner).dataProvider.getItemIndex(data) )"/>
+</s:ItemRenderer>
+

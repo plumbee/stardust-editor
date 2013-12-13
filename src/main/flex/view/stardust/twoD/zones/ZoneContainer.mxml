@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark">
+    <fx:Script><![CDATA[
+        import helpers.DropdownListVO;
+        import helpers.ZoneDrawer;
+
+        import idv.cjcat.stardust.common.StardustElement;
+        import idv.cjcat.stardust.twoD.display.Circle;
+        import idv.cjcat.stardust.twoD.zones.CircleContour;
+
+        import idv.cjcat.stardust.twoD.zones.Line;
+        import idv.cjcat.stardust.twoD.zones.RectContour;
+        import idv.cjcat.stardust.twoD.zones.RectZone;
+        import idv.cjcat.stardust.twoD.zones.SinglePoint;
+        import idv.cjcat.stardust.twoD.zones.Zone;
+
+        import mx.collections.ArrayCollection;
+        import mx.collections.Sort;
+        import mx.events.FlexEvent;
+
+        import spark.collections.SortField;
+
+        private const zonesAC : ArrayCollection = new ArrayCollection( [
+            new DropdownListVO( "Line", Line, LineZone ),
+            new DropdownListVO( "Point", SinglePoint, SinglePointZone ),
+            new DropdownListVO( "Rectangle", idv.cjcat.stardust.twoD.zones.RectZone, view.stardust.twoD.zones.RectZone ),
+            new DropdownListVO( "Rectangle contour", RectContour, RectContourZone ),
+            new DropdownListVO( "Circle", idv.cjcat.stardust.twoD.zones.CircleZone, CircleZone ),
+            new DropdownListVO( "Circle contour", CircleContour, CircleContourZone )
+        ] );
+
+        private var itemWithZone : StardustElement;
+        private var zoneField : String;
+
+        private function onSelChange() : void
+        {
+            var it : DropdownListVO = DropdownListVO( ddl.selectedItem );
+            if ( (itemWithZone[zoneField] is it.stardustClass) == false )
+            {
+                itemWithZone[zoneField] = Zone( new it.stardustClass() );
+                content.removeAllElements();
+                content.addElement( new it.viewClass() );
+            }
+            Object( content.getElementAt( 0 ) ).setData( itemWithZone[zoneField] );
+            ZoneDrawer.drawZones();
+        }
+
+        public function setData( _itemWithZone : StardustElement, _zoneField : String ) : void
+        {
+            itemWithZone = _itemWithZone;
+            zoneField = _zoneField;
+            var z : Zone = itemWithZone[zoneField];
+            if ( z is Line )
+            {
+                ddl.selectedIndex = 0;
+            }
+            else if ( z is SinglePoint )
+            {
+                ddl.selectedIndex = 1;
+            }
+            else if ( z is idv.cjcat.stardust.twoD.zones.RectZone )
+            {
+                ddl.selectedIndex = 2;
+            }
+            else if ( z is RectContour )
+            {
+                ddl.selectedIndex = 3;
+            }
+            else if ( z is Circle )
+            {
+                ddl.selectedIndex = 4;
+            }
+            else if ( z is CircleContour )
+            {
+                ddl.selectedIndex = 5;
+            }
+            ddl.validateProperties();
+            if ( content.numElements == 0 )
+            {
+                var selectedItem : DropdownListVO = DropdownListVO( ddl.selectedItem );
+                content.addElement( new selectedItem.viewClass() );
+            }
+            onSelChange();
+        }
+        ]]></fx:Script>
+
+    <s:HGroup verticalAlign="middle">
+        <s:Label text="Zone type:" />
+        <s:DropDownList id="ddl" dataProvider="{zonesAC}" change="onSelChange()"
+                        labelField="name" requireSelection="true" selectedIndex="0"/>
+    </s:HGroup>
+    <s:Group id="content" />
+
+</s:VGroup>

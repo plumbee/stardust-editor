@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:s="library://ns.adobe.com/flex/spark"
+                opaqueBackground="0x565656" autoDrawBackground="false" width="100%">
+
+    <fx:Script><![CDATA[
+        import helpers.ZoneDrawer;
+
+        import idv.cjcat.stardust.twoD.deflectors.LineDeflector;
+
+        import spark.components.DataGroup;
+
+        override public function set data(d:Object):void
+        {
+            super.data = d;
+            if (d == null) return;
+            var dat:LineDeflector = data as LineDeflector;
+            xTextInput.text = dat.x.toString();
+            yTextInput.text = dat.y.toString();
+            slopeTextInput.text = (dat.normal.angle+90).toString();
+            frictionTextInput.text = dat.bounce.toString();
+        }
+
+        private function updateData():void
+        {
+            var dat:LineDeflector = data as LineDeflector;
+            dat.x = Number(xTextInput.text);
+            dat.y = Number(yTextInput.text);
+            dat.normal.angle = Number(slopeTextInput.text)-90;
+            dat.bounce = Number(frictionTextInput.text);
+            ZoneDrawer.drawZones();
+        }
+        ]]></fx:Script>
+
+
+    <s:layout>
+        <s:HorizontalLayout verticalAlign="middle" paddingTop="1" paddingBottom="1"/>
+    </s:layout>
+
+    <s:VGroup>
+        <s:HGroup verticalAlign="middle">
+            <s:Label text="x" />
+            <s:TextInput id="xTextInput" restrict="0-9.\-" width="50" change="updateData()"/>
+
+            <s:Label text="y" />
+            <s:TextInput id="yTextInput" restrict="0-9.\-" width="50" change="updateData()"/>
+        </s:HGroup>
+
+        <s:HGroup verticalAlign="middle">
+            <s:Label text="angle(degrees)" />
+            <s:TextInput id="slopeTextInput" restrict="0-9.\-" width="50" change="updateData()"
+                         toolTip="0-360 degrees"/>
+
+            <s:Label text="bounciness" />
+            <s:TextInput id="frictionTextInput" restrict="0-9.\-" width="50" change="updateData()" />
+        </s:HGroup>
+    </s:VGroup>
+
+    <s:Spacer width="100%"/>
+    <s:Button label="remove" click="DataGroup(owner).dataProvider.removeItemAt( DataGroup(owner).dataProvider.getItemIndex(data) )"/>
+</s:ItemRenderer>

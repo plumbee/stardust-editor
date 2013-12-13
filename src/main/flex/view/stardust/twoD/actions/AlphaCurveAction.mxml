@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+                toolTip="Alters a particle's alpha value according to its age.">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardust.common.actions.AlphaCurve;
+
+        import spark.components.List;
+
+        private function updateData():void
+        {
+            var dat:AlphaCurve = data as AlphaCurve;
+            dat.inAlpha = Number(initAlphaTextInput.text);
+            dat.inLifespan = Number(inLifeTextInput.text);
+            dat.outAlpha = Number(outAlphaTextInput.text);
+            dat.outLifespan = Number(outLifeTextInput.text);
+        }
+
+        override public function set data(d:Object):void {
+            super.data = d;
+            if (d == null) return;
+            var dat:AlphaCurve = AlphaCurve(data);
+            initAlphaTextInput.text = dat.inAlpha.toString();
+            inLifeTextInput.text = dat.inLifespan.toString();
+            outAlphaTextInput.text = dat.outAlpha.toString();
+            outLifeTextInput.text = dat.outLifespan.toString();
+        }
+        ]]></fx:Script>
+    <s:layout>
+        <s:HorizontalLayout verticalAlign="middle"/>
+    </s:layout>
+
+    <s:Label text="Change alpha" />
+
+    <s:VGroup width="100%">
+        <s:HGroup width="100%" verticalAlign="middle">
+            <s:Label text="init. alpha" />
+            <s:TextInput id="initAlphaTextInput" restrict="0-9.\-" width="50" change="updateData()"
+                         toolTip="The initial alpha value of a particle."/>
+
+            <s:Label text="init trans. time" />
+            <s:TextInput id="inLifeTextInput" restrict="0-9.\-" width="50" change="updateData()"
+                         toolTip="The transition age of alpha value from the initial alpha to the normal alpha."/>
+        </s:HGroup>
+
+        <s:HGroup width="100%" verticalAlign="middle">
+            <s:Label text="final alpha" />
+            <s:TextInput id="outAlphaTextInput" restrict="0-9.\-" width="50" change="updateData()"
+                         toolTip="The final alpha value of a particle."/>
+
+            <s:Label text="final trans. time" />
+            <s:TextInput id="outLifeTextInput" restrict="0-9.\-" width="50" change="updateData()"
+                         toolTip="The transition lifespan of alpha value from the normal alpha to the final alpha."/>
+        </s:HGroup>
+    </s:VGroup>
+
+    <s:Button label="remove" height="100%"
+              click="List(owner).dataProvider.removeItemAt( List(owner).dataProvider.getItemIndex(data) )"/>
+</s:ItemRenderer>

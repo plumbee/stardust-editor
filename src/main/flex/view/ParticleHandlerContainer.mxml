@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<!--
+particle handlers
+    - DisplayObject: Adds the particle's displayObject to the stage - NEEDS displayObject initializer!
+    - BitmapHandler: Draws the particle's displayObject into a bitmapData - NEEDS displayObject initializer!
+    - SingularBitmapHandler: Draws the specified DisplayObject into a bitmapData
+    - PixelHandler: draws a pixel into a bitmapdata
+
+Initializers:
+    - DisplayObjectClass - sets the particle's target prop to the specified DisplayObject
+    - PooledDisplayObjectClass - same, just does not create a new particle every time, it uses a pool instead.
+
+TODO:
+- somehow BitmapHandler and SingularBitmapHandler are slow. Look into this.
+- setting this messes up saving/loading!
+ -->
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+        paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4">
+    <fx:Script><![CDATA[
+        import helpers.Globals;
+
+        import idv.cjcat.stardust.common.initializers.Initializer;
+
+        import idv.cjcat.stardust.sd;
+
+        import idv.cjcat.stardust.twoD.emitters.Emitter2D;
+        import idv.cjcat.stardust.twoD.handlers.BitmapHandler;
+        import idv.cjcat.stardust.twoD.handlers.DisplayObjectHandler;
+        import idv.cjcat.stardust.twoD.handlers.PixelHandler;
+        import idv.cjcat.stardust.twoD.handlers.SingularBitmapHandler;
+        import idv.cjcat.stardust.twoD.initializers.PooledDisplayObjectClass;
+
+        import mx.core.FlexGlobals;
+
+        use namespace sd;
+
+        private var canvas:Sprite;
+
+        public function setData( emitter:Emitter2D, _canvas:Sprite ):void
+        {
+            canvas = _canvas;
+            while (canvas.numChildren > 0)
+            {
+                canvas.removeChildAt(0);
+            }
+            if (displayObjectRadioButton.selected)
+            {
+                emitter.particleHandler = new DisplayObjectHandler(canvas);
+            }
+            else if (bitmapRadioButton.selected)
+            {
+                emitter.particleHandler = new BitmapHandler(setupBitmap(), blendModeList.selectedItem);
+            }
+            else if (singularBitmapRadioButton.selected)
+            {
+                var sh:Shape = new Shape();
+                sh.graphics.beginFill(0xa6a1bc);
+                sh.graphics.drawRect(0, 0, 10, 10);
+                var bd:BitmapData = new BitmapData(10, 10);
+                bd.draw(sh);
+                emitter.particleHandler = new SingularBitmapHandler(sh, setupBitmap(), blendModeList.selectedItem);
+            }
+            else if ( pixelRadioButton.selected )
+            {
+                emitter.particleHandler = new PixelHandler(setupBitmap());
+            }
+            if ( singularBitmapRadioButton.selected || pixelRadioButton.selected || noneRadioButton.selected)
+            {
+                var initializers:Array = emitter.sd::initializers;
+                for each (var init:Initializer in initializers)
+                {
+                    if ( init is PooledDisplayObjectClass )
+                    {
+                        emitter.removeInitializer(init);
+                        trace("removing PooledDisplayObjectClass initializer, its not needed by the particle handler.");
+                    }
+                }
+            }
+        }
+
+        private function setupBitmap():BitmapData {
+            var bitmapWidth:int = Number(wiTextInput.text);
+            if (bitmapWidth < 1) {
+                bitmapWidth = 1;
+            }
+            var bitmapHeight:int = Number(heTextInput.text);
+            if (bitmapHeight < 1) {
+                bitmapHeight = 1;
+            }
+            var bitmapData:BitmapData = new BitmapData(bitmapWidth, bitmapHeight);
+            Globals.bitmapData = bitmapData;
+            var bitmap:Bitmap = new Bitmap(bitmapData);
+            canvas.addChild(bitmap);
+            return bitmapData;
+        }
+
+        private function resetSimulation():void {
+            callLater(Stardusttool(FlexGlobals.topLevelApplication).startSim);
+        }
+
+        public function get isRenderingToBitmap():Boolean {
+            if (displayObjectRadioButton.selected || noneRadioButton.selected) {
+                return false;
+            }
+            return true;
+        }
+
+        ]]></fx:Script>
+
+    <s:Rect width="{width}" height="{height}" includeInLayout="false">
+        <s:stroke>
+            <s:SolidColorStroke color="0xa2a2a2" />
+        </s:stroke>
+    </s:Rect>
+
+    <s:Label text="Particle display mode: (Experimental, mostly for performance analysis)" />
+
+    <s:HGroup verticalAlign="middle">
+        <s:RadioButton groupName="rbg" id="displayObjectRadioButton" label="displayObject" change="resetSimulation()" selected="true"/>
+        <s:RadioButton groupName="rbg" id="bitmapRadioButton" label="bitmap" change="resetSimulation()"/>
+        <s:RadioButton groupName="rbg" id="singularBitmapRadioButton" label="single bitmap(in progress)" change="resetSimulation()"/>
+        <s:RadioButton groupName="rbg" id="pixelRadioButton" label="pixel" change="resetSimulation()"/>
+        <s:RadioButton groupName="rbg" id="noneRadioButton" label="none" change="resetSimulation()"/>
+    </s:HGroup>
+
+    <s:HGroup visible="{bitmapRadioButton.selected || singularBitmapRadioButton.selected || pixelRadioButton.selected}"
+              includeInLayout="{bitmapRadioButton.selected || singularBitmapRadioButton.selected || pixelRadioButton.selected}"
+              verticalAlign="middle">
+        <s:Label text="render bitmap" />
+        <s:Label text="width" />
+        <s:TextInput id="wiTextInput" text="500" restrict="0-9" width="50" change="resetSimulation()" />
+        <s:Label text="height" />
+        <s:TextInput id="heTextInput" text="500" restrict="0-9" width="50" change="resetSimulation()" />
+        <s:Label text="blend mode" />
+        <s:DropDownList id="blendModeList" dataProvider="{Globals.blendModes}" selectedItem="normal" change="resetSimulation()"
+                enabled="{!pixelRadioButton.selected}"/>
+    </s:HGroup>
+
+
+</s:VGroup>

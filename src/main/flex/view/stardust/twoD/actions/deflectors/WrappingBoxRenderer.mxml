@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+                opaqueBackground="0x565656" autoDrawBackground="false" width="100%"
+                toolTip="Causes particles to reappear on the other side of the box if they hit a wall. The emitter must be inside this box.">
+
+    <fx:Script><![CDATA[
+        import helpers.Globals;
+        import helpers.ZoneDrawer;
+
+        import idv.cjcat.stardust.twoD.deflectors.WrappingBox;
+
+        import spark.components.DataGroup;
+
+        override public function set data(d:Object):void
+        {
+            super.data = d;
+            if (d == null) return;
+            var dat:WrappingBox = data as WrappingBox;
+            xTextInput.text = dat.x.toString();
+            yTextInput.text = dat.y.toString();
+            widthTextInput.text = dat.width.toString();
+            heightTextInput.text = dat.height.toString();
+        }
+
+        private function updateData():void
+        {
+            var dat:WrappingBox = data as WrappingBox;
+            dat.x = Number(xTextInput.text);
+            dat.y = Number(yTextInput.text);
+            dat.width = Number(widthTextInput.text);
+            dat.height = Number(heightTextInput.text);
+            ZoneDrawer.drawZones();
+        }
+        ]]></fx:Script>
+
+    <s:layout>
+        <s:HorizontalLayout verticalAlign="middle" paddingTop="1" paddingBottom="1"/>
+    </s:layout>
+
+    <s:Label text="x" />
+    <s:TextInput id="xTextInput" restrict="0-9.\-" width="50" change="updateData()"/>
+
+    <s:Label text="y" />
+    <s:TextInput id="yTextInput" restrict="0-9.\-" width="50" change="updateData()"/>
+
+    <s:Label text="width" />
+    <s:TextInput id="widthTextInput" restrict="0-9.\-" width="50" change="updateData()"/>
+
+    <s:Label text="height" />
+    <s:TextInput id="heightTextInput" restrict="0-9.\-" width="50" change="updateData()"/>
+    <s:Spacer width="100%"/>
+    <s:Button label="remove" click="DataGroup(owner).dataProvider.removeItemAt( DataGroup(owner).dataProvider.getItemIndex(data) )"/>
+</s:ItemRenderer>
