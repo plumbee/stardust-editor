@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.plumbee</groupId>
-	<artifactId>stardust-sim-editor</artifactId>
+	<artifactId>stardust-editor</artifactId>
 	<version>2.82</version>
 	<packaging>swf</packaging>
 
@@ -60,7 +60,7 @@
 			<plugin>
 				<groupId>com.plumbee</groupId>
 				<artifactId>plumbee-s3-maven-plugin</artifactId>
-				<version>2.3</version>
+				<version>2.13</version>
 				<executions>
 					<execution>
 						<id>upload-assets</id>
