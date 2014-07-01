@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           xmlns:components="com.plumbee.stardust.view.components.*"
+                           toolTip="Causes a particle's rotation to change according to it's angular velocity. Has only effect, if the angular velocity initalizer is set"
+                           nameText="Spin  multiplier">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.actions.Spin;
+
+        private function updateData() : void
+        {
+            var dat : Spin = data as Spin;
+            dat.multiplier = Number(multInput.text);
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : Spin = data as Spin;
+            multInput.text = dat.multiplier.toString();
+        }
+        ]]></fx:Script>
+
+    <components:CustomNumericStepper id="multInput" text="1" stepValue="0.1" width="50" change="updateData()"/>
+
+</twod:PropertyRendererBase>

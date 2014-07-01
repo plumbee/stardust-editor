@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:s="library://ns.adobe.com/flex/spark" xmlns:components="com.plumbee.stardust.view.components.*" >
+
+    <fx:Script><![CDATA[
+        import com.plumbee.stardust.view.events.LoadEmitterImageFromFileReferenceEvent;
+
+        import idv.cjcat.stardustextended.twoD.display.bitmapParticle.BitmapParticle;
+
+        import idv.cjcat.stardustextended.twoD.initializers.BitmapParticleInit;
+
+        import mx.logging.ILogger;
+        import mx.logging.Log;
+
+        private static const LOG : ILogger = Log.getLogger(getQualifiedClassName(BitmapParticleInitalizer).replace("::", "."));
+
+        [Bindable]
+        public var sourceBD : BitmapData;
+
+        override public function set data(dat : Object) : void
+        {
+            super.data = dat;
+            const initializer : BitmapParticleInit = dat as BitmapParticleInit;
+            if (initializer == null)
+            {
+                return;
+            }
+            sourceBD = initializer.bitmapData;
+            if (initializer.bitmapType == BitmapParticleInit.SPRITE_SHEET)
+            {
+                spriteSheetRadioButton.selected = true;
+                //if the spriteSheet width/heights haven't been set, or ar invalid, Set to bitmapData dimensions.
+                if (initializer.spriteSheetSliceWidth == 0 || initializer.spriteSheetSliceHeight == 0)
+                {
+                    widthTextInput.text = initializer.bitmapData.width.toString();
+                    heightTextInput.text = initializer.bitmapData.height.toString();
+                }
+                else
+                {
+                    widthTextInput.text = initializer.spriteSheetSliceWidth.toString();
+                    heightTextInput.text = initializer.spriteSheetSliceHeight.toString();
+                }
+                speedTextInput.text = initializer.spriteSheetAnimationSpeed.toString();
+                randomFrameCB.selected = initializer.spriteSheetStartAtRandomFrame;
+            }
+            else if (initializer.bitmapType == BitmapParticleInit.SINGLE_IMAGE)
+            {
+                singleImageRadioButton.selected = true;
+            }
+            validateNow();
+        }
+
+        private function loadImageFromFile() : void
+        {
+            dispatchEvent(new LoadEmitterImageFromFileReferenceEvent());
+        }
+
+        public function updateUI() : void
+        {
+            data = super.data;
+        }
+
+        private function validateTextInputRange() : void
+        {
+            if (int(widthTextInput.text) < 1)
+            {
+                widthTextInput.text = "1";
+            }
+            if (int(heightTextInput.text) < 1)
+            {
+                heightTextInput.text = "1";
+            }
+        }
+
+        private function onImagePropsChange() : void
+        {
+            validateTextInputRange();
+            const initializer : BitmapParticleInit = data as BitmapParticleInit;
+            validateNow();
+            if (spriteSheetRadioButton.selected)
+            {
+                initializer.bitmapType = BitmapParticleInit.SPRITE_SHEET;
+                //if the spriteSheet width/heights haven't been set, or ar invalid, Set to bitmapData dimensions.
+                if (initializer.spriteSheetSliceWidth == 0 || initializer.spriteSheetSliceHeight == 0)
+                {
+                    widthTextInput.text = initializer.bitmapData.width.toString();
+                    heightTextInput.text = initializer.bitmapData.height.toString();
+                }
+                // If the particle is a sprite sheet every time its dimensions/image changes it gets stored in a static array.
+                // Lots of such changes can potentially lead to out of memory errors, this command will clear the cache.
+                // In a real project this should be called when the sim is not needed anymore.
+                BitmapParticle.clearBitmapCache();
+            }
+            else
+            {
+                initializer.bitmapType = BitmapParticleInit.SINGLE_IMAGE;
+            }
+            initializer.spriteSheetSliceWidth = parseInt(widthTextInput.text);
+            initializer.spriteSheetSliceHeight = parseInt(heightTextInput.text);
+            initializer.spriteSheetAnimationSpeed = parseInt(speedTextInput.text);
+            initializer.spriteSheetStartAtRandomFrame = randomFrameCB.selected;
+        }
+        ]]></fx:Script>
+
+    <s:layout>
+        <s:VerticalLayout/>
+    </s:layout>
+
+    <s:HGroup verticalAlign="middle">
+        <s:Label text="Graphic asset"/>
+
+        <s:Image maxWidth="40" maxHeight="40" source="{sourceBD}"/>
+
+        <s:Button label="Browse" click="loadImageFromFile()"/>
+
+        <s:RadioButton groupName="rbg" label="Single image" enabled="{sourceBD != null}"
+                       id="singleImageRadioButton" change="onImagePropsChange()"/>
+        <s:RadioButton groupName="rbg" label="Sprite sheet" enabled="{sourceBD != null}"
+                       id="spriteSheetRadioButton" change="onImagePropsChange()"/>
+    </s:HGroup>
+
+    <s:HGroup visible="{spriteSheetRadioButton.selected}" verticalAlign="middle"
+              includeInLayout="{spriteSheetRadioButton.selected}">
+        <s:Label text="Single image width"/>
+        <components:CustomNumericStepper id="widthTextInput" restrict="0-9" minimum="0" maximum="2048" width="50"
+                                         change="onImagePropsChange()"/>
+
+        <s:Label text="height"/>
+        <components:CustomNumericStepper id="heightTextInput" restrict="0-9" minimum="0" maximum="2048" width="50"
+                                         change="onImagePropsChange()"/>
+
+        <s:Label text="anim. speed"/>
+        <components:CustomNumericStepper id="speedTextInput" text="1" restrict="0-9" minimum="0" width="50"
+                                         change="onImagePropsChange()"/>
+
+        <s:CheckBox label="start at random frame?" id="randomFrameCB" change="onImagePropsChange()"/>
+    </s:HGroup>
+
+</s:ItemRenderer>

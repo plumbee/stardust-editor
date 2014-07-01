@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           xmlns:components="com.plumbee.stardust.view.components.*"
+                           nameText="Damping"
+                           toolTip="Causes particles to decelerate.">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.actions.Damping;
+
+        private function updateData() : void
+        {
+            Damping(data).damping = Number(dampTextInput.text);
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : Damping = data as Damping;
+            dampTextInput.text = dat.damping.toString();
+        }
+        ]]></fx:Script>
+
+    <components:CustomNumericStepper id="dampTextInput" restrict="0-9." minimum="0" maximum="1" stepValue="0.1"
+                                     width="50"
+                                     change="updateData()"
+                                     toolTip="In each emitter step, each particle's velocity is multiplied by this value. A value of 0 denotes no damping at all, and a value of 1 means all particles will not move at all."/>
+</twod:PropertyRendererBase>

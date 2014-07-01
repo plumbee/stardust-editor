@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+                xmlns:components="com.plumbee.stardust.view.components.*"
+                opaqueBackground="0x565656" autoDrawBackground="false">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.actions.waypoints.Waypoint;
+
+        import spark.components.DataGroup;
+
+        private function updateData(e : Event) : void
+        {
+            var dat : Waypoint = data as Waypoint;
+            dat.x = Number(xTextInput.text);
+            dat.y = Number(yTextInput.text);
+            dat.radius = Number(radiusTextInput.text);
+            dat.strength = Number(strengthTextInput.text);
+            dat.attenuationPower = Number(attenuationPowerTextInput.text);
+            dat.epsilon = Number(epsilonTextInput.text);
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : Waypoint = data as Waypoint;
+            xTextInput.text = dat.x.toString();
+            yTextInput.text = dat.y.toString();
+            radiusTextInput.text = dat.radius.toString();
+            strengthTextInput.text = dat.strength.toString();
+            attenuationPowerTextInput.text = dat.attenuationPower.toString();
+            epsilonTextInput.text = dat.epsilon.toString();
+        }
+        ]]></fx:Script>
+
+
+    <s:layout>
+        <s:HorizontalLayout verticalAlign="middle" paddingTop="1" paddingBottom="1"/>
+    </s:layout>
+
+    <s:VGroup>
+        <s:HGroup verticalAlign="middle">
+            <s:Label text="x"/>
+            <components:CustomNumericStepper id="xTextInput" width="50" change="updateData(event)"
+                                             toolTip="The X coordinate of the center of the waypoint."/>
+
+            <s:Label text="y"/>
+            <components:CustomNumericStepper id="yTextInput" width="50" change="updateData(event)"
+                                             toolTip="The Y coordinate of the center of the waypoint."/>
+
+            <s:Label text="radius"/>
+            <components:CustomNumericStepper id="radiusTextInput" width="50" change="updateData(event)"
+                                             toolTip="The radius of the waypoint."/>
+
+            <s:Label text="strength"/>
+            <components:CustomNumericStepper id="strengthTextInput" restrict="0-9." stepValue="0.1" width="50"
+                                             change="updateData(event)"
+                                             toolTip="The strength of the waypoint (positive)."/>
+        </s:HGroup>
+
+        <s:HGroup verticalAlign="middle">
+            <s:Label text="attenuation power"/>
+            <components:CustomNumericStepper id="attenuationPowerTextInput" stepValue="0.1" width="50"
+                                             change="updateData(event)"
+                                             toolTip="The attenuation power of the waypoint, in powers per pixel."/>
+
+            <s:Label text="epsilon"/>
+            <components:CustomNumericStepper id="epsilonTextInput" width="50" change="updateData(event)"
+                                             toolTip="(advanced) If a point is closer to the center than this value, it's treated as if it's this far from the center."/>
+        </s:HGroup>
+    </s:VGroup>
+
+    <s:Button label="remove"
+              click="DataGroup(owner).dataProvider.removeItemAt( DataGroup(owner).dataProvider.getItemIndex(data) )"/>
+</s:ItemRenderer>

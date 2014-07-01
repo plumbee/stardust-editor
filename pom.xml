@@ -3,121 +3,256 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.plumbee</groupId>
-	<artifactId>stardust-editor</artifactId>
-	<version>2</version>
+	<artifactId>stardust-sim-editor</artifactId>
+	<version>2.82</version>
 	<packaging>swf</packaging>
 
 	<name>Stardust editor</name>
-	<description>Stardust editor</description>
+	<description>Stardust simulation editor application.</description>
+	
+	<properties>
+		<maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
+        <stardust.sim.loader.version>2.41</stardust.sim.loader.version>
+
+        <!-- External dependencies -->
+		<dependency.plugin.version>2.8</dependency.plugin.version>
+		<flex.sdk.version>4.6.0.23201</flex.sdk.version>
+        <flexmojos.version>5.1-beta-QP</flexmojos.version>
+		<hamcrest.version>1.1</hamcrest.version>
+		<asmock.version>1.0</asmock.version>
+		<flexunit.version>4.1.0</flexunit.version>
+        <swf.version>18</swf.version>
+        <flash.player.version>11.5</flash.player.version>
+		<flash-console.version>2.6-RC</flash-console.version>
+		<robotlegs.version>2.1.0</robotlegs.version>
+
+        <includeProperties>
+            stardust.sim.loader.version
+        </includeProperties>
+	</properties>
+	
+	<!-- Change this part to your own repository details -->
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <url>http://nexus.plumbee.co.uk:8081/nexus/content/repositories/plumbeerel/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus</id>
+            <url>http://nexus.plumbee.co.uk:8081/nexus/content/repositories/plumbee/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <repositories>
         <repository>
             <id>flex-mojos-repository</id>
             <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
         </repository>
-
-        <repository>
-            <id>plumbee-maven-repo</id>
-            <name>S3 main repo repo</name>
-            <url>s3://plumbee-maven-repo/mainrepo</url>
-        </repository>
-
-        <!-- this is NOT an official starling repo. It does not even have the latest version -->
-        <repository>
-            <id>starling-repository-trylogic</id>
-            <url>http://repository-trylogic.forge.cloudbees.com/snapshot</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
     </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>flex-mojos-plugin-repository</id>
-            <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
-        </pluginRepository>
-    </pluginRepositories>
-
-	<properties>
-		<flexmojos.version>6.0.1</flexmojos.version>
-		<flex.version>4.6.0.23201</flex.version>
-        <swf.version>17</swf.version>
-        <flash.player.version>11.4</flash.player.version>
-	</properties>
-
-    <!-- Change this part to your own S3 repository details -->
-    <distributionManagement>
-        <repository>
-            <id>s3account</id>
-            <name>S3 Release repo</name>
-            <url>s3://plumbee-maven-repo/mainrepo</url>
-        </repository>
-        <snapshotRepository>
-            <id>s3account</id>
-            <name>S3 Snapshot repo</name>
-            <url>s3://plumbee-maven-repo/mainrepo</url>
-        </snapshotRepository>
-    </distributionManagement>
-
+	
 	<build>
-
-        <extensions>
-            <extension>
-                <groupId>org.springframework.build</groupId>
-                <artifactId>aws-maven</artifactId>
-                <version>4.4.0.RELEASE</version>
-            </extension>
-        </extensions>
-
 		<sourceDirectory>src/main/flex</sourceDirectory>
 		<testSourceDirectory>src/test/flex</testSourceDirectory>
+				
+		<finalName>stardust-editor</finalName>
 		<plugins>
+			
+			<plugin>
+				<groupId>com.plumbee</groupId>
+				<artifactId>plumbee-s3-maven-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<id>upload-assets</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>upload</goal>
+						</goals>
+						<configuration>
+							<bucketName>stardust-editor</bucketName>
+							<awsAccessKey>${aws.access-key}</awsAccessKey>
+							<awsSecretKey>${aws.secret-key}</awsSecretKey>
+							<baseDir>${pom.basedir}</baseDir>
+							<source>target/</source>
+							<destination>html</destination>
+							<includes>
+								<include>**/*.swf</include>
+								<include>**/*.js</include>
+								<include>**/*.css</include>
+								<include>**/*.html</include>
+							</includes>
+							<permissions>PublicRead</permissions>
+							<versioningEnabled>false</versioningEnabled>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>${dependency.plugin.version}</version>
+				<configuration>
+						<outputDirectory>libs</outputDirectory>
+						<excludeGroupIds>com.adobe.flex.framework</excludeGroupIds>
+						<stripVersion>true</stripVersion>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>net.flexmojos.oss</groupId>
 				<artifactId>flexmojos-maven-plugin</artifactId>
 				<version>${flexmojos.version}</version>
 				<extensions>true</extensions>
 				<configuration>
+					<sourceFile>com/plumbee/stardust/Stardusttool.mxml</sourceFile>
+                    <coverage>false</coverage>
+                    <targetPlayer>${flash.player.version}</targetPlayer>
+                    <swfVersion>${swf.version}</swfVersion>
 					<testTimeout>200000</testTimeout>
-					<footer>Stardust editor. Plumbee ltd.</footer>
-					<leftFramesetWidth>320</leftFramesetWidth>
-					<mainTitle>Stardust editor API documentation</mainTitle>
-					<windowTitle>Stardust editor API documentation</windowTitle>
-					<targetPlayer>${flash.player.version}</targetPlayer>
-					<swfVersion>${swf.version}</swfVersion>
+                    <accessible>false</accessible>
+                    <fonts>
+                        <managers>
+                            <manager>flash.fonts.AFEFontManager</manager>
+                            <manager>flash.fonts.JREFontManager</manager>
+                            <manager>flash.fonts.BatikFontManager</manager>
+                            <manager>flash.fonts.CFFFontManager</manager>
+                        </managers>
+                    </fonts>
+                    <verifyDigests>false</verifyDigests>
+                    <policyFileUrls>
+                        <url />
+                    </policyFileUrls>
+                    <compilerWarnings>
+                        <warn-no-constructor>false</warn-no-constructor>
+                    </compilerWarnings>
 				</configuration>
 				<dependencies>
-					<dependency>
-						<groupId>com.adobe.flex</groupId>
-						<artifactId>compiler</artifactId>
-						<version>${flex.version}</version>
-						<type>pom</type>
-					</dependency>
+                    <dependency>
+                        <groupId>com.adobe.flex</groupId>
+                        <artifactId>compiler</artifactId>
+                        <version>${flex.sdk.version}</version>
+                        <type>pom</type>
+                    </dependency>
 				</dependencies>
 			</plugin>
+
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-resources-plugin</artifactId>
+		        <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-assets-folder</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/html</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+		    </plugin>
+			
 		</plugins>
 	</build>
-
+	
     <dependencies>
+        <!-- Flex needs to be included here, otherwise will compile for FP 10 for some reason -->
         <dependency>
             <groupId>com.adobe.flex.framework</groupId>
             <artifactId>flex-framework</artifactId>
-            <version>${flex.version}</version>
+            <version>${flex.sdk.version}</version>
             <type>pom</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.adobe.flash.framework</groupId>
+                    <artifactId>playerglobal</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>playerglobal</artifactId>
+			<version>11.7</version>
+			<type>swc</type>
+        </dependency>
+
+		<dependency>
+            <groupId>com.adobe.flexunit</groupId>
+            <artifactId>flexunit</artifactId>
+            <version>${flexunit.version}</version>
+            <type>swc</type>
+            <scope>test</scope>
+        </dependency>
+
+		<dependency>
+			<groupId>asmock</groupId>
+			<artifactId>asmock</artifactId>
+			<version>${asmock.version}</version>
+			<type>swc</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>asmock</groupId>
+			<artifactId>asmock-flexunit4.1</artifactId>
+			<version>${asmock.version}</version>
+			<type>swc</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-as3</artifactId>
+			<version>${hamcrest.version}</version>
+			<type>swc</type>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.junkbyte</groupId>
+			<artifactId>flash-console</artifactId>
+			<version>${flash-console.version}</version>
+			<type>swc</type>
+		</dependency>
+		
+		<dependency>
+            <groupId>org.robotlegs</groupId>
+            <artifactId>robotlegs-framework</artifactId>
+            <version>${robotlegs.version}</version>
+            <type>swc</type>
         </dependency>
 		
 		<dependency>
-			<groupId>com.plumbee</groupId>
-			<artifactId>stardust-library</artifactId>
-			<version>2</version>
-			<type>swc</type>
+            <groupId>org.robotlegs</groupId>
+            <artifactId>robotlegs-framework</artifactId>
+            <version>${robotlegs.version}</version>
+            <type>jar</type>
+            <classifier>sources</classifier>
 		</dependency>
 
-    </dependencies>
+        <dependency>
+            <groupId>com.plumbee</groupId>
+            <artifactId>stardust-sim-loader</artifactId>
+            <version>${stardust.sim.loader.version}</version>
+            <type>swc</type>
+        </dependency>
 
+        <dependency>
+            <groupId>com.gamua</groupId>
+            <artifactId>starling-framework</artifactId>
+            <version>1.4</version>
+            <type>swc</type>
+        </dependency>
+
+    </dependencies>
 </project>

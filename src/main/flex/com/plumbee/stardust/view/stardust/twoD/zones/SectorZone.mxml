@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:components="com.plumbee.stardust.view.components.*"
+          verticalAlign="middle"
+          implements="com.plumbee.stardust.view.stardust.twoD.zones.IZoneRenderer">
+
+    <fx:Script><![CDATA[
+
+        import idv.cjcat.stardustextended.twoD.zones.Sector;
+        import idv.cjcat.stardustextended.twoD.zones.Zone;
+
+        private var zone : Sector;
+
+        public function setData(d : Zone) : void
+        {
+            zone = Sector(d);
+            xTextInput.text = zone.x.toString();
+            yTextInput.text = zone.y.toString();
+            minRadius.text = zone.minRadius.toString();
+            maxRadius.text = zone.maxRadius.toString();
+            minAngle.text = zone.minAngle.toString();
+            maxAngle.text = zone.maxAngle.toString();
+        }
+
+        private function updateData() : void
+        {
+            zone.x = Number(xTextInput.text);
+            zone.y = Number(yTextInput.text);
+            zone.minRadius = Number(minRadius.text);
+            zone.maxRadius = Number(maxRadius.text);
+            zone.minAngle = Number(minAngle.text);
+            zone.maxAngle = Number(maxAngle.text);
+        }
+        ]]></fx:Script>
+
+    <s:HGroup verticalAlign="middle">
+        <s:Label text="x"/>
+        <components:CustomNumericStepper id="xTextInput" width="50" change="updateData()"/>
+
+        <s:Label text="y"/>
+        <components:CustomNumericStepper id="yTextInput" width="50" change="updateData()"/>
+
+        <s:Label text="min. radius"/>
+        <components:CustomNumericStepper id="minRadius" width="50" change="updateData()"/>
+
+        <s:Label text="max. radius"/>
+        <components:CustomNumericStepper id="maxRadius" width="50" change="updateData()"/>
+    </s:HGroup>
+
+    <s:HGroup verticalAlign="middle" toolTip="angles in degrees">
+        <s:Label text="min. angle"/>
+        <components:CustomNumericStepper id="minAngle" width="50" change="updateData()"/>
+
+        <s:Label text="max. angle"/>
+        <components:CustomNumericStepper id="maxAngle" width="50" change="updateData()"/>
+    </s:HGroup>
+
+</s:VGroup>

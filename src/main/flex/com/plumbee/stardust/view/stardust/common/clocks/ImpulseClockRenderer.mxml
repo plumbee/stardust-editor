@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:components="com.plumbee.stardust.view.components.*"
+          verticalAlign="middle">
+
+    <fx:Script><![CDATA[
+        import com.plumbee.stardust.view.events.ImpulseClockRendererSetDataEvent;
+        import com.plumbee.stardust.view.events.ImpulseClockRendererUpdateEmitterInfoEvent;
+        import com.plumbee.stardust.view.events.UpdateClockInEmitterGroupEvent;
+        import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+
+        import idv.cjcat.stardustextended.common.clocks.ImpulseClock;
+
+        import mx.logging.ILogger;
+        import mx.logging.Log;
+
+        private static const LOG : ILogger = Log.getLogger(getQualifiedClassName(ImpulseClockRenderer).replace("::", "."));
+
+        //TODO move into model/service?
+        private var clock : ImpulseClock;
+
+        public function setData(d : ImpulseClock) : void
+        {
+            clock = d;
+            dispatchEvent(new ImpulseClockRendererSetDataEvent(ImpulseClockRendererSetDataEvent.SET));
+        }
+
+        public function updateTextFieldsFromEmitterVO(emitterVO : EmitterValueObject) : void
+        {
+            var clock : ImpulseClock = ImpulseClock(emitterVO.emitter.clock);
+            numParticlesTextInput.text = clock.impulseCount.toString();
+            numBurstsTextInput.text = clock.repeatCount.toString();
+
+            if (emitterVO.burstClockInterval >= 20)
+            {
+                burstIntervalTextInput.text = emitterVO.burstClockInterval.toString();
+            }
+
+            updateData();
+        }
+
+        private function updateData() : void
+        {
+            LOG.debug("Update Impulse Clock");
+            clock.impulseCount = int(numParticlesTextInput.text);
+            clock.repeatCount = int(numBurstsTextInput.text);
+            updateEmitterInfo();
+
+            dispatchEvent(new UpdateClockInEmitterGroupEvent(UpdateClockInEmitterGroupEvent.UPDATE, clock));
+        }
+
+        private function updateEmitterInfo() : void
+        {
+            var burstInterval : int = parseInt(burstIntervalTextInput.text);
+            var numParticles : int = parseInt(numParticlesTextInput.text);
+            var numBursts : int = parseInt(numBurstsTextInput.text);
+
+            dispatchEvent(new ImpulseClockRendererUpdateEmitterInfoEvent(burstInterval, numParticles, numBursts));
+        }
+        ]]></fx:Script>
+
+    <s:Label text="bursts/impulse"/>
+    <components:CustomNumericStepper id="numBurstsTextInput" restrict="0-9" change="updateData()" width="50" minimum="1"
+                                     text="1" maxChars="2"/>
+
+    <s:Label text="particles/impulse"/>
+    <components:CustomNumericStepper id="numParticlesTextInput" restrict="0-9" change="updateData()" width="50"
+                                     maximum="1000"/>
+
+    <s:Label text="burst interval (steps)"/>
+    <components:CustomNumericStepper id="burstIntervalTextInput" restrict="0-9" change="updateEmitterInfo()" width="50"
+                                     minimum="20" text="1000"/>
+</s:HGroup>

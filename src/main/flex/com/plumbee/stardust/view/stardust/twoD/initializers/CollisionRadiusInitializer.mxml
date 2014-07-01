@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           xmlns:components="com.plumbee.stardust.view.components.*"
+                           toolTip="Used for the collide action"
+                           nameText="Collision radius">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.common.initializers.CollisionRadius;
+
+        private function updateData() : void
+        {
+            CollisionRadius(data).radius = Number(collRadiusTextInput.text);
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            collRadiusTextInput.text = CollisionRadius(data).radius.toString();
+        }
+        ]]></fx:Script>
+
+    <components:CustomNumericStepper id="collRadiusTextInput" width="50" text="0" restrict="0-9." change="updateData()"
+                                     minimum="0"/>
+
+</twod:PropertyRendererBase>

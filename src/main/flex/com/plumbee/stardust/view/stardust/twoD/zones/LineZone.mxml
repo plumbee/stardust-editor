@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:components="com.plumbee.stardust.view.components.*"
+          verticalAlign="middle"
+          implements="com.plumbee.stardust.view.stardust.twoD.zones.IZoneRenderer">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.zones.Line;
+        import idv.cjcat.stardustextended.twoD.zones.Zone;
+
+        private var zone : Line;
+
+        public function setData(d : Zone) : void
+        {
+            zone = Line(d);
+            x1.text = zone.x1.toString();
+            y1.text = zone.y1.toString();
+            x2.text = zone.x2.toString();
+            y2.text = zone.y2.toString();
+        }
+
+        private function updateData() : void
+        {
+            zone.x1 = Number(x1.text);
+            zone.y1 = Number(y1.text);
+            zone.x2 = Number(x2.text);
+            zone.y2 = Number(y2.text);
+        }
+        ]]></fx:Script>
+
+    <s:Label text="x1"/>
+    <components:CustomNumericStepper id="x1" width="50" change="updateData()"/>
+
+    <s:Label text="y1"/>
+    <components:CustomNumericStepper id="y1" width="50" change="updateData()"/>
+
+    <s:Label text="x2"/>
+    <components:CustomNumericStepper id="x2" width="50" change="updateData()"/>
+
+    <s:Label text="y2"/>
+    <components:CustomNumericStepper id="y2" width="50" change="updateData()"/>
+
+</s:HGroup>

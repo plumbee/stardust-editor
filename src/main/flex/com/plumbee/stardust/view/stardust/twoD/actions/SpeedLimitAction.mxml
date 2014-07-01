@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           xmlns:components="com.plumbee.stardust.view.components.*"
+                           toolTip="Limits a particle's maximum traveling speed."
+                           nameText="Speed limit">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.actions.SpeedLimit;
+
+        private function updateData(e : Event) : void
+        {
+            var dat : SpeedLimit = data as SpeedLimit;
+            dat.limit = Number(textInput.text);
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : SpeedLimit = data as SpeedLimit;
+            if (dat.limit > 9999)
+            {
+                dat.limit = 9999;
+            }
+            textInput.text = dat.limit.toString();
+        }
+        ]]></fx:Script>
+
+    <components:CustomNumericStepper id="textInput" text="10" restrict="0-9." minimum="0" maxChars="5"
+                                     width="200" change="updateData(event)"/>
+
+</twod:PropertyRendererBase>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+                           xmlns:zones="com.plumbee.stardust.view.stardust.twoD.zones.*"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           nameText="Death zone"
+                           toolTip="Causes particles to be deleted when they are inside a specified zone.">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.actions.DeathZone;
+
+        private function updateData() : void
+        {
+            DeathZone(data).inverted = isInvertedCheckBox.selected;
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : DeathZone = DeathZone(d);
+            zc.setData(dat);
+        }
+        ]]></fx:Script>
+
+    <twod:layout>
+        <s:VerticalLayout/>
+    </twod:layout>
+
+    <s:CheckBox id="isInvertedCheckBox" label="Inverted?" toolTip="Inverts the zone."
+                change="updateData()"/>
+    <zones:ZoneContainer id="zc" width="100%"/>
+
+</twod:PropertyRendererBase>

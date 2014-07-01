@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           toolTip="Collision radius is determined by the collision radius initializer"
+                           nameText="Particles will collide with each other.">
+
+</twod:PropertyRendererBase>

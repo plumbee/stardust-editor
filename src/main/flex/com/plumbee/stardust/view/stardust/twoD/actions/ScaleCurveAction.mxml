@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           xmlns:components="com.plumbee.stardust.view.components.*"
+                           nameText="Change scale"
+                           toolTip="Alters a particle's scale value based on its age.">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.common.actions.ScaleCurve;
+
+        private function updateData() : void
+        {
+            var dat : ScaleCurve = data as ScaleCurve;
+            dat.inScale = Number(initScaleTextInput.text);
+            dat.inLifespan = Number(inLifeTextInput.text);
+            dat.outScale = Number(outScaleTextInput.text);
+            dat.outLifespan = Number(outLifeTextInput.text);
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : ScaleCurve = ScaleCurve(data);
+            initScaleTextInput.text = dat.inScale.toString();
+            inLifeTextInput.text = dat.inLifespan.toString();
+            outScaleTextInput.text = dat.outScale.toString();
+            outLifeTextInput.text = dat.outLifespan.toString();
+        }
+        ]]></fx:Script>
+
+    <twod:layout>
+        <s:VerticalLayout/>
+    </twod:layout>
+
+    <s:HGroup width="100%" verticalAlign="middle">
+        <s:Label text="initial scale"/>
+        <components:CustomNumericStepper id="initScaleTextInput" restrict="0-9.\-" width="50" stepValue="0.1"
+                                         change="updateData()"
+                                         toolTip="The scale of a particle when its created."/>
+
+        <s:Label text="initial transition time"/>
+        <components:CustomNumericStepper id="inLifeTextInput" restrict="0-9.\-" width="50"
+                                         change="updateData()"
+                                         toolTip="The number of steps to transition from the initial scale to the normal scale."/>
+    </s:HGroup>
+
+    <s:HGroup width="100%" verticalAlign="middle">
+        <s:Label text="final scale"/>
+        <components:CustomNumericStepper id="outScaleTextInput" restrict="0-9.\-" width="50" stepValue="0.1"
+                                         change="updateData()"
+                                         toolTip="The final scale value of a particle. (at the end of its lifespan)"/>
+
+        <s:Label text="final transition time"/>
+        <components:CustomNumericStepper id="outLifeTextInput" restrict="0-9.\-" width="50"
+                                         change="updateData()"
+                                         toolTip="The number of steps to transition from the normal value to the final one."/>
+    </s:HGroup>
+
+</twod:PropertyRendererBase>

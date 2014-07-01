@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           xmlns:components="com.plumbee.stardust.view.components.*"
+                           toolTip="Accelerates particles along their velocity directions."
+                           nameText="Acceleration">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.actions.Accelerate;
+
+        private function updateData() : void
+        {
+            Accelerate(data).acceleration = Number(accTextInput.text);
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : Accelerate = data as Accelerate;
+            accTextInput.text = dat.acceleration.toString();
+        }
+        ]]></fx:Script>
+
+    <components:CustomNumericStepper id="accTextInput" restrict="0-9." width="50" change="updateData()" minimum="0"
+                                     stepValue="0.1"
+                                     toolTip="The amount of acceleration in each emitter step."/>
+
+</twod:PropertyRendererBase>

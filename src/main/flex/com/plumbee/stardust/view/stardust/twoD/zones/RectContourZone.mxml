@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:components="com.plumbee.stardust.view.components.*"
+          verticalAlign="middle"
+          implements="com.plumbee.stardust.view.stardust.twoD.zones.IZoneRenderer">
+
+    <fx:Script><![CDATA[
+
+        import idv.cjcat.stardustextended.twoD.zones.RectContour;
+        import idv.cjcat.stardustextended.twoD.zones.Zone;
+
+        private var zone : RectContour;
+
+        public function setData(d : Zone) : void
+        {
+            zone = RectContour(d);
+            xInput.text = zone.x.toString();
+            yInput.text = zone.y.toString();
+            wiInput.text = zone.width.toString();
+            heInput.text = zone.height.toString();
+        }
+
+        private function updateData() : void
+        {
+            zone.x = Number(xInput.text);
+            zone.y = Number(yInput.text);
+            zone.width = Number(wiInput.text);
+            zone.height = Number(heInput.text);
+        }
+        ]]></fx:Script>
+
+    <s:Label text="x"/>
+    <components:CustomNumericStepper id="xInput" width="50" change="updateData()"/>
+
+    <s:Label text="y"/>
+    <components:CustomNumericStepper id="yInput" width="50" change="updateData()"/>
+
+    <s:Label text="width"/>
+    <components:CustomNumericStepper id="wiInput" width="50" change="updateData()"/>
+
+    <s:Label text="height"/>
+    <components:CustomNumericStepper id="heInput" width="50" change="updateData()"/>
+
+</s:HGroup>

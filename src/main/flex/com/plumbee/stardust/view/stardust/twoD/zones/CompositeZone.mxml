@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          implements="com.plumbee.stardust.view.stardust.twoD.zones.IZoneRenderer"
+          initialize="createDDLDataProvider()">
+
+    <fx:Script><![CDATA[
+
+        import com.plumbee.stardust.helpers.DropdownListVO;
+        import com.plumbee.stardust.helpers.Globals;
+
+        import idv.cjcat.stardustextended.twoD.zones.Composite;
+
+        import idv.cjcat.stardustextended.twoD.zones.Zone;
+
+        import mx.collections.ArrayCollection;
+
+        private var zone:Composite;
+
+        public function setData(d:Zone):void {
+            zoneRenderers.removeAllElements();
+            zone = Composite(d);
+            for (var j:int = 0; j < zone.zones.length; j++) {
+                const ZoneClass : Class = Class(getDefinitionByName(getQualifiedClassName(zone.zones[j])));
+                const RendererClass : Class = DropdownListVO(Globals.zonesDict[ZoneClass]).viewClass;
+                const newRenderer:IZoneRenderer = new RendererClass();
+
+                zoneRenderers.addElement(newRenderer);
+                newRenderer.setData(zone.zones[j]);
+            }
+        }
+
+        private function addZone():void {
+            const selectedItem:DropdownListVO = DropdownListVO(ddl.selectedItem);
+            const newRenderer:IZoneRenderer = new selectedItem.viewClass();
+            zoneRenderers.addElement(newRenderer);
+
+            const newZone:Zone = new selectedItem.stardustClass();
+            newRenderer.setData(newZone);
+
+            zone.addZone(newZone);
+        }
+
+        private function createDDLDataProvider():void {
+            const zones:ArrayCollection = new ArrayCollection();
+            zones.addAll(Globals.zonesDDLAC);
+            // do not allow to create a composite zone inside a composite zone
+            for (var j:int = 0; j < zones.length; j++) {
+                var item:DropdownListVO = zones[j];
+                if (item.stardustClass == Composite) {
+                    zones.removeItemAt(j);
+                    break;
+                }
+            }
+            ddl.dataProvider = zones;
+        }
+        ]]></fx:Script>
+
+    <s:HGroup verticalAlign="middle" toolTip="Lines have 1 width.">
+        <s:Label text="new subzone type:"/>
+        <s:DropDownList id="ddl"
+                        labelField="name" requireSelection="true" selectedIndex="0"/>
+        <s:Button label="Add" click="addZone()"/>
+    </s:HGroup>
+
+    <s:VGroup id="zoneRenderers" width="100%"/>
+</s:VGroup>

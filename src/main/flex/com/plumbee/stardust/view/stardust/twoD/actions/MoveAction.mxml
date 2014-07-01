@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           xmlns:components="com.plumbee.stardust.view.components.*"
+                           nameText="Move speed  Multiplier:"
+                           showRemoveButton="false">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.actions.Move;
+
+        private function updateData(e : Event) : void
+        {
+            var dat : Move = data as Move;
+            dat.multiplier = Number(mulTextInput.text);
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            mulTextInput.text = Move(data).multiplier.toString();
+        }
+        ]]></fx:Script>
+
+    <components:CustomNumericStepper id="mulTextInput" restrict="0-9." width="50" change="updateData(event)" minimum="0"
+                                     height="100%"/>
+
+</twod:PropertyRendererBase>

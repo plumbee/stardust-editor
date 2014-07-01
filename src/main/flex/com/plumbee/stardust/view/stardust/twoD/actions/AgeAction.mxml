@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           xmlns:components="com.plumbee.stardust.view.components.*"
+                           nameText="Change age  Multiplier"
+                           toolTip="Causes particle's age to increase or decrease.">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.common.actions.Age;
+
+        private function updateData(e : Event) : void
+        {
+            Age(data).multiplier = Number(multInput.text);
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            multInput.text = Age(data).multiplier.toString();
+        }
+        ]]></fx:Script>
+
+    <components:CustomNumericStepper id="multInput" text="1" width="50" change="updateData(event)"
+                                     toolTip="The multiplier of aging. For instance, a multiplier value of 2 causes a particle to age twice as fast as normal."/>
+
+</twod:PropertyRendererBase>

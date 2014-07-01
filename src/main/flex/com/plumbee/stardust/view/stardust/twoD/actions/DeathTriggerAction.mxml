@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           nameText="Spawn particles on death"
+                           xmlns:actions="com.plumbee.stardust.view.stardust.twoD.actions.*"
+                           toolTip="Spawns particles when a particle dies">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.common.actions.triggers.DeathTrigger;
+        import idv.cjcat.stardustextended.sd;
+        import idv.cjcat.stardustextended.twoD.actions.Spawn;
+
+        use namespace sd;
+
+        private function updateData() : void
+        {
+            var dat : DeathTrigger = DeathTrigger(data);
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : DeathTrigger = DeathTrigger(data);
+            var actionsArr : Array = dat.sd::actionCollection.actions;
+            var spawn : Spawn;
+            if (actionsArr.length == 0)
+            {
+                spawn = new Spawn();
+                dat.addAction(spawn);
+            }
+            else if (actionsArr.length == 1 && actionsArr[0] is Spawn)
+            {
+                spawn = Spawn(actionsArr[0]);
+            } else
+            {
+                throw ("Death trigger has other than a single spawn action, this case is not handled");
+            }
+            spawnAction.data = spawn;
+        }
+        ]]></fx:Script>
+
+    <actions:SpawnAction id="spawnAction"/>
+
+</twod:PropertyRendererBase>
+

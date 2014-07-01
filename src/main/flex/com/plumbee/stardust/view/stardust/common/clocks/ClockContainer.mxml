@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark">
+    <fx:Script><![CDATA[
+        import com.plumbee.stardust.helpers.DropdownListVO;
+        import com.plumbee.stardust.view.events.ClockTypeChangeEvent;
+
+        import idv.cjcat.stardustextended.common.clocks.Clock;
+        import idv.cjcat.stardustextended.common.clocks.ImpulseClock;
+        import idv.cjcat.stardustextended.common.clocks.SteadyClock;
+        import idv.cjcat.stardustextended.common.emitters.Emitter;
+
+        import mx.collections.ArrayCollection;
+        import mx.logging.ILogger;
+        import mx.logging.Log;
+
+        private static const LOG : ILogger = Log.getLogger(getQualifiedClassName(ClockContainer).replace("::", "."));
+
+        private const clocksAC : ArrayCollection = new ArrayCollection([
+            new DropdownListVO("constant", SteadyClock, SteadyClockRenderer),
+            new DropdownListVO("impulse", ImpulseClock, ImpulseClockRenderer)
+        ]);
+
+        private var emitter : Emitter;
+
+        private function onSelChange() : void
+        {
+            LOG.debug("onSelChange() Change Clock: " + ddl.selectedItem);
+
+            var it : DropdownListVO = DropdownListVO(ddl.selectedItem);
+            emitter.clock = Clock(new it.stardustClass());
+            populateData();
+
+            if (ddl.selectedIndex == 0)
+            {
+                dispatchEvent(new ClockTypeChangeEvent(ClockTypeChangeEvent.STEADY_CLOCK));
+            }
+            else if (ddl.selectedIndex == 1)
+            {
+                dispatchEvent(new ClockTypeChangeEvent(ClockTypeChangeEvent.IMPULSE_CLOCK));
+            }
+        }
+
+        public function setData(_emitter : Emitter) : void
+        {
+            emitter = _emitter;
+            if (emitter.clock is SteadyClock)
+            {
+                ddl.selectedIndex = 0;
+            }
+            else if (emitter.clock is ImpulseClock)
+            {
+                ddl.selectedIndex = 1;
+            }
+            ddl.validateProperties();
+            populateData();
+        }
+
+        public function getData() : Clock
+        {
+            if (emitter)
+            {
+                return emitter.clock;
+            }
+            return null;
+        }
+
+        private function populateData() : void
+        {
+            LOG.debug("Populate Clock Data");
+            var it : DropdownListVO = DropdownListVO(ddl.selectedItem);
+            content.removeAllElements();
+            content.addElement(new it.viewClass());
+        }
+        ]]></fx:Script>
+
+    <s:HGroup verticalAlign="middle">
+        <s:Label text="clock type:"/>
+        <s:DropDownList id="ddl" dataProvider="{clocksAC}" change="onSelChange()"
+                        labelField="name" requireSelection="true" selectedIndex="0"/>
+    </s:HGroup>
+    <s:Group id="content"/>
+
+</s:VGroup>

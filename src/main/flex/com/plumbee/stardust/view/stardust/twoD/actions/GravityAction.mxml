@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:fields="com.plumbee.stardust.view.stardust.twoD.fields.*"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           nameText="Gravity"
+                           toolTip="Applies acceleration(s) to particles according to the associated fields, in pixels.">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.sd;
+        import idv.cjcat.stardustextended.twoD.actions.Gravity;
+
+        use namespace sd;
+
+        private function updateData(e : Event) : void
+        {
+            var dat : Gravity = data as Gravity;
+            dat.sd::fields = fieldContainer.getData();
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : Gravity = d as Gravity;
+            fieldContainer.setData(dat.sd::fields);
+        }
+        ]]></fx:Script>
+
+    <fields:FieldContainer id="fieldContainer" width="100%" height="100%" change="updateData(event)"/>
+
+</twod:PropertyRendererBase>

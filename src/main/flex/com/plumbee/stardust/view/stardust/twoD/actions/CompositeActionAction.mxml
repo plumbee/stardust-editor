@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:s="library://ns.adobe.com/flex/spark"
+                xmlns:view="com.plumbee.stardust.view.*"
+                toolTip="A group of actions, where one can set the action's mask. Used with triggers."
+                preinitialize="actionsAC.addEventListener(CollectionEvent.COLLECTION_CHANGE, onACChange)">
+
+    <fx:Script><![CDATA[
+        import com.plumbee.stardust.helpers.Globals;
+
+        import idv.cjcat.stardustextended.common.actions.Action;
+        import idv.cjcat.stardustextended.common.actions.CompositeAction;
+        import idv.cjcat.stardustextended.sd;
+
+        import mx.collections.ArrayCollection;
+        import mx.events.CollectionEvent;
+        import mx.events.CollectionEventKind;
+
+        import spark.components.List;
+
+        use namespace sd;
+        private const actionsAC : ArrayCollection = new ArrayCollection();
+
+        private function updateData() : void
+        {
+            var dat : CompositeAction = CompositeAction(data);
+            dat.mask = Globals.stringToBitwiseOR(masksTextInput.text);
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : CompositeAction = CompositeAction(data);
+            masksTextInput.text = dat.mask.toString();
+            for each (var act : Action in dat.sd::actionCollection.actions)
+            {
+                actionsAC.source.push(act);
+            }
+            actionsAC.refresh();
+        }
+
+        private function onACChange(e : CollectionEvent) : void
+        {
+            var dat : CompositeAction = CompositeAction(data);
+            if (e.kind == CollectionEventKind.ADD)
+            {
+                dat.addAction(Action(e.items[0]));
+            }
+            if (e.kind == CollectionEventKind.REMOVE)
+            {
+                dat.removeAction(Action(e.items[0]));
+            }
+        }
+        ]]></fx:Script>
+    <s:layout>
+        <s:HorizontalLayout verticalAlign="middle"/>
+    </s:layout>
+
+    <s:VGroup width="100%">
+
+        <s:HGroup verticalAlign="middle">
+            <s:Label text="mask"/>
+            <s:TextInput id="masksTextInput" toolTip="Comma separated values of whole number, for example '1,2,4'"/>
+        </s:HGroup>
+
+        <view:StardustElementContainer id="actionsContainer"
+                                       label="Actions"
+                                       dataProviderAC="{actionsAC}"
+                                       dropdownListAC="{Globals.actionsDDLAC}"
+                                       dataproviderDict="{Globals.actionDict}"/>
+    </s:VGroup>
+
+    <s:Button label="remove" height="100%"
+              click="List(owner).dataProvider.removeItemAt( List(owner).dataProvider.getItemIndex(data) )"/>
+</s:ItemRenderer>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:components="com.plumbee.stardust.view.components.*"
+          verticalAlign="middle"
+          implements="com.plumbee.stardust.view.stardust.twoD.zones.IZoneRenderer">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.zones.SinglePoint;
+        import idv.cjcat.stardustextended.twoD.zones.Zone;
+
+        private var zone : SinglePoint;
+
+        public function setData(d : Zone) : void
+        {
+            zone = SinglePoint(d);
+            x1.text = zone.x.toString();
+            y1.text = zone.y.toString();
+        }
+
+        private function updateData() : void
+        {
+            zone.x = Number(x1.text);
+            zone.y = Number(y1.text);
+        }
+        ]]></fx:Script>
+
+    <s:Label text="x"/>
+    <components:CustomNumericStepper id="x1" text="1" change="updateData()"/>
+
+    <s:Label text="y"/>
+    <components:CustomNumericStepper id="y1" text="1" change="updateData()"/>
+
+</s:HGroup>

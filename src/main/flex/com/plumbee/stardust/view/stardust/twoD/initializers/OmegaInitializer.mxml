@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:math="com.plumbee.stardust.view.stardust.common.math.*"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           toolTip="Sets a particle's angular velocity, in degrees per emitter step. Has only effect, if it has a 'spin' action"
+                           nameText="Angular velocity">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.common.math.UniformRandom;
+        import idv.cjcat.stardustextended.twoD.initializers.Omega;
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : Omega = data as Omega;
+            if (dat.random is UniformRandom)
+            {
+                randomMath.setData(dat.random as UniformRandom);
+            }
+        }
+        ]]></fx:Script>
+
+    <math:UniformRandomMath id="randomMath"/>
+
+</twod:PropertyRendererBase>

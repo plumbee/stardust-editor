@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:sparkcolorpicker="com.plumbee.stardust.view.components.sparkcolorpicker.*"
+          paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4" >
+
+    <fx:Script><![CDATA[
+        import com.plumbee.stardust.controller.events.BackgroundChangeEvent;
+
+        import mx.core.UIComponent;
+        import mx.events.ResizeEvent;
+        import mx.logging.ILogger;
+        import mx.logging.Log;
+
+        import starling.core.Starling;
+
+        private static const LOG : ILogger = Log.getLogger(getQualifiedClassName(BackgroundProvider).replace("::", "."));
+
+        private var _background : UIComponent;
+
+        public function set background(bg : UIComponent) : void
+        {
+            _background = bg;
+        }
+         /*
+        public function setBackgroundColourStarling(color : uint) : void
+        {
+            colorPicker.selectedItem = color;
+            colorPicker.current.color = color;
+            _background.removeChildren();
+            _background.graphics.clear();
+            removeBackground();
+
+            var bgColorBD : BitmapData = new BitmapData(128, 128, false, color);
+            var shape : Image = new Image(Texture.fromBitmapData(bgColorBD));
+            shape.x = StardusttoolMainView.leftColumnWidth;
+            shape.width = _background.width;
+            shape.height = _background.height;
+
+            Starling.current.stage.addChildAt(shape, 0);
+        }
+
+        private function addBackgroundStarling(bg : Object, starlingInstance : Starling) : void
+        {
+            removeBackground();
+
+            if (bg is BitmapData)
+            {
+                var image : Image = new Image(Texture.fromBitmapData(bg as BitmapData));
+
+            }
+            if (bg is Bitmap)
+            {
+                image = new Image(Texture.fromBitmap(bg as Bitmap));
+            }
+            else
+            {
+                LOG.error("Starling only supports bitmap based backgrounds: " + (typeof bg));
+                return;
+            }
+            image.x = StardusttoolMainView.leftColumnWidth;
+            starlingInstance.stage.addChildAt(image as starling.display.DisplayObject, 0);
+        }
+        */
+        private function onHasBGChange() : void
+        {
+            dispatchEvent(new BackgroundChangeEvent(BackgroundChangeEvent.HAS_BACKGROUND, hasBackgroundCheckBox.selected));
+        }
+
+        private function onColorChange() : void
+        {
+            dispatchEvent(new BackgroundChangeEvent(BackgroundChangeEvent.COLOR, colorPicker.selectedColor));
+        }
+
+        private function onLoadImageClick() : void
+        {
+            dispatchEvent(new BackgroundChangeEvent(BackgroundChangeEvent.IMAGE, null));
+        }
+
+        public function setData(hasBackground : Boolean, backgroundColor : uint, backgroundImage : flash.display.DisplayObject) : void
+        {
+            _background.removeChildren();
+            _background.graphics.clear();
+            var starlingInstance : Starling = Starling.current;
+            if (starlingInstance.stage.numChildren > 1)
+            {
+                starlingInstance.stage.removeChildAt(0, true);
+            }
+
+            colorPicker.selectedItem = null;
+            hasBackgroundCheckBox.selected = hasBackground;
+            if (hasBackground)
+            {
+                if (backgroundImage)
+                {
+                    _background.addChild(backgroundImage);
+                }
+                else
+                {
+                    colorPicker.selectedItem = backgroundColor;
+                    colorPicker.current.color = backgroundColor;
+                    _background.removeChildren();
+                    _background.graphics.clear();
+                    _background.graphics.beginFill(backgroundColor);
+                    _background.graphics.drawRect(0, 0, _background.width, _background.height);
+                }
+            }
+            else
+            {
+                colorPicker.selectedItem = null;
+            }
+
+            //dispatch resize event to center the background (if selected).
+            stage.dispatchEvent( new ResizeEvent( ResizeEvent.RESIZE ) );
+        }
+
+        private function onActAsForegroundChange() : void
+        {
+            if (actAsForegroundCheckBox.selected)
+            {
+                _background.depth = 1;
+            }
+            else
+            {
+                _background.depth = 0;
+            }
+        }
+
+        ]]></fx:Script>
+
+    <s:Rect includeInLayout="false" width="{width}" height="{height}">
+        <s:stroke>
+            <s:SolidColorStroke color="0x787878"/>
+        </s:stroke>
+        <s:fill>
+            <s:SolidColor color="0x2F3B3F"/>
+        </s:fill>
+    </s:Rect>
+
+    <s:CheckBox label="Background?" change="onHasBGChange()" id="hasBackgroundCheckBox"/>
+    <s:CheckBox label="Act as foreground" change="onActAsForegroundChange()" id="actAsForegroundCheckBox"/>
+
+    <s:VGroup id="settingsGroup" enabled="{hasBackgroundCheckBox.selected}">
+        <s:HGroup verticalAlign="middle">
+            <s:Label text="color"/>
+            <sparkcolorpicker:SparkColorPicker id="colorPicker" change="onColorChange()"
+                                               skinClass="com.plumbee.stardust.view.components.sparkcolorpicker.ColorPickerListSkin"/>
+        </s:HGroup>
+
+        <s:Button label="Or image" click="onLoadImageClick()" width="100%"/>
+    </s:VGroup>
+
+
+</s:VGroup>

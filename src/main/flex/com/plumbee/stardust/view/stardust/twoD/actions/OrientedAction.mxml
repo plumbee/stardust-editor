@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           xmlns:components="com.plumbee.stardust.view.components.*"
+                           nameText="Orient to velocity"
+                           toolTip="Causes particles' rotation to align to their velocities.">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.actions.Oriented;
+
+        private function updateData(e : Event) : void
+        {
+            var dat : Oriented = data as Oriented;
+            dat.factor = Number(factorTextInput.text);
+            dat.offset = Number(offsetTextInput.text);
+        }
+        ]]></fx:Script>
+
+    <twod:layout>
+        <s:HorizontalLayout verticalAlign="middle"/>
+    </twod:layout>
+
+    <s:Label text="factor"/>
+    <components:CustomNumericStepper id="factorTextInput" text="1" minimum="0" maximum="1" stepValue="0.1" width="50"
+                                     change="updateData(event)"
+                                     toolTip="How fast the particles align to their velocities, 1 by default. 1 means immediate alignment. 0 means no alignment at all."/>
+
+    <s:Label text="offset"/>
+    <components:CustomNumericStepper id="offsetTextInput" text="0" width="50" change="updateData(event)"
+                                     toolTip="The rotation angle offset in degrees."/>
+
+</twod:PropertyRendererBase>

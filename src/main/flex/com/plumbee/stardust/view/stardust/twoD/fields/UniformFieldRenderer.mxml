@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:s="library://ns.adobe.com/flex/spark" xmlns:components="com.plumbee.stardust.view.components.*"
+                opaqueBackground="0x565656" autoDrawBackground="false" width="100%">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.fields.UniformField;
+
+        import spark.components.DataGroup;
+
+        override public function set data(dat : Object) : void
+        {
+            super.data = dat;
+            if (dat)
+            {
+                xInput.text = dat.x.toString();
+                yInput.text = dat.y.toString();
+                masslessCheckBox.selected = dat.massless;
+            }
+        }
+
+        private function updateData() : void
+        {
+            var dat : UniformField = data as UniformField;
+            dat.x = Number(xInput.text);
+            dat.y = Number(yInput.text);
+            dat.massless = masslessCheckBox.selected;
+        }
+        ]]></fx:Script>
+
+    <s:layout>
+        <s:HorizontalLayout verticalAlign="middle"/>
+    </s:layout>
+
+    <s:Label text="x"/>
+    <components:CustomNumericStepper id="xInput" stepValue="0.1" width="50" change="updateData()"/>
+
+    <s:Label text="y"/>
+    <components:CustomNumericStepper id="yInput" stepValue="0.1" width="50" change="updateData()"/>
+
+    <s:CheckBox label="massless" id="masslessCheckBox" change="updateData()"/>
+
+    <s:Spacer width="100%"/>
+    <s:Button label="remove"
+              click="DataGroup(owner).dataProvider.removeItemAt( DataGroup(owner).dataProvider.getItemIndex(data) )"/>
+</s:ItemRenderer>

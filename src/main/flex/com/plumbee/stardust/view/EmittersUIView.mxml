@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:clocks="com.plumbee.stardust.view.stardust.common.clocks.*" xmlns:view="com.plumbee.stardust.view.*"
+          width="100%" >
+
+    <fx:Script><![CDATA[
+        import com.plumbee.stardust.controller.events.ChangeEmitterInFocusEvent;
+        import com.plumbee.stardust.controller.events.UpdateEmitterDropDownListEvent;
+        import com.plumbee.stardust.view.components.InputPopup;
+        import com.plumbee.stardust.view.events.EmitterChangeUIViewEvent;
+        import com.plumbee.stardust.view.events.EmitterNameChangeEvent;
+        import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+        import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+
+        import idv.cjcat.stardustextended.twoD.emitters.Emitter2D;
+
+        import mx.collections.ArrayCollection;
+        import mx.events.CloseEvent;
+        import mx.logging.ILogger;
+        import mx.logging.Log;
+        import mx.managers.PopUpManager;
+
+        import spark.events.IndexChangeEvent;
+
+        private static const LOG : ILogger = Log.getLogger(getQualifiedClassName(EmittersUIView).replace("::", "."));
+
+        private const _emitterAC : ArrayCollection = new ArrayCollection();
+
+        private var emitterNameWindow : InputPopup;
+
+        public function updateEmitterDropDownList() : void
+        {
+            dispatchEvent(new UpdateEmitterDropDownListEvent(UpdateEmitterDropDownListEvent.UPDATE));
+        }
+
+        private function onClickAdd(event : MouseEvent) : void
+        {
+            LOG.debug("Add Emitter");
+
+            dispatchEvent(new EmitterChangeUIViewEvent(EmitterChangeUIViewEvent.ADD));
+        }
+
+        private function onClickRemove(event : MouseEvent) : void
+        {
+            LOG.debug("Remove Emitter");
+
+            dispatchEvent(new EmitterChangeUIViewEvent(EmitterChangeUIViewEvent.REMOVE));
+        }
+
+        private function onClickRename(event : MouseEvent) : void
+        {
+            LOG.debug("Rename Emitter");
+            showRenamePopup(EmitterValueObject(dropdownList.selectedItem).emitterName);
+        }
+
+        public function showRenamePopup(labelText : String) : void
+        {
+            emitterNameWindow = PopUpManager.createPopUp(this, InputPopup, true) as InputPopup;
+            emitterNameWindow.title = "Enter an Emitter Name";
+            emitterNameWindow.closeButton.visible = false;
+
+            emitterNameWindow.moveArea.visible = false;
+
+            emitterNameWindow.addEventListener(CloseEvent.CLOSE, removeRenamePopup);
+            emitterNameWindow.addEventListener("mouseDownOutside", removeRenamePopup);
+            emitterNameWindow.okButton.addEventListener(MouseEvent.CLICK, handleRenamePopupEvent);
+            emitterNameWindow.cancelButton.addEventListener(MouseEvent.CLICK, removeRenamePopup);
+
+            emitterNameWindow.label = labelText;
+
+            PopUpManager.centerPopUp(emitterNameWindow);
+        }
+
+        private function removeRenamePopup(event : Event) : void
+        {
+            PopUpManager.removePopUp(emitterNameWindow);
+        }
+
+        private function handleRenamePopupEvent(event : Event) : void
+        {
+            var result : String = emitterNameWindow.emitterName.text;
+            PopUpManager.removePopUp(emitterNameWindow);
+            var emitter : EmitterValueObject = dropdownList.selectedItem as EmitterValueObject;
+
+            dispatchEvent(new EmitterNameChangeEvent(EmitterNameChangeEvent.CHANGE, result, emitter));
+        }
+
+        private function onDropDownChange(event : IndexChangeEvent) : void
+        {
+            var emitter : EmitterValueObject = dropdownList.selectedItem as EmitterValueObject;
+            dispatchEvent(new ChangeEmitterInFocusEvent(ChangeEmitterInFocusEvent.CHANGE, emitter));
+            LOG.debug("Change Emitter: " + emitter);
+        }
+
+        public function setDropDownListResult(list : Array, emitterInFocus : EmitterValueObject) : void
+        {
+            _emitterAC.source = list;
+            dropdownList.selectedItem = emitterInFocus;
+        }
+        ]]></fx:Script>
+
+    <s:HGroup verticalAlign="middle" width="100%">
+        <s:Label id="containerLabel" text="Emitters" fontSize="14" fontWeight="bold"/>
+        <s:DropDownList id="dropdownList" labelField="emitterName"
+                        dataProvider="{_emitterAC}" requireSelection="true"
+                        width="220"
+                        change="onDropDownChange(event)"/>
+        <s:Button label="Add" click="onClickAdd(event)"/>
+        <s:Button label="Remove" click="onClickRemove(event)"/>
+        <s:Button label="Rename" click="onClickRename(event)"/>
+    </s:HGroup>
+
+    <s:BorderContainer width="100%" height="100%" backgroundColor="#2F3B3F">
+        <s:layout>
+            <s:VerticalLayout/>
+        </s:layout>
+
+        <clocks:ClockContainer id="clockContainer"/>
+        <view:ParticleHandlerContainer id="particleHandlerContainer" visible="true" includeInLayout="true"/>
+    </s:BorderContainer>
+
+
+</s:VGroup>

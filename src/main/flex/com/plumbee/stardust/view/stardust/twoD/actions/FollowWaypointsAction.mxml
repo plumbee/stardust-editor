@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:s="library://ns.adobe.com/flex/spark"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           toolTip="Causes particles to go through a series of waypoints. Usually combined with a speed limit"
+                           nameText="Waypoints "
+                           initialize="init()">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.actions.FollowWaypoints;
+        import idv.cjcat.stardustextended.twoD.actions.waypoints.Waypoint;
+
+        import mx.collections.ArrayCollection;
+        import mx.events.CollectionEvent;
+        import mx.events.CollectionEventKind;
+
+        private const ac : ArrayCollection = new ArrayCollection();
+
+        private function init() : void
+        {
+            ac.addEventListener(CollectionEvent.COLLECTION_CHANGE, onACChange);
+        }
+
+        private function onACChange(e : CollectionEvent) : void
+        {
+            var dat : FollowWaypoints = data as FollowWaypoints;
+            var wp : Waypoint = Waypoint(e.items[0]);
+            if (e.kind == CollectionEventKind.ADD)
+            {
+                dat.addWaypoint(wp);
+            }
+            if (e.kind == CollectionEventKind.REMOVE)
+            {
+                for (var i : int = 0; i < dat.waypoints.length; i++)
+                {
+                    if (dat.waypoints[i] == wp)
+                    {
+                        dat.waypoints.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        }
+
+        private function updateData(e : Event) : void
+        {
+            var dat : FollowWaypoints = data as FollowWaypoints;
+            // dat.loop = loopCheckBox.selected;
+            dat.massless = masslessCheckBox.selected;
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : FollowWaypoints = data as FollowWaypoints;
+            //loopCheckBox.selected = dat.loop;
+            masslessCheckBox.selected = dat.massless;
+            ac.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onACChange);
+            ac.removeAll();
+            for (var i : int = 0; i < dat.waypoints.length; i++)
+            {
+                ac.addItem(dat.waypoints[i]);
+            }
+            ac.addEventListener(CollectionEvent.COLLECTION_CHANGE, onACChange);
+        }
+        ]]></fx:Script>
+
+    <twod:layout>
+        <s:VerticalLayout/>
+    </twod:layout>
+
+    <!-- TODO fix in Stardust
+    <s:CheckBox id="loopCheckBox" label="Loop" change="updateData(event)"
+                toolTip="Whether the particles head for the first waypoint after passing through the last waypoint."/>
+    -->
+
+    <s:HGroup verticalAlign="middle">
+        <s:Button label="Add waypoint" click="ac.addItem(new Waypoint())"/>
+
+        <s:CheckBox id="masslessCheckBox" label="Massless" change="updateData(event)"
+                    toolTip="Whether the particle's mass is taken into account. If unchecked, the acceleration applied to a particle is divided by the particle's mass."/>
+    </s:HGroup>
+
+    <s:DataGroup width="100%" itemRenderer="com.plumbee.stardust.view.stardust.twoD.actions.waypoint.WaypointRenderer"
+                 dataProvider="{ac}" >
+        <s:layout>
+            <s:VerticalLayout gap="3"/>
+        </s:layout>
+    </s:DataGroup>
+
+</twod:PropertyRendererBase>

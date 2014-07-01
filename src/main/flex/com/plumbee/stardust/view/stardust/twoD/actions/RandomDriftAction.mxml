@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           xmlns:components="com.plumbee.stardust.view.components.*"
+                           toolTip="Applies random acceleration to particles."
+                           nameText="Random drift">
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.actions.RandomDrift;
+
+        private function updateData(e : Event) : void
+        {
+            var dat : RandomDrift = data as RandomDrift;
+            dat.maxX = Number(maxXTextInput.text);
+            dat.maxY = Number(maxYTextInput.text);
+            dat.massless = massCheckBox.selected;
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : RandomDrift = RandomDrift(data);
+            maxXTextInput.text = dat.maxX.toString();
+            maxYTextInput.text = dat.maxY.toString();
+            massCheckBox.selected = dat.massless;
+        }
+        ]]></fx:Script>
+    <twod:layout>
+        <s:HorizontalLayout verticalAlign="middle"/>
+    </twod:layout>
+
+    <s:Label text="max X"/>
+    <components:CustomNumericStepper id="maxXTextInput" text="0.2" stepValue="0.1" width="50" change="updateData(event)"
+                                     toolTip="The acceleration's x component ranges from -maxX to maxX."/>
+
+    <s:Label text="max Y"/>
+    <components:CustomNumericStepper id="maxYTextInput" text="0.2" stepValue="0.1" width="50" change="updateData(event)"
+                                     toolTip="The acceleration's y component ranges from -maxY to maxY."/>
+
+    <s:CheckBox label="massless?" id="massCheckBox" change="updateData(event)"
+                toolTip="Whether the particles acceleration is divided by their masses before applied to them, true by default. When set to true, it simulates a gravity that applies equal acceleration on all particles."/>
+</twod:PropertyRendererBase>
+

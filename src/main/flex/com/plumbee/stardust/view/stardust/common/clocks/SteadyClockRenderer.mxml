@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:components="com.plumbee.stardust.view.components.*"
+          verticalAlign="middle">
+
+    <fx:Script><![CDATA[
+        import com.plumbee.stardust.controller.events.EmitterInfoTicksPerCallChangeEvent;
+
+        import idv.cjcat.stardustextended.common.clocks.SteadyClock;
+
+        import mx.logging.ILogger;
+        import mx.logging.Log;
+
+        private static const LOG : ILogger = Log.getLogger(getQualifiedClassName(SteadyClockRenderer).replace("::", "."));
+
+        private var clock : SteadyClock;
+
+        public function setData(d : SteadyClock, ticksPerCall : Number) : void
+        {
+            clock = d;
+
+            stepsTextInput.text = ticksPerCall.toString();
+
+            updateData();
+        }
+
+        public function getData() : SteadyClock
+        {
+            return clock;
+        }
+
+        private function updateData() : void
+        {
+            LOG.debug("Update Steady Clock");
+            clock.ticksPerCall = parseFloat(stepsTextInput.text);
+            updateEmitterInfo();
+        }
+
+        private function updateEmitterInfo() : void
+        {
+            var ticksPerCall : Number = parseFloat(stepsTextInput.text);
+            dispatchEvent(new EmitterInfoTicksPerCallChangeEvent(EmitterInfoTicksPerCallChangeEvent.CHANGE, ticksPerCall));
+        }
+        ]]></fx:Script>
+
+    <s:Label text="New particles/frame"/>
+    <components:CustomNumericStepper id="stepsTextInput" restrict="0-9." change="updateData()" maximum="50"
+                                     minimum="0"/>
+
+</s:HGroup>

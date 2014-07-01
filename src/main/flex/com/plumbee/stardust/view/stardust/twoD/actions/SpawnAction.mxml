@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:view="com.plumbee.stardust.view.*" width="100%"
+          xmlns:s="library://ns.adobe.com/flex/spark" xmlns:math="com.plumbee.stardust.view.stardust.common.math.*"
+          preinitialize="initializerAC.addEventListener(CollectionEvent.COLLECTION_CHANGE, onInitializerACChange);">
+
+    <fx:Script><![CDATA[
+        import com.plumbee.stardust.helpers.Globals;
+
+        import idv.cjcat.stardustextended.common.initializers.Initializer;
+        import idv.cjcat.stardustextended.common.initializers.Mask;
+        import idv.cjcat.stardustextended.common.math.UniformRandom;
+        import idv.cjcat.stardustextended.twoD.actions.Spawn;
+        import idv.cjcat.stardustextended.twoD.initializers.PooledDisplayObjectClass;
+
+        import mx.collections.ArrayCollection;
+        import mx.events.CollectionEvent;
+        import mx.events.CollectionEventKind;
+
+        private const initializerAC : ArrayCollection = new ArrayCollection();
+        private var _data : Spawn;
+
+        private function updateData() : void
+        {
+            _data.inheritDirection = inheritDirectionCheckBox.selected;
+            _data.inheritVelocity = inheritVelocityCheckBox.selected;
+        }
+
+        public function set data(d : Spawn) : void
+        {
+            _data = d;
+            if (d == null)
+            {
+                return;
+            }
+            inheritDirectionCheckBox.selected = _data.inheritDirection;
+            inheritVelocityCheckBox.selected = _data.inheritVelocity;
+            if (_data.countRandom is UniformRandom)
+            {
+                numParticles.setData(UniformRandom(_data.countRandom));
+            }
+            else
+            {
+                throw "Only UniformRandom is an implemented random!";
+            }
+            var relatedObjects : Array = _data.getRelatedObjects();
+            relatedObjects.shift();
+            // TODO: handle pixel other display classes, pixel renderer
+            var hasDisplayObjectInitializer : Boolean = false;
+            for each (var initalizer : Initializer in relatedObjects)
+            {
+                if (initalizer is PooledDisplayObjectClass)
+                {
+                    hasDisplayObjectInitializer = true;
+                }
+                initializerAC.source.push(initalizer);
+            }
+            initializerAC.refresh();
+            if (hasDisplayObjectInitializer == false)
+            {
+                initializerAC.addItem(new PooledDisplayObjectClass());
+            }
+            initializerAC.addItem(new Mask(4));
+        }
+
+        private function onInitializerACChange(e : CollectionEvent) : void
+        {
+            var dat : Spawn = Spawn(_data);
+            if (e.kind == CollectionEventKind.ADD)
+            {
+                dat.addInitializer(Initializer(e.items[0]));
+            }
+            if (e.kind == CollectionEventKind.REMOVE)
+            {
+                dat.removeInitializer(Initializer(e.items[0]));
+            }
+        }
+        ]]></fx:Script>
+
+    <s:Label text="Experimental. Wrong mask values can lead to endless loop!"/>
+
+    <s:HGroup verticalAlign="middle">
+        <s:CheckBox label="Inherit velocity" id="inheritVelocityCheckBox" change="updateData()"/>
+        <s:CheckBox label="Inherit direction" id="inheritDirectionCheckBox" change="updateData()"/>
+    </s:HGroup>
+
+    <s:HGroup verticalAlign="middle">
+        <s:Label text="Particles to spawn"/>
+        <math:UniformRandomMath id="numParticles"/>
+    </s:HGroup>
+
+    <view:StardustElementContainer id="initializersContainer" width="100%"
+                                   label="Initializers"
+                                   dataProviderAC="{initializerAC}"
+                                   dropdownListAC="{Globals.initializerDDLAC}"
+                                   dataproviderDict="{Globals.initalizerDict}"/>
+
+</s:VGroup>

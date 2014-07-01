@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4">
+    <fx:Script><![CDATA[
+
+        import com.plumbee.stardust.helpers.Globals;
+        import com.plumbee.stardust.view.events.DisplayModeChangeEvent;
+        import com.plumbee.stardust.view.events.UpdateBlendModeEvent;
+        import com.plumbee.stardust.view.events.UpdateSmoothingEvent;
+        import com.plumbee.stardustplayer.project.DisplayModes;
+
+        import idv.cjcat.stardustextended.sd;
+
+        import mx.collections.ArrayCollection;
+        import mx.logging.ILogger;
+        import mx.logging.Log;
+
+        import starling.display.Sprite;
+
+        [Bindable]
+        public var blendModesAC : ArrayCollection = Globals.blendModesDisplayList;
+
+        use namespace sd;
+
+        private static const LOG : ILogger = Log.getLogger(getQualifiedClassName(ParticleHandlerContainer).replace("::", "."));
+        private var canvas : flash.display.Sprite;
+        private var starlingCanvas : starling.display.Sprite;
+
+        private function updateSim() : void
+        {
+            validateNow(); // radio buttons suck
+            if (displayObjectRadioButton.selected)
+            {
+                dispatchEvent(new DisplayModeChangeEvent(DisplayModeChangeEvent.CHANGE, DisplayModes.DISPLAY_LIST));
+            }
+            else if (starlingRadioButton.selected)
+            {
+                dispatchEvent(new DisplayModeChangeEvent(DisplayModeChangeEvent.CHANGE, DisplayModes.STARLING));
+            }
+        }
+
+        public function setBlendModeListSelectedItem(blendMode : String) : void
+        {
+            var data : ArrayCollection = (blendModeList as DropDownList).dataProvider as ArrayCollection;
+            var numBlendModes : int = data.length;
+            for (var i : int = 0; i < numBlendModes; i++)
+            {
+                if (data[i] == blendMode)
+                {
+                    blendModeList.selectedIndex = i;
+                    return;
+                }
+            }
+        }
+
+        private function updateBlendMode() : void
+        {
+            LOG.debug("Update Blend Mode");
+            dispatchEvent(new UpdateBlendModeEvent(UpdateBlendModeEvent.UPDATE, blendModeList.selectedItem));
+        }
+
+        private function updateSmoothing() : void
+        {
+            dispatchEvent( new UpdateSmoothingEvent( useSmoothingCheckBox.selected ) );
+        }
+
+        ]]></fx:Script>
+
+    <s:HGroup verticalAlign="middle" visible="false" includeInLayout="false">
+        <s:Label text="Display mode:"/>
+        <s:RadioButton groupName="rbg" id="displayObjectRadioButton" label="displayObject"
+                       selected="true" change="updateSim()"/>
+        <s:RadioButton groupName="rbg" id="starlingRadioButton" label="Starling" change="updateSim()"/>
+    </s:HGroup>
+
+    <s:HGroup verticalAlign="middle">
+        <s:CheckBox id="useSmoothingCheckBox" label="Use Smoothing" change="updateSmoothing()"/>
+        <s:Spacer width="36"/>
+        <s:Label text="Blend mode:"/>
+        <s:DropDownList id="blendModeList" dataProvider="{blendModesAC}" selectedItem="normal" change="updateBlendMode()"/>
+    </s:HGroup>
+
+</s:VGroup>

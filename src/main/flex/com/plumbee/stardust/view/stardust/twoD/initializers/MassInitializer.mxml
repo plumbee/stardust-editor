@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:math="com.plumbee.stardust.view.stardust.common.math.*"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           toolTip="Sets a particle's mass. A particle's mass is important in collision and gravity simulation."
+                           nameText="Mass">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.common.initializers.Mass;
+        import idv.cjcat.stardustextended.common.math.UniformRandom;
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : Mass = data as Mass;
+            if (dat.random is UniformRandom)
+            {
+                randomMath.setData(dat.random as UniformRandom);
+            }
+        }
+        ]]></fx:Script>
+
+    <math:UniformRandomMath id="randomMath"/>
+
+</twod:PropertyRendererBase>

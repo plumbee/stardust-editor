@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<s:Application
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        backgroundColor="0x353D3F"
+        backgroundAlpha="0"
+        xmlns:config="com.plumbee.stardust.config.*"
+        xmlns:mvcs="robotlegs.bender.bundles.mvcs.*"
+        xmlns:rl2="robotlegs.bender.mxml.*"
+        frameRate="30"
+        >
+
+    <fx:Declarations>
+        <rl2:ContextBuilderTag>
+            <mvcs:MVCSBundle/>
+            <config:AppConfig/>
+        </rl2:ContextBuilderTag>
+    </fx:Declarations>
+
+    <fx:Style>
+        @namespace mx "library://ns.adobe.com/flex/mx";
+        @namespace s "library://ns.adobe.com/flex/spark";
+
+        mx|ToolTip {
+            fontSize: 14px;
+            backgroundColor: #7FB290;
+        }
+
+        s|DropDownList {
+            skinClass: ClassReference("com.plumbee.stardust.view.skins.DropdownListSkin");
+        }
+
+        s|List {
+            contentBackgroundColor: #2F3B3F;
+            selectionColor: #11183D;
+            rollOverColor: #696969;
+        }
+
+        s|Label {
+            color: #D0D0D0;
+        }
+
+        s|TextInput {
+            color: #DADADA;
+            contentBackgroundColor: #0E2D38;
+        }
+
+        s|Button {
+            color: #D0D0D0;
+            skinClass: ClassReference("com.plumbee.stardust.view.skins.ButtonSkin");
+        }
+
+    </fx:Style>
+
+</s:Application>

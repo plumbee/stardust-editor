@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          paddingBottom="4" paddingTop="4" paddingLeft="4" paddingRight="4" >
+
+    <fx:Script><![CDATA[
+
+        private var _mainView : StardusttoolMainView;
+
+        public function set mainView( mainView : StardusttoolMainView ) : void
+        {
+            _mainView = mainView;
+        }
+
+        private function onStagePosChange() : void
+        {
+            _mainView.updateStagePosition();
+        }
+
+        ]]>
+    </fx:Script>
+
+    <s:Rect includeInLayout="false" width="{width}" height="{height}">
+        <s:stroke>
+            <s:SolidColorStroke color="0x787878"/>
+        </s:stroke>
+        <s:fill>
+            <s:SolidColor color="0x2F3B3F"/>
+        </s:fill>
+    </s:Rect>
+    <s:Label text="Stage 0,0 position" />
+    <s:RadioButton groupName="stagePos" label="Center" change="onStagePosChange()" id="centerRadioButton" selected="true"/>
+    <s:RadioButton groupName="stagePos" label="Top Left" change="onStagePosChange()" id="topRadioButton"/>
+    <s:CheckBox label="Recenter Background" change="onStagePosChange()" id="centerBackgroundCheckBox" selected="true"/>
+
+</s:VGroup>

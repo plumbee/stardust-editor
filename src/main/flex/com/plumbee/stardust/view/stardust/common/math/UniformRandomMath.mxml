@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:components="com.plumbee.stardust.view.components.*"
+          verticalAlign="middle" >
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.common.math.UniformRandom;
+
+        private var data:UniformRandom;
+
+        public function setData(d:UniformRandom):void
+        {
+            data = d;
+            avgTextInput.text = d.center.toString();
+            varTextInput.text = d.radius.toString();
+            setTooltip();
+        }
+
+        public function updateData():void
+        {
+            data.center = Number(avgTextInput.text);
+            data.radius = Number(varTextInput.text);
+            setTooltip();
+        }
+
+        private function setTooltip() : void
+        {
+            if (varTextInput.text == "0")
+            {
+                toolTip="The final value is " + avgTextInput.text;
+            }
+            else
+            {
+                toolTip="The final value is randomly between " +
+                        avgTextInput.text + "-" + varTextInput.text + " and " + avgTextInput.text + "+" + varTextInput.text;
+            }
+
+        }
+        ]]></fx:Script>
+
+    <s:Label text="average value"/>
+    <components:CustomNumericStepper id="avgTextInput" restrict="0-9.\-" width="50" change="updateData()"/>
+
+    <s:Label text="variation"/>
+    <components:CustomNumericStepper id="varTextInput" restrict="0-9.\-" width="50" change="updateData()" />
+
+</s:HGroup>

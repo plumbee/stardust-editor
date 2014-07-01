@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:s="library://ns.adobe.com/flex/spark"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           xmlns:components="com.plumbee.stardust.view.components.*"
+                           toolTip="Causes particles to attract each other."
+                           nameText="Mutual gravity">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.actions.MutualGravity;
+
+        private function updateData() : void
+        {
+            var dat : MutualGravity = data as MutualGravity;
+            dat.strength = Number(strengthTextInput.text);
+            dat.epsilon = Number(epsilonTextInput.text);
+            dat.attenuationPower = Number(attenuationPowerTextInput.text);
+            dat.massless = masslessCheckBox.selected;
+            dat.maxDistance = Number(maxdistTextInput.text);
+        }
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : MutualGravity = MutualGravity(data);
+            strengthTextInput.text = dat.strength.toString();
+            epsilonTextInput.text = dat.epsilon.toString();
+            attenuationPowerTextInput.text = dat.attenuationPower.toString();
+            masslessCheckBox.selected = dat.massless;
+            maxdistTextInput.text = dat.maxDistance.toString();
+        }
+        ]]></fx:Script>
+
+    <twod:layout>
+        <s:VerticalLayout/>
+    </twod:layout>
+
+    <s:HGroup width="100%" verticalAlign="middle">
+        <s:Label text="strength"/>
+        <components:CustomNumericStepper id="strengthTextInput" stepValue="0.1" width="50" change="updateData()"
+                                         toolTip="The attraction strength. Negative values cause particles to repel each other"/>
+
+        <s:Label text="epsilon"/>
+        <components:CustomNumericStepper id="epsilonTextInput" stepValue="0.1" width="50" change="updateData()"
+                                         toolTip="(advanced) If the distance between two particle's is less than this value, they are processed as if they were apart by distance of this value. This property is meant to prevent simulation blowup, 1 by default."/>
+
+        <s:Label text="max. distance"/>
+        <components:CustomNumericStepper id="maxdistTextInput" width="50" change="updateData()"
+                                         toolTip="Only when the distance between two particles is less than this value will these particles be processed."/>
+    </s:HGroup>
+
+    <s:HGroup width="100%" verticalAlign="middle">
+        <s:Label text="attenuation power"/>
+        <components:CustomNumericStepper id="attenuationPowerTextInput" stepValue="0.1" width="50"
+                                         change="updateData()"/>
+
+        <s:CheckBox id="masslessCheckBox" label="massless" change="updateData()"
+                    toolTip="When unchecked, particle's mass is taken into account: heavier particles tend not to move more than lighter particles."/>
+    </s:HGroup>
+
+</twod:PropertyRendererBase>

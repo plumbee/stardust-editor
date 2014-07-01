@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:components="com.plumbee.stardust.view.components.*"
+          verticalAlign="middle"
+          implements="com.plumbee.stardust.view.stardust.twoD.zones.IZoneRenderer">
+
+    <fx:Script><![CDATA[
+
+        import idv.cjcat.stardustextended.twoD.zones.CircleContour;
+        import idv.cjcat.stardustextended.twoD.zones.Zone;
+
+        private var zone : CircleContour;
+
+        public function setData(d : Zone) : void
+        {
+            zone = CircleContour(d);
+            xTextInput.text = zone.x.toString();
+            yTextInput.text = zone.y.toString();
+            radius.text = zone.radius.toString();
+        }
+
+        private function updateData() : void
+        {
+            zone.x = Number(xTextInput.text);
+            zone.y = Number(yTextInput.text);
+            zone.radius = Number(radius.text);
+        }
+        ]]></fx:Script>
+
+    <s:Label text="x"/>
+    <components:CustomNumericStepper id="xTextInput" width="50" change="updateData()"/>
+
+    <s:Label text="y"/>
+    <components:CustomNumericStepper id="yTextInput" width="50" change="updateData()"/>
+
+    <s:Label text="radius"/>
+    <components:CustomNumericStepper id="radius" width="50" change="updateData()"/>
+
+</s:HGroup>

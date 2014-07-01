@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<twod:PropertyRendererBase xmlns:fx="http://ns.adobe.com/mxml/2009"
+                           xmlns:zones="com.plumbee.stardust.view.stardust.twoD.zones.*"
+                           xmlns:twod="com.plumbee.stardust.view.stardust.twoD.*"
+                           nameText="Speed"
+                           toolTip="Sets a particle's initial speed.">
+
+    <fx:Script><![CDATA[
+        import idv.cjcat.stardustextended.twoD.initializers.Velocity;
+
+        override public function set data(d : Object) : void
+        {
+            super.data = d;
+            if (d == null)
+            {
+                return;
+            }
+            var dat : Velocity = data as Velocity;
+            zc.setData(dat);
+        }
+        ]]></fx:Script>
+
+    <zones:ZoneContainer id="zc" width="100%"/>
+
+</twod:PropertyRendererBase>

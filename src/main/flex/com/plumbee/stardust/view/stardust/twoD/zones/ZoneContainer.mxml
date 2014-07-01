@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark">
+    <fx:Script><![CDATA[
+
+        import com.plumbee.stardust.helpers.DropdownListVO;
+        import com.plumbee.stardust.helpers.Globals;
+
+        import idv.cjcat.stardustextended.common.StardustElement;
+
+        import idv.cjcat.stardustextended.twoD.zones.Zone;
+
+        private static const ZONE_PROPERTY_NAME : String = "zone";
+        private var itemWithZone : StardustElement;
+
+        private function onSelChange() : void
+        {
+            const it : DropdownListVO = DropdownListVO(ddl.selectedItem);
+            const zone : Zone = new it.stardustClass();
+            itemWithZone[ZONE_PROPERTY_NAME] = zone;
+            setRenderer(it.viewClass, zone);
+        }
+
+        public function setData(_itemWithZone : StardustElement) : void
+        {
+            itemWithZone = _itemWithZone;
+            const zone : Zone = itemWithZone[ZONE_PROPERTY_NAME];
+            const ZoneClass : Class = Class(getDefinitionByName(getQualifiedClassName(zone)));
+            const currentData : DropdownListVO = Globals.zonesDict[ZoneClass];
+            ddl.selectedItem = currentData;
+            ddl.validateProperties();
+
+            setRenderer(currentData.viewClass, zone);
+        }
+
+        private function setRenderer(RendererClass : Class, data : Zone) : void
+        {
+            content.removeAllElements();
+            const renderer : IZoneRenderer = new RendererClass();
+            content.addElement(renderer);
+            renderer.setData(data);
+        }
+        ]]></fx:Script>
+
+    <s:HGroup verticalAlign="middle">
+        <s:Label text="Zone type:"/>
+        <s:DropDownList id="ddl" dataProvider="{Globals.zonesDDLAC}" change="onSelChange()"
+                        labelField="name" requireSelection="true" selectedIndex="0"/>
+    </s:HGroup>
+    <s:Group id="content"/>
+
+</s:VGroup>
