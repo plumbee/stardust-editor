@@ -102,7 +102,6 @@
                 //validate to force correct size for background.
                 validateNow();
                 previewGroup.x = background.width * 0.5;
-                trace( previewGroup.x );
                 previewGroup.y = stage.stageHeight * 0.5;
 
                 if ( canvasPosition.centerBackgroundCheckBox.selected )
