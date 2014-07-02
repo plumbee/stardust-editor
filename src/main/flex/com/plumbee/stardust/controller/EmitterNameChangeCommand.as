@@ -1,10 +1,3 @@
-/**
- * Created with IntelliJ IDEA.
- * User: BenP
- * Date: 23/12/13
- * Time: 17:26
- * To change this template use File | Settings | File Templates.
- */
 package com.plumbee.stardust.controller
 {
 
@@ -32,7 +25,7 @@ public class EmitterNameChangeCommand implements ICommand
     {
         var name : String = event.name;
         var emitterVO : EmitterValueObject = event.emitterVO;
-        emitterVO.emitterName = name;
+        emitterVO.emitter.name = name;
 
         dispatcher.dispatchEvent( new UpdateEmitterDropDownListEvent( UpdateEmitterDropDownListEvent.UPDATE ) );
 

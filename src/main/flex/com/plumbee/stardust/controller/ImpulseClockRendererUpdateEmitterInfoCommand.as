@@ -1,10 +1,3 @@
-/**
- * Created with IntelliJ IDEA.
- * User: BenPalc
- * Date: 02/01/14
- * Time: 22:22
- * To change this template use File | Settings | File Templates.
- */
 package com.plumbee.stardust.controller
 {
 import com.plumbee.stardust.model.ProjectModel;
@@ -25,11 +18,10 @@ public class ImpulseClockRendererUpdateEmitterInfoCommand implements ICommand
 
     public function execute() : void
     {
-        var info : EmitterValueObject = projectSetting.emitterInFocus;
-        info.burstClockInterval = event.burstInterval;
-
+        const info : EmitterValueObject = projectSetting.emitterInFocus;
         ImpulseClock(info.emitter.clock).impulseCount = event.numParticles;
         ImpulseClock(info.emitter.clock).repeatCount = event.numBursts;
+        ImpulseClock(info.emitter.clock).burstInterval = event.burstInterval;
     }
 }
 }

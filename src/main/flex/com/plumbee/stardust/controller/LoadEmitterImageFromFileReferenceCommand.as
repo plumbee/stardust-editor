@@ -1,10 +1,3 @@
-/**
- * Created with IntelliJ IDEA.
- * User: BenPalc
- * Date: 03/01/14
- * Time: 18:37
- * To change this template use File | Settings | File Templates.
- */
 package com.plumbee.stardust.controller
 {
 import com.plumbee.stardust.controller.events.RefreshBitmapParticleInitializerRendererEvent;
@@ -84,7 +77,7 @@ public class LoadEmitterImageFromFileReferenceCommand implements ICommand
                 const loadJob : LoadByteArrayJob = sequenceLoader.getJobByName( emitterVO.id.toString() );
                 bitmapParticleInit.bitmapData = ( loadJob.content as Bitmap ).bitmapData;
                 emitterVO.image = bitmapParticleInit.bitmapData;
-                emitterVO.emitterName = loadJob.fileName;
+                emitterVO.emitter.name = loadJob.fileName;
             }
         }
         dispatcher.dispatchEvent( new RefreshBitmapParticleInitializerRendererEvent() );

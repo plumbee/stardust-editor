@@ -52,7 +52,7 @@
             emitterNameWindow.okButton.addEventListener(MouseEvent.CLICK, handleRenamePopupEvent);
             emitterNameWindow.cancelButton.addEventListener(MouseEvent.CLICK, removeRenamePopup);
 
-            emitterNameWindow.label = EmitterValueObject(dropdownList.selectedItem).emitterName;
+            emitterNameWindow.label = EmitterValueObject(dropdownList.selectedItem).emitter.name;
 
             PopUpManager.centerPopUp(emitterNameWindow);
         }
@@ -83,11 +83,16 @@
             _emitterAC.source = list;
             dropdownList.selectedItem = emitterInFocus;
         }
+
+        private static function emitterNameDDL(item : Object) : String
+        {
+            return EmitterValueObject(item).emitter.name;
+        }
         ]]></fx:Script>
 
     <s:HGroup verticalAlign="middle" width="100%">
         <s:Label id="containerLabel" text="Emitters" fontSize="14" fontWeight="bold"/>
-        <s:DropDownList id="dropdownList" labelField="emitterName"
+        <s:DropDownList id="dropdownList" labelFunction="emitterNameDDL"
                         dataProvider="{_emitterAC}" requireSelection="true"
                         width="220"
                         change="onDropDownChange(event)"/>

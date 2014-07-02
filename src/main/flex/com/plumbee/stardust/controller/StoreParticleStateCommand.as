@@ -1,17 +1,8 @@
 package com.plumbee.stardust.controller
 {
 import com.plumbee.stardust.model.ProjectModel;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
 
 import flash.events.IEventDispatcher;
-import flash.utils.ByteArray;
-
-import idv.cjcat.stardustextended.common.particles.Particle;
-
-import idv.cjcat.stardustextended.common.particles.ParticleCollection;
-
-import idv.cjcat.stardustextended.common.particles.ParticleIterator;
-import idv.cjcat.stardustextended.twoD.particles.PooledParticle2DFactory;
 
 public class StoreParticleStateCommand
 {

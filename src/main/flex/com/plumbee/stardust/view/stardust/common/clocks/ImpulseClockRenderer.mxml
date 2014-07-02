@@ -32,9 +32,9 @@
             numParticlesTextInput.text = clock.impulseCount.toString();
             numBurstsTextInput.text = clock.repeatCount.toString();
 
-            if (emitterVO.burstClockInterval >= 20)
+            if (clock.burstInterval >= 20)
             {
-                burstIntervalTextInput.text = emitterVO.burstClockInterval.toString();
+                burstIntervalTextInput.text = clock.burstInterval.toString();
             }
 
             updateData();

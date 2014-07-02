@@ -60,7 +60,7 @@ public class SaveSimCommand implements ICommand
         const emitterArr : Array = [];
         for each (var emitterVO : EmitterValueObject in projectSettings.stadustSim.emitters)
         {
-            emitterArr.push( {id : emitterVO.id.toString(), emitterName : emitterVO.emitterName.toString(), burstClockInterval: emitterVO.burstClockInterval });
+            emitterArr.push( {id : emitterVO.id.toString() });
 
             var pngEncoder : PNGEncoder = new PNGEncoder();
             zip.addFile( emitterVO.imageName, pngEncoder.encode( emitterVO.image ), false );

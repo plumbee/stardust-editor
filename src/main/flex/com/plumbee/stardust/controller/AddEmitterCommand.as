@@ -89,7 +89,7 @@ public class AddEmitterCommand implements ICommand
         const emitterData : EmitterValueObject = new EmitterValueObject( uniqueID );
         emitterData.emitter = EmitterBuilder.buildEmitter( DEFAULT_EMITTER );
         emitterData.image = new BitmapData( 10, 10, false, Math.random()*16777215 );
-        emitterData.emitterName = emitterData.imageName;
+        emitterData.emitter.name = emitterData.imageName;
 
         if (projectSettings.stadustSim.emitters[emitterData.id])
         {
