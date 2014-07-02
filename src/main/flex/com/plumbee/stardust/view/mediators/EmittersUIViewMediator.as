@@ -10,7 +10,6 @@ package com.plumbee.stardust.view.mediators
 import com.plumbee.stardust.controller.events.ChangeEmitterInFocusEvent;
 import com.plumbee.stardust.controller.events.EmitterChangeEvent;
 import com.plumbee.stardust.controller.events.SetResultsForEmitterDropDownListEvent;
-import com.plumbee.stardust.controller.events.UpdateEmitterDropDownListEvent;
 import com.plumbee.stardust.view.EmittersUIView;
 import com.plumbee.stardust.view.events.EmitterChangeUIViewEvent;
 import com.plumbee.stardust.view.events.EmitterNameChangeEvent;
@@ -29,7 +28,6 @@ public class EmittersUIViewMediator extends Mediator
         addViewListener( EmitterNameChangeEvent.CHANGE, handleNameChangeEvent, EmitterNameChangeEvent );
         addViewListener( ChangeEmitterInFocusEvent.CHANGE, handleChangeEmitterInFocusEvent, ChangeEmitterInFocusEvent );
 
-        addViewListener( UpdateEmitterDropDownListEvent.UPDATE, handleUpdateDropDownListEvent, UpdateEmitterDropDownListEvent );
         addContextListener( SetResultsForEmitterDropDownListEvent.UPDATE, handleSetResultsDropDownListEvent, SetResultsForEmitterDropDownListEvent );
     }
 
@@ -51,11 +49,6 @@ public class EmittersUIViewMediator extends Mediator
     private function handleNameChangeEvent( event : EmitterNameChangeEvent ) : void
     {
         dispatch( new EmitterNameChangeEvent( EmitterNameChangeEvent.CHANGE, event.name, event.emitterVO ) );
-    }
-
-    private function handleUpdateDropDownListEvent( event : UpdateEmitterDropDownListEvent ) : void
-    {
-        dispatch( event );
     }
 
     private function handleSetResultsDropDownListEvent( event : SetResultsForEmitterDropDownListEvent ) : void

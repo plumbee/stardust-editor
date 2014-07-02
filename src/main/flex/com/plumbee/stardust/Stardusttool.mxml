@@ -7,8 +7,7 @@
         xmlns:config="com.plumbee.stardust.config.*"
         xmlns:mvcs="robotlegs.bender.bundles.mvcs.*"
         xmlns:rl2="robotlegs.bender.mxml.*"
-        frameRate="30"
-        >
+        frameRate="30">
 
     <fx:Declarations>
         <rl2:ContextBuilderTag>
@@ -48,6 +47,11 @@
         s|Button {
             color: #D0D0D0;
             skinClass: ClassReference("com.plumbee.stardust.view.skins.ButtonSkin");
+        }
+
+        s|TitleWindow {
+            backgroundColor: #2F3B3F;
+            skinClass: ClassReference("com.plumbee.stardust.view.skins.TitleWindowSkin");
         }
 
     </fx:Style>

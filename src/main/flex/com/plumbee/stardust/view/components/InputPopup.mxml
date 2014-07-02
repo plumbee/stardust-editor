@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
-<!-- containers\spark\myComponents\MyLoginForm.mxml -->
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
                xmlns:s="library://ns.adobe.com/flex/spark"
-               backgroundColor="#2F3B3F">
+               title="Enter an Emitter Name">
     <s:layout>
-        <s:VerticalLayout/>
+        <s:VerticalLayout paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" gap="15"/>
     </s:layout>
 
     <fx:Script>
@@ -14,11 +13,10 @@
         ]]>
     </fx:Script>
 
-    <s:Form>
-        <s:FormItem label="Emitter name:">
-            <s:TextInput id="emitterName" text="{label}" width="100%"/>
-        </s:FormItem>
-    </s:Form>
+    <s:HGroup verticalAlign="middle">
+        <s:Label text="Emitter name:" />
+        <s:TextInput id="emitterName" text="{label}" width="200"/>
+    </s:HGroup>
     <s:HGroup>
         <s:Button id="okButton" label="OK"/>
         <s:Button id="cancelButton" label="Cancel"/>
