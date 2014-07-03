@@ -1,10 +1,3 @@
-/**
- * Created with IntelliJ IDEA.
- * User: BenP
- * Date: 05/12/13
- * Time: 16:21
- * To change this template use File | Settings | File Templates.
- */
 package com.plumbee.stardust.config
 {
 

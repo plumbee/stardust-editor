@@ -3,6 +3,7 @@ package com.plumbee.stardust.controller
 
 import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardustplayer.SimLoader;
+import com.plumbee.stardustplayer.ZipFileNames;
 import com.plumbee.stardustplayer.emitter.EmitterValueObject;
 import com.plumbee.stardustplayer.project.ProjectValueObject;
 
@@ -46,7 +47,7 @@ public class SaveSimCommand implements ICommand
         const descObj : Object = {};
         descObj.version = 1;
 
-        addEmittersToProjectFile( zip, descObj );
+        addEmittersToProjectFile( zip );
         addBackgroundToProjectFile( zip, descObj );
 
         zip.addFileFromString( SimLoader.DESCRIPTOR_FILENAME, JSON.stringify( descObj ) );
@@ -55,18 +56,14 @@ public class SaveSimCommand implements ICommand
         return zippedData;
     }
 
-    private function addEmittersToProjectFile( zip : Zip, descObj : Object ) : void
+    private function addEmittersToProjectFile( zip : Zip ) : void
     {
-        const emitterArr : Array = [];
         for each (var emitterVO : EmitterValueObject in projectSettings.stadustSim.emitters)
         {
-            emitterArr.push( {id : emitterVO.id.toString() });
-
             var pngEncoder : PNGEncoder = new PNGEncoder();
-            zip.addFile( emitterVO.imageName, pngEncoder.encode( emitterVO.image ), false );
-            zip.addFileFromString( emitterVO.xmlName, XMLBuilder.buildXML( emitterVO.emitter ).toString() );
+            zip.addFile( ZipFileNames.getImageName(emitterVO.id), pngEncoder.encode( emitterVO.image ), false );
+            zip.addFileFromString( ZipFileNames.getXMLName(emitterVO.id), XMLBuilder.buildXML( emitterVO.emitter ).toString() );
         }
-        descObj.emitters = emitterArr;
     }
 
     private function addBackgroundToProjectFile( zip : Zip, descObj : Object ) : void
