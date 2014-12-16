@@ -7,7 +7,7 @@
  */
 package com.plumbee.stardust.view.events
 {
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.events.Event;
 
@@ -16,9 +16,9 @@ public class EmitterNameChangeEvent extends Event
     public static const CHANGE : String = "EmitterNameChangeEvent_CHANGE";
 
     private var _name : String;
-    private var _emitterVO : EmitterValueObject;
+    private var _emitterVO : BaseEmitterValueObject;
 
-    public function EmitterNameChangeEvent( type : String, name : String, emitterVO : EmitterValueObject )
+    public function EmitterNameChangeEvent( type : String, name : String, emitterVO : BaseEmitterValueObject )
     {
         super( type );
         _name = name;
@@ -35,7 +35,7 @@ public class EmitterNameChangeEvent extends Event
         return _name;
     }
 
-    public function get emitterVO() : EmitterValueObject
+    public function get emitterVO() : BaseEmitterValueObject
     {
         return _emitterVO;
     }

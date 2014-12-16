@@ -8,7 +8,7 @@
         import com.plumbee.stardust.view.events.ImpulseClockRendererSetDataEvent;
         import com.plumbee.stardust.view.events.ImpulseClockRendererUpdateEmitterInfoEvent;
         import com.plumbee.stardust.view.events.UpdateClockInEmitterGroupEvent;
-        import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+        import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
         import idv.cjcat.stardustextended.common.clocks.ImpulseClock;
 
@@ -26,7 +26,7 @@
             dispatchEvent(new ImpulseClockRendererSetDataEvent(ImpulseClockRendererSetDataEvent.SET));
         }
 
-        public function updateTextFieldsFromEmitterVO(emitterVO : EmitterValueObject) : void
+        public function updateTextFieldsFromEmitterVO(emitterVO : BaseEmitterValueObject) : void
         {
             var clock : ImpulseClock = ImpulseClock(emitterVO.emitter.clock);
             numParticlesTextInput.text = clock.impulseCount.toString();

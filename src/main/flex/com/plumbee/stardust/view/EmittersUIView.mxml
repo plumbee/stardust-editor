@@ -10,7 +10,7 @@
         import com.plumbee.stardust.view.components.InputPopup;
         import com.plumbee.stardust.view.events.EmitterChangeUIViewEvent;
         import com.plumbee.stardust.view.events.EmitterNameChangeEvent;
-        import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+        import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
         import mx.collections.ArrayCollection;
         import mx.events.CloseEvent;
@@ -52,7 +52,7 @@
             emitterNameWindow.okButton.addEventListener(MouseEvent.CLICK, handleRenamePopupEvent);
             emitterNameWindow.cancelButton.addEventListener(MouseEvent.CLICK, removeRenamePopup);
 
-            emitterNameWindow.label = EmitterValueObject(dropdownList.selectedItem).emitter.name;
+            emitterNameWindow.label = BaseEmitterValueObject(dropdownList.selectedItem).emitter.name;
 
             PopUpManager.centerPopUp(emitterNameWindow);
         }
@@ -66,19 +66,19 @@
         {
             var result : String = emitterNameWindow.emitterName.text;
             PopUpManager.removePopUp(emitterNameWindow);
-            var emitter : EmitterValueObject = dropdownList.selectedItem as EmitterValueObject;
+            var emitter : BaseEmitterValueObject = dropdownList.selectedItem as BaseEmitterValueObject;
 
             dispatchEvent(new EmitterNameChangeEvent(EmitterNameChangeEvent.CHANGE, result, emitter));
         }
 
         private function onDropDownChange(event : IndexChangeEvent) : void
         {
-            var emitter : EmitterValueObject = dropdownList.selectedItem as EmitterValueObject;
+            var emitter : BaseEmitterValueObject = dropdownList.selectedItem as BaseEmitterValueObject;
             dispatchEvent(new ChangeEmitterInFocusEvent(ChangeEmitterInFocusEvent.CHANGE, emitter));
             LOG.debug("Change Emitter: " + emitter);
         }
 
-        public function setDropDownListResult(list : Array, emitterInFocus : EmitterValueObject) : void
+        public function setDropDownListResult(list : Array, emitterInFocus : BaseEmitterValueObject) : void
         {
             _emitterAC.source = list;
             dropdownList.selectedItem = emitterInFocus;
@@ -86,7 +86,7 @@
 
         private static function emitterNameDDL(item : Object) : String
         {
-            return EmitterValueObject(item).emitter.name;
+            return BaseEmitterValueObject(item).emitter.name;
         }
         ]]></fx:Script>
 

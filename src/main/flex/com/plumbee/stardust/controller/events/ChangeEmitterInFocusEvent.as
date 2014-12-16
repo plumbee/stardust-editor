@@ -7,7 +7,7 @@
  */
 package com.plumbee.stardust.controller.events
 {
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.events.Event;
 
@@ -17,9 +17,9 @@ public class ChangeEmitterInFocusEvent extends Event
 {
     public static const CHANGE : String = "ChangeEmitterInFocusEvent_CHANGE";
 
-    private var _emitter : EmitterValueObject;
+    private var _emitter : BaseEmitterValueObject;
 
-    public function ChangeEmitterInFocusEvent( type : String, emitter : EmitterValueObject )
+    public function ChangeEmitterInFocusEvent( type : String, emitter : BaseEmitterValueObject )
     {
         super( type );
         _emitter = emitter;
@@ -30,7 +30,7 @@ public class ChangeEmitterInFocusEvent extends Event
         return new ChangeEmitterInFocusEvent( type, emitter );
     }
 
-    public function get emitter() : EmitterValueObject
+    public function get emitter() : BaseEmitterValueObject
     {
         return _emitter;
     }

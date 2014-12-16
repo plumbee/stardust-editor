@@ -11,7 +11,7 @@ package com.plumbee.stardust.controller
 import com.plumbee.stardust.controller.events.UpdateImpulseClockRendererEvent;
 import com.plumbee.stardust.controller.events.UpdateSteadyClockRendererEvent;
 import com.plumbee.stardust.model.ProjectModel;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.events.IEventDispatcher;
 
@@ -32,7 +32,7 @@ public class UpdateClockValuesFromModelCommand implements ICommand
 
     public function execute() : void
     {
-        var emitterVO : EmitterValueObject = projectSettings.emitterInFocus;
+        var emitterVO : BaseEmitterValueObject = projectSettings.emitterInFocus;
 
         var clock : Clock = emitterVO.emitter.clock;
 

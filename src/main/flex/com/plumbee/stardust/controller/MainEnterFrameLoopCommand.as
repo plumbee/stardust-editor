@@ -7,7 +7,7 @@ import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardust.view.StardusttoolMainView;
 import com.plumbee.stardust.view.events.MainEnterFrameLoopEvent;
 import com.plumbee.stardustplayer.SimPlayer;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.display.BitmapData;
 

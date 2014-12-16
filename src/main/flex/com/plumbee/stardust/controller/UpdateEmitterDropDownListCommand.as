@@ -9,7 +9,7 @@ package com.plumbee.stardust.controller
 {
 import com.plumbee.stardust.controller.events.SetResultsForEmitterDropDownListEvent;
 import com.plumbee.stardust.model.ProjectModel;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.events.IEventDispatcher;
 
@@ -27,7 +27,7 @@ public class UpdateEmitterDropDownListCommand implements ICommand
     public function execute() : void
     {
         var list : Array = [];
-        for each (var emitterVO : EmitterValueObject in project.stadustSim.emitters)
+        for each (var emitterVO : BaseEmitterValueObject in project.stadustSim.emitters)
         {
             list.push( emitterVO );
         }

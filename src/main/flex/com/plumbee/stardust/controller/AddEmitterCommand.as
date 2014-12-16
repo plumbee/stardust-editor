@@ -7,7 +7,7 @@ import com.plumbee.stardust.helpers.Globals;
 import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardustplayer.SimPlayer;
 import com.plumbee.stardustplayer.emitter.EmitterBuilder;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.display.BitmapData;
 
@@ -86,7 +86,7 @@ public class AddEmitterCommand implements ICommand
         {
             uniqueID++;
         }
-        const emitterData : EmitterValueObject = new EmitterValueObject( uniqueID, EmitterBuilder.buildEmitter(DEFAULT_EMITTER));
+        const emitterData : BaseEmitterValueObject = new BaseEmitterValueObject( uniqueID, EmitterBuilder.buildEmitter(DEFAULT_EMITTER));
         emitterData.image = new BitmapData( 10, 10, false, Math.random()*16777215 );
         emitterData.emitter.name = "Emitter " + uniqueID;
 

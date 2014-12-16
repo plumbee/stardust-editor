@@ -7,7 +7,7 @@
  */
 package com.plumbee.stardust.controller.events
 {
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.events.Event;
 
@@ -15,9 +15,9 @@ public class SetResultsForEmitterDropDownListEvent extends Event
 {
     public static const UPDATE : String = "SetResultsForEmitterDropDownListEvent_UPDATE";
     private var _list : Array;
-    private var _emitterInFocus : EmitterValueObject;
+    private var _emitterInFocus : BaseEmitterValueObject;
 
-    public function SetResultsForEmitterDropDownListEvent( type : String, list : Array, emitterInFocus : EmitterValueObject )
+    public function SetResultsForEmitterDropDownListEvent( type : String, list : Array, emitterInFocus : BaseEmitterValueObject )
     {
         super( type );
         _list = list;
@@ -34,7 +34,7 @@ public class SetResultsForEmitterDropDownListEvent extends Event
         return _list;
     }
 
-    public function get emitterInFocus() : EmitterValueObject
+    public function get emitterInFocus() : BaseEmitterValueObject
     {
         return _emitterInFocus;
     }

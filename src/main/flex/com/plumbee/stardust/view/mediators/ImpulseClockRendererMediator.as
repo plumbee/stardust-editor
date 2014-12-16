@@ -14,7 +14,7 @@ import com.plumbee.stardust.view.events.ImpulseClockRendererSetDataEvent;
 import com.plumbee.stardust.view.events.ImpulseClockRendererUpdateEmitterInfoEvent;
 import com.plumbee.stardust.view.events.UpdateClockInEmitterGroupEvent;
 import com.plumbee.stardust.view.stardust.common.clocks.ImpulseClockRenderer;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import robotlegs.bender.bundles.mvcs.Mediator;
 
@@ -41,7 +41,7 @@ public class ImpulseClockRendererMediator extends Mediator
 
     private function handleSetData( event : ImpulseClockRendererSetDataEvent ) : void
     {
-        var emitterVO : EmitterValueObject = projectSettings.emitterInFocus;
+        var emitterVO : BaseEmitterValueObject = projectSettings.emitterInFocus;
 
         view.updateTextFieldsFromEmitterVO( emitterVO );
     }

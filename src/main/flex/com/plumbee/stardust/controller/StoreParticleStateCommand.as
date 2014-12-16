@@ -22,7 +22,7 @@ public class StoreParticleStateCommand
     private function takeSnapshot() : void
     {
         const particleData : Object = {};
-        for each (var em : EmitterValueObject in projectSettings.stadustSim.emitters)
+        for each (var em : BaseEmitterValueObject in projectSettings.stadustSim.emitters)
         {
             const allParticles : Array = [];
             const iterator : ParticleIterator = em.emitter.particles.getIterator();
@@ -49,7 +49,7 @@ public class StoreParticleStateCommand
         var bArr : ByteArray = zip.getFile(); // or get it from a parameter
         var particlesData : Object = bArr.readObject();
         var factory = new PooledParticle2DFactory();
-        for each (var em : EmitterValueObject in loader.project.emitters)
+        for each (var em : BaseEmitterValueObject in loader.project.emitters)
         {
             var arr : Array =  particlesData[em.id];
             var particles:ParticleCollection = factory.createParticles(arr.length, 0);

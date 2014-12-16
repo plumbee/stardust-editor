@@ -2,7 +2,7 @@ package com.plumbee.stardust.controller
 {
 import com.plumbee.stardust.controller.events.RefreshBitmapParticleInitializerRendererEvent;
 import com.plumbee.stardust.model.ProjectModel;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 import com.plumbee.stardustplayer.sequenceLoader.ISequenceLoader;
 import com.plumbee.stardustplayer.sequenceLoader.LoadByteArrayJob;
 
@@ -66,7 +66,7 @@ public class LoadEmitterImageFromFileReferenceCommand implements ICommand
     {
         sequenceLoader.removeEventListener( Event.COMPLETE, onEmitterImageLoaded );
 
-        const emitterVO : EmitterValueObject = projectSettings.emitterInFocus;
+        const emitterVO : BaseEmitterValueObject = projectSettings.emitterInFocus;
 
         const initializers : Array = emitterVO.emitter.sd::initializers;
         for (var i:int = 0; i < initializers.length; i++)

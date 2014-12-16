@@ -4,7 +4,7 @@ package com.plumbee.stardust.controller
 import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardustplayer.SimLoader;
 import com.plumbee.stardustplayer.ZipFileNames;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 import com.plumbee.stardustplayer.project.ProjectValueObject;
 
 import flash.events.IEventDispatcher;
@@ -58,7 +58,7 @@ public class SaveSimCommand implements ICommand
 
     private function addEmittersToProjectFile( zip : Zip ) : void
     {
-        for each (var emitterVO : EmitterValueObject in projectSettings.stadustSim.emitters)
+        for each (var emitterVO : BaseEmitterValueObject in projectSettings.stadustSim.emitters)
         {
             var pngEncoder : PNGEncoder = new PNGEncoder();
             zip.addFile( ZipFileNames.getImageName(emitterVO.id), pngEncoder.encode( emitterVO.image ), false );

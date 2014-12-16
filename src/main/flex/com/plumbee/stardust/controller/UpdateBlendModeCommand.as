@@ -4,7 +4,7 @@ package com.plumbee.stardust.controller
 import com.plumbee.stardust.controller.events.StartSimEvent;
 import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardust.view.events.UpdateBlendModeEvent;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.events.IEventDispatcher;
 
@@ -28,7 +28,7 @@ public class UpdateBlendModeCommand implements ICommand
     public function execute() : void
     {
 
-        var emitterVO : EmitterValueObject = projectSettings.emitterInFocus;
+        var emitterVO : BaseEmitterValueObject = projectSettings.emitterInFocus;
 
         var handler : ParticleHandler = emitterVO.emitter.particleHandler;
 

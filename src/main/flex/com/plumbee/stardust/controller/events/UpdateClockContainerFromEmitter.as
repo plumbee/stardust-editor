@@ -7,7 +7,7 @@
  */
 package com.plumbee.stardust.controller.events
 {
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.events.Event;
 
@@ -16,9 +16,9 @@ import idv.cjcat.stardustextended.twoD.emitters.Emitter2D;
 public class UpdateClockContainerFromEmitter extends Event
 {
     public static const UPDATE : String = "UpdateClockContainerFromEmitter";
-    private var _emitter : EmitterValueObject;
+    private var _emitter : BaseEmitterValueObject;
 
-    public function UpdateClockContainerFromEmitter( type : String, emitter : EmitterValueObject )
+    public function UpdateClockContainerFromEmitter( type : String, emitter : BaseEmitterValueObject )
     {
         super( type );
         _emitter = emitter;
@@ -29,7 +29,7 @@ public class UpdateClockContainerFromEmitter extends Event
         return new UpdateClockContainerFromEmitter( type, _emitter );
     }
 
-    public function get emitter() : EmitterValueObject
+    public function get emitter() : BaseEmitterValueObject
     {
         return _emitter;
     }

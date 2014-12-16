@@ -11,7 +11,7 @@ package com.plumbee.stardust.controller
 import com.plumbee.stardust.controller.events.ChangeEmitterInFocusEvent;
 import com.plumbee.stardust.controller.events.StartSimEvent;
 import com.plumbee.stardust.model.ProjectModel;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 import com.plumbee.stardustplayer.project.ProjectValueObject;
 
 import flash.events.IEventDispatcher;
@@ -41,7 +41,7 @@ public class RemoveEmitterCommand implements ICommand
             projectSettings.emitterInFocus.emitter.clearParticles();
             delete projectObj.emitters[projectSettings.emitterInFocus.id];
 
-            for each (var emitter : EmitterValueObject in projectObj.emitters)
+            for each (var emitter : BaseEmitterValueObject in projectObj.emitters)
             {
                 dispatcher.dispatchEvent( new ChangeEmitterInFocusEvent( ChangeEmitterInFocusEvent.CHANGE, emitter ) );
                 break;

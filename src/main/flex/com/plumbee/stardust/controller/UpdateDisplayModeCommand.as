@@ -5,7 +5,7 @@ import com.plumbee.stardust.controller.events.SetBlendModeSelectedEvent;
 import com.plumbee.stardust.controller.events.UpdateDisplayModeEvent;
 import com.plumbee.stardust.helpers.Globals;
 import com.plumbee.stardust.model.ProjectModel;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 import com.plumbee.stardustplayer.project.DisplayModes;
 
 import flash.display.BlendMode;
@@ -50,7 +50,7 @@ public class UpdateDisplayModeCommand implements ICommand
     private function setDisplayModeStarling() : void
     {
         const emitters : Dictionary = projectSettings.stadustSim.emitters;
-        for each( var emitterVO : EmitterValueObject in emitters )
+        for each( var emitterVO : BaseEmitterValueObject in emitters )
         {
             var blendMode : String = DisplayObjectHandler(emitterVO.emitter.particleHandler).blendMode;
             if ( !isBlendModeStarlingSafe( blendMode ) )

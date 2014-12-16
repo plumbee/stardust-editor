@@ -10,7 +10,7 @@ package com.plumbee.stardust.controller
 import com.plumbee.stardust.controller.events.StartSimEvent;
 import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardust.view.events.UpdateSmoothingEvent;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.events.IEventDispatcher;
 
@@ -34,7 +34,7 @@ public class UpdateSmoothingCommand implements ICommand
 
     public function execute() : void
     {
-        const emitterVO : EmitterValueObject = projectSettings.emitterInFocus;
+        const emitterVO : BaseEmitterValueObject = projectSettings.emitterInFocus;
 
         const inits : Array = emitterVO.emitter.sd::initializers;
         const numInits : uint = inits.length;

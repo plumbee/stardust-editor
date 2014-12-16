@@ -7,7 +7,7 @@
  */
 package com.plumbee.stardust.controller.events
 {
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.events.Event;
 
@@ -15,9 +15,9 @@ public class UpdateEmitterFromViewUICollectionsEvent extends Event
 {
     public static const UPDATE : String = "UpdateEmitterFromViewUICollectionsEvent_UPDATE";
 
-    private var _emitterInFocus : EmitterValueObject;
+    private var _emitterInFocus : BaseEmitterValueObject;
 
-    public function UpdateEmitterFromViewUICollectionsEvent( type : String, emitterInFocus : EmitterValueObject )
+    public function UpdateEmitterFromViewUICollectionsEvent( type : String, emitterInFocus : BaseEmitterValueObject )
     {
         _emitterInFocus = emitterInFocus;
         super( type );
@@ -28,7 +28,7 @@ public class UpdateEmitterFromViewUICollectionsEvent extends Event
         return new UpdateEmitterFromViewUICollectionsEvent( type, _emitterInFocus );
     }
 
-    public function get emitterInFocus() : EmitterValueObject
+    public function get emitterInFocus() : BaseEmitterValueObject
     {
         return _emitterInFocus;
     }

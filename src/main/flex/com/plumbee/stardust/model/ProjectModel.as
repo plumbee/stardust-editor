@@ -1,7 +1,7 @@
 package com.plumbee.stardust.model
 {
 
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 import com.plumbee.stardustplayer.project.DisplayModes;
 import com.plumbee.stardustplayer.project.ProjectValueObject;
 
@@ -11,7 +11,7 @@ import flash.utils.ByteArray;
 public class ProjectModel
 {
 
-    public var emitterInFocus : EmitterValueObject;
+    public var emitterInFocus : BaseEmitterValueObject;
     public var stadustSim : ProjectValueObject;
 
     public function getDisplayMode() : String

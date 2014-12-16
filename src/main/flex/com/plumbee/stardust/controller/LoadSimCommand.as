@@ -9,7 +9,7 @@ import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardust.view.events.RefreshBackgroundViewEvent;
 import com.plumbee.stardustplayer.ISimLoader;
 import com.plumbee.stardustplayer.SimPlayer;
-import com.plumbee.stardustplayer.emitter.EmitterValueObject;
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.events.Event;
 
@@ -48,7 +48,7 @@ public class LoadSimCommand implements ICommand
 
         if ( projectSettings.stadustSim )
         {
-            for each (var oldEmitterVO : EmitterValueObject in projectSettings.stadustSim.emitters)
+            for each (var oldEmitterVO : BaseEmitterValueObject in projectSettings.stadustSim.emitters)
             {
                 oldEmitterVO.emitter.clearActions();
                 oldEmitterVO.emitter.clearInitializers();
@@ -57,7 +57,7 @@ public class LoadSimCommand implements ICommand
         }
 
         projectSettings.stadustSim = simLoader.project;
-        for each (var emitterVO : EmitterValueObject in projectSettings.stadustSim.emitters)
+        for each (var emitterVO : BaseEmitterValueObject in projectSettings.stadustSim.emitters)
         {
             projectSettings.emitterInFocus = emitterVO;
             break;
