@@ -10,6 +10,7 @@ import com.plumbee.stardust.controller.events.SetSmoothingCheckBoxEvent;
 import com.plumbee.stardust.helpers.Globals;
 import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardustplayer.SimPlayer;
+import com.plumbee.stardustplayer.emitter.DisplayListEmitterValueObject;
 
 import flash.display.MovieClip;
 import flash.events.IEventDispatcher;
@@ -17,6 +18,7 @@ import flash.utils.getQualifiedClassName;
 
 import idv.cjcat.stardustextended.sd;
 import idv.cjcat.stardustextended.twoD.handlers.DisplayObjectHandler;
+import idv.cjcat.stardustextended.twoD.starling.StarlingHandler;
 
 import mx.logging.ILogger;
 import mx.logging.Log;
@@ -66,11 +68,17 @@ public class StartSimCommand implements ICommand
         dispatcher.dispatchEvent( new UpdateEmitterDropDownListEvent( UpdateEmitterDropDownListEvent.UPDATE ) );
 
         //refresh the smoothing checkbox.
-        dispatcher.dispatchEvent( new SetSmoothingCheckBoxEvent( projectSettings.emitterInFocus.smoothing ) );
+        dispatcher.dispatchEvent( new SetSmoothingCheckBoxEvent( (projectSettings.emitterInFocus as DisplayListEmitterValueObject).smoothing ) );
 
         //refresh the displayMode radiobuttons and the blendMode dropdown.
-        const blendMode : String = DisplayObjectHandler(projectSettings.emitterInFocus.emitter.particleHandler).blendMode;
-        dispatcher.dispatchEvent( new SetBlendModeSelectedEvent( SetBlendModeSelectedEvent.DISPLAY_LIST, blendMode ) );
+	    var blendMode : String;
+	    if(projectSettings.emitterInFocus.emitter.particleHandler is DisplayObjectHandler) {
+	        blendMode = DisplayObjectHandler(projectSettings.emitterInFocus.emitter.particleHandler).blendMode;
+	        dispatcher.dispatchEvent( new SetBlendModeSelectedEvent( SetBlendModeSelectedEvent.DISPLAY_LIST, blendMode ) );
+	    } else {
+		    blendMode = StarlingHandler(projectSettings.emitterInFocus.emitter.particleHandler).blendMode;
+		    dispatcher.dispatchEvent( new SetBlendModeSelectedEvent( SetBlendModeSelectedEvent.STARLING, blendMode ) );
+	    }
 
         // setup zone drawer
         dispatcher.dispatchEvent( new InitalizeZoneDrawerEvent( InitalizeZoneDrawerEvent.RESET ) );
