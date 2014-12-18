@@ -67,7 +67,7 @@
 
         ]]></fx:Script>
 
-    <s:HGroup verticalAlign="middle" visible="false" includeInLayout="false">
+    <s:HGroup verticalAlign="middle">
         <s:Label text="Display mode:"/>
         <s:RadioButton groupName="rbg" id="displayObjectRadioButton" label="displayObject"
                        selected="true" change="updateSim()"/>

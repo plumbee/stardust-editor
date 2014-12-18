@@ -246,7 +246,7 @@
 
         <dependency>
             <groupId>com.plumbee</groupId>
-            <artifactId>stardust-sim-loader</artifactId>
+            <artifactId>stardust-starling-sim-loader</artifactId>
             <version>${stardust.sim.loader.version}</version>
             <type>swc</type>
         </dependency>
