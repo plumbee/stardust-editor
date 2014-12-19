@@ -6,7 +6,7 @@
          preinitialize="Globals.init()"
          initialize="initializeCanvasesForEmitters()"
          width="100%"
-         height="100%" >
+         height="100%">
 
     <fx:Script><![CDATA[
         import com.plumbee.stardust.controller.events.StartSimEvent;
@@ -19,11 +19,10 @@
         import mx.logging.ILogger;
         import mx.logging.Log;
 
-
         import starling.core.Starling;
         import starling.display.Sprite;
 
-        private static const LOG : ILogger = Log.getLogger( getQualifiedClassName( StardusttoolMainView ).replace( "::", "." ) );
+        private static const LOG : ILogger = Log.getLogger(getQualifiedClassName(StardusttoolMainView).replace("::", "."));
 
         public static const leftColumnWidth : int = 615;
         private const _initializerAC : ArrayCollection = new ArrayCollection();
@@ -33,8 +32,8 @@
 
         private function initializeCanvasesForEmitters() : void
         {
-            previewGroup.mx_internal::$addChild( Globals.canvas );
-            statsHolder.mx_internal::$addChild( new Stats() );
+            previewGroup.mx_internal::$addChild(Globals.canvas);
+            statsHolder.mx_internal::$addChild(new Stats());
             Globals.canvas.mouseChildren = Globals.canvas.mouseEnabled = false;
             Globals.backgroundHolder = background;
         }
@@ -50,12 +49,13 @@
         public function setupStarlingCanvas() : void
         {
             Starling.handleLostContext = true;
-            starlingInstance = new Starling( starling.display.Sprite, stage );
+            starlingInstance = new Starling(starling.display.Sprite, stage);
             starlingInstance.antiAliasing = 1;
             starlingInstance.start();
             Globals.starlingCanvas.touchable = false;
-            starlingInstance.stage.addChild( Globals.starlingCanvas );
-            Globals.starlingCanvas.x = leftColumnWidth;
+            starlingInstance.stage.addChild(Globals.starlingCanvas);
+            Globals.starlingCanvas.x = leftColumnWidth + 250;
+            Globals.starlingCanvas.y = 250;
         }
 
         public function resizeStarlingViewPort() : void
@@ -80,33 +80,33 @@
 
         private function dispatchStartSimEvent() : void
         {
-            dispatchEvent( new StartSimEvent() );
+            dispatchEvent(new StartSimEvent());
         }
 
         private function dispatchLoadSimEvent() : void
         {
-            dispatchEvent( new MainViewLoadSimEvent( MainViewLoadSimEvent.LOAD ) );
+            dispatchEvent(new MainViewLoadSimEvent(MainViewLoadSimEvent.LOAD));
 
         }
 
         private function dispatchSaveSimEvent() : void
         {
-            dispatchEvent( new MainViewSaveSimEvent( MainViewSaveSimEvent.SAVE ) );
+            dispatchEvent(new MainViewSaveSimEvent(MainViewSaveSimEvent.SAVE));
         }
 
         public function updateStagePosition() : void
         {
             canvasPosition.validateNow();
-            if ( canvasPosition.centerRadioButton.selected )
+            if (canvasPosition.centerRadioButton.selected)
             {
                 //validate to force correct size for background.
                 validateNow();
                 previewGroup.x = background.width * 0.5;
                 previewGroup.y = stage.stageHeight * 0.5;
 
-                if ( canvasPosition.centerBackgroundCheckBox.selected )
+                if (canvasPosition.centerBackgroundCheckBox.selected)
                 {
-                    if ( background.numChildren == 1 )
+                    if (background.numChildren == 1)
                     {
                         var dispObj : DisplayObject = background.getChildAt(0);
                         dispObj.x = previewGroup.x;
@@ -115,7 +115,7 @@
                 }
                 else
                 {
-                    if ( background.numChildren == 1 )
+                    if (background.numChildren == 1)
                     {
                         dispObj = background.getChildAt(0);
                         dispObj.x = 0;
@@ -128,7 +128,7 @@
                 previewGroup.x = 0;
                 previewGroup.y = 0;
 
-                if ( background.numChildren == 1 )
+                if (background.numChildren == 1)
                 {
                     dispObj = background.getChildAt(0);
                     dispObj.x = 0;
@@ -167,7 +167,7 @@
         <mx:Spacer height="13"/>
         <s:CheckBox label="Zones visible" id="zonesVisibleCheckBox"/>
         <view:BackgroundProvider background="{background}" width="100%" id="backgroundProvider"/>
-        <view:CanvasPositionView mainView="{this}" id="canvasPosition" />
+        <view:CanvasPositionView mainView="{this}" id="canvasPosition"/>
         <s:Spacer height="100%"/>
         <mx:UIComponent id="statsHolder" height="125"/>
     </s:VGroup>

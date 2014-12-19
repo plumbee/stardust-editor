@@ -11,6 +11,7 @@ import flash.events.IEventDispatcher;
 import idv.cjcat.stardustextended.common.handlers.ParticleHandler;
 
 import idv.cjcat.stardustextended.twoD.handlers.DisplayObjectHandler;
+import idv.cjcat.stardustextended.twoD.starling.StarlingHandler;
 
 import robotlegs.bender.extensions.commandCenter.api.ICommand;
 
@@ -35,6 +36,8 @@ public class UpdateBlendModeCommand implements ICommand
         if ( handler is DisplayObjectHandler )
         {
             (handler as DisplayObjectHandler).blendMode = event.newBlendMode;
+        } else if (handler is StarlingHandler) {
+	        (handler as StarlingHandler).blendMode = event.newBlendMode;
         }
 
         dispatcher.dispatchEvent( new StartSimEvent() );

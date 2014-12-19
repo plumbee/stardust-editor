@@ -5,6 +5,7 @@ import com.plumbee.stardust.controller.events.ChangeEmitterInFocusEvent;
 import com.plumbee.stardust.controller.events.StartSimEvent;
 import com.plumbee.stardust.controller.events.UpdateEmitterDropDownListEvent;
 import com.plumbee.stardust.model.ProjectModel;
+import com.plumbee.stardustplayer.emitter.DisplayListEmitterValueObject;
 
 import flash.events.IEventDispatcher;
 
@@ -24,7 +25,7 @@ public class ChangeEmitterInFocusCommand implements ICommand
 
     public function execute() : void
     {
-        project.emitterInFocus = event.emitter;
+        project.emitterInFocus = event.emitter as DisplayListEmitterValueObject;
 
         //refresh the emitter dropdown list.
         dispatcher.dispatchEvent( new UpdateEmitterDropDownListEvent( UpdateEmitterDropDownListEvent.UPDATE ) );

@@ -3,9 +3,11 @@ package com.plumbee.stardust.controller
 
 import com.plumbee.stardust.controller.events.ChangeEmitterInFocusEvent;
 import com.plumbee.stardust.controller.events.StartSimEvent;
+import com.plumbee.stardust.controller.events.UpdateProjectRendererEvent;
 import com.plumbee.stardust.helpers.Globals;
 import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardustplayer.SimPlayer;
+import com.plumbee.stardustplayer.emitter.DisplayListEmitterValueObject;
 import com.plumbee.stardustplayer.emitter.EmitterBuilder;
 import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
@@ -15,6 +17,7 @@ import flash.events.IEventDispatcher;
 
 import idv.cjcat.stardustextended.sd;
 import idv.cjcat.stardustextended.twoD.handlers.DisplayObjectHandler;
+import idv.cjcat.stardustextended.twoD.starling.StarlingHandler;
 
 import robotlegs.bender.extensions.commandCenter.api.ICommand;
 
@@ -86,8 +89,9 @@ public class AddEmitterCommand implements ICommand
         {
             uniqueID++;
         }
-        const emitterData : BaseEmitterValueObject = new BaseEmitterValueObject( uniqueID, EmitterBuilder.buildEmitter(DEFAULT_EMITTER));
-        emitterData.image = new BitmapData( 10, 10, false, Math.random()*16777215 );
+        const emitterData : DisplayListEmitterValueObject = new DisplayListEmitterValueObject( uniqueID, EmitterBuilder.buildEmitter(DEFAULT_EMITTER));
+	    emitterData.prepareForDisplayList();
+	    emitterData.image = new BitmapData( 10, 10, false, Math.random()*16777215 );
         emitterData.emitter.name = "Emitter " + uniqueID;
 
         if (projectSettings.stadustSim.emitters[emitterData.id])
@@ -96,11 +100,14 @@ public class AddEmitterCommand implements ICommand
         }
         projectSettings.stadustSim.emitters[emitterData.id] = emitterData;
 
-        //set the simulation for the new emitter
+	    //set the simulation for the new emitter
         if (emitterData.emitter.particleHandler is DisplayObjectHandler)
         {
             simPlayer.setSimulation( projectSettings.stadustSim, Globals.canvas);
-        }
+        }else if (emitterData.emitter.particleHandler is StarlingHandler)
+	    {
+		    simPlayer.setSimulation( projectSettings.stadustSim, Globals.starlingCanvas);
+	    }
         else
         {
             simPlayer.setSimulation( projectSettings.stadustSim, Globals.bitmapData);
@@ -110,6 +117,8 @@ public class AddEmitterCommand implements ICommand
         dispatcher.dispatchEvent( new ChangeEmitterInFocusEvent( ChangeEmitterInFocusEvent.CHANGE, emitterData ) );
 
         dispatcher.dispatchEvent( new StartSimEvent() );
+
+	    dispatcher.dispatchEvent(new UpdateProjectRendererEvent(UpdateProjectRendererEvent.UPDATE));
     }
 
 }

@@ -28,6 +28,7 @@ import com.plumbee.stardust.controller.UpdateClockValuesFromModelCommand;
 import com.plumbee.stardust.controller.UpdateDisplayModeCommand;
 import com.plumbee.stardust.controller.UpdateEmitterDropDownListCommand;
 import com.plumbee.stardust.controller.UpdateEmitterInfoTicksPerCallCommand;
+import com.plumbee.stardust.controller.UpdateProjectRendererCommand;
 import com.plumbee.stardust.controller.UpdateSmoothingCommand;
 import com.plumbee.stardust.controller.events.BackgroundChangeEvent;
 import com.plumbee.stardust.controller.events.ChangeEmitterInFocusEvent;
@@ -40,6 +41,7 @@ import com.plumbee.stardust.controller.events.StartToolEvent;
 import com.plumbee.stardust.controller.events.UpdateClockValuesFromModelEvent;
 import com.plumbee.stardust.controller.events.UpdateDisplayModeEvent;
 import com.plumbee.stardust.controller.events.UpdateEmitterDropDownListEvent;
+import com.plumbee.stardust.controller.events.UpdateProjectRendererEvent;
 import com.plumbee.stardust.view.events.UpdateSmoothingEvent;
 import com.plumbee.stardustplayer.ISimLoader;
 import com.plumbee.stardustplayer.SimLoader;
@@ -149,7 +151,9 @@ public class AppConfig implements IConfig
         eventCommandMap.map( ClockTypeChangeEvent.STEADY_CLOCK, ClockTypeChangeEvent ).toCommand( SetEmitterInFocusClockTypeToSteadyCommand );
         eventCommandMap.map( InitializeZoneDrawerFromEmitterGroupEvent.INITIALIZE, InitializeZoneDrawerFromEmitterGroupEvent ).toCommand( InitializeZoneDrawerFromEmitterCommand );
         eventCommandMap.map( MainEnterFrameLoopEvent.ENTER_FRAME, MainEnterFrameLoopEvent ).toCommand( MainEnterFrameLoopCommand );
-        injector.map( ProjectModel ).asSingleton();
+	    eventCommandMap.map( UpdateProjectRendererEvent.UPDATE, UpdateProjectRendererEvent ).toCommand( UpdateProjectRendererCommand );
+
+	    injector.map( ProjectModel ).asSingleton();
         injector.map( ISequenceLoader ).toSingleton( SequenceLoader );
         injector.map( ISimLoader ).toSingleton( SimLoader );
         injector.map(SimPlayer).asSingleton();
