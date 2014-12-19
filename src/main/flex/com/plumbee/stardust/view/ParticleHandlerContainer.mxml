@@ -65,6 +65,11 @@
             dispatchEvent( new UpdateSmoothingEvent( useSmoothingCheckBox.selected ) );
         }
 
+        public function resetDisplayMode() : void
+        {
+            displayObjectRadioButton.selected = true;
+        }
+
         ]]></fx:Script>
 
     <s:HGroup verticalAlign="middle">

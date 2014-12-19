@@ -54,8 +54,6 @@
             starlingInstance.start();
             Globals.starlingCanvas.touchable = false;
             starlingInstance.stage.addChild(Globals.starlingCanvas);
-            Globals.starlingCanvas.x = leftColumnWidth + 250;
-            Globals.starlingCanvas.y = 250;
         }
 
         public function resizeStarlingViewPort() : void
@@ -66,6 +64,8 @@
             Starling.current.viewPort = viewPortRectangle;
             starlingInstance.stage.stageWidth = stage.stageWidth;
             starlingInstance.stage.stageHeight = stage.stageHeight;
+            Globals.starlingCanvas.x = leftColumnWidth + previewGroup.x;
+            Globals.starlingCanvas.y = stage.stageHeight / 2;
         }
 
         public function get initializerAC() : ArrayCollection

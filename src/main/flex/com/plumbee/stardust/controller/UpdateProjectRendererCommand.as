@@ -56,7 +56,6 @@ public class UpdateProjectRendererCommand implements ICommand
 		var displayListEmitterValueObject : DisplayListEmitterValueObject = new DisplayListEmitterValueObject(emitterVO.id, emitterVO.emitter);
 		displayListEmitterValueObject.addDisplayListInitializers();
 		(displayListEmitterValueObject.emitter.particleHandler as DisplayObjectHandler).container = Globals.canvas;
-//		return displayListEmitterValueObject;
 	}
 
 	protected function setupRenderingForStarling(emitterVO : BaseEmitterValueObject) : void
@@ -64,7 +63,6 @@ public class UpdateProjectRendererCommand implements ICommand
 		var starlingEmitterValueObject : StarlingEmitterValueObject = new StarlingEmitterValueObject(emitterVO.id, emitterVO.emitter);
 		starlingEmitterValueObject.addStarlingInitializers(getTexturesFromBitmapParticleInit(emitterVO.emitter));
 		(starlingEmitterValueObject.emitter.particleHandler as StarlingHandler).container = Globals.starlingCanvas;
-//		return starlingEmitterValueObject;
 	}
 
 	private function getTexturesFromBitmapParticleInit(emitter2D : Emitter2D) : Vector.<Texture>
@@ -86,7 +84,6 @@ public class UpdateProjectRendererCommand implements ICommand
 				}
 				else
 				{
-					//Need to get information
 					var numTextures : uint = mainTexture.width / bitmapParticleInit.spriteSheetSliceWidth;
 
 					for (var j : uint = 0; j < numTextures; j++)

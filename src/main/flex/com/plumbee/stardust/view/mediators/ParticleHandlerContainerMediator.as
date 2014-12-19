@@ -8,6 +8,7 @@
 package com.plumbee.stardust.view.mediators
 {
 
+import com.plumbee.stardust.controller.events.RefreshBitmapParticleInitializerRendererEvent;
 import com.plumbee.stardust.controller.events.SetBlendModeSelectedEvent;
 import com.plumbee.stardust.controller.events.UpdateDisplayModeEvent;
 import com.plumbee.stardust.controller.events.SetSmoothingCheckBoxEvent;
@@ -35,7 +36,13 @@ public class ParticleHandlerContainerMediator extends Mediator
         addContextListener( SetBlendModeSelectedEvent.DISPLAY_LIST, handleSetBlendModeSelectedInDropdownDisplayList, SetBlendModeSelectedEvent );
         addContextListener( SetBlendModeSelectedEvent.STARLING, handleSetBlendModeSelectedInDropdownStarling, SetBlendModeSelectedEvent );
         addContextListener( SetSmoothingCheckBoxEvent.SET, handleUpdateSmoothingCheckBox, SetSmoothingCheckBoxEvent );
+	    addContextListener( RefreshBitmapParticleInitializerRendererEvent.TYPE, reset, RefreshBitmapParticleInitializerRendererEvent );
     }
+
+	private function reset(event : RefreshBitmapParticleInitializerRendererEvent) : void
+	{
+		view.resetDisplayMode();
+	}
 
     private function handleDisplayModeChange( event : DisplayModeChangeEvent ) : void
     {

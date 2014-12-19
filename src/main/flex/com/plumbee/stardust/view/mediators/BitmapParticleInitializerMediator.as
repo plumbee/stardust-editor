@@ -3,6 +3,7 @@ package com.plumbee.stardust.view.mediators
 
 import com.plumbee.stardust.controller.events.RefreshBitmapParticleInitializerRendererEvent;
 import com.plumbee.stardust.controller.events.StartSimEvent;
+import com.plumbee.stardust.controller.events.UpdateProjectRendererEvent;
 import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardust.view.events.LoadEmitterImageFromFileReferenceEvent;
 import com.plumbee.stardust.view.stardust.twoD.initializers.BitmapParticleInitalizer;
@@ -21,8 +22,8 @@ public class BitmapParticleInitializerMediator extends Mediator
     {
         addViewListener( LoadEmitterImageFromFileReferenceEvent.LOAD, handleLoadImage, LoadEmitterImageFromFileReferenceEvent );
         addViewListener( StartSimEvent.START, handleStartSim, StartSimEvent );
-
-        addContextListener( RefreshBitmapParticleInitializerRendererEvent.TYPE, handleSourceBDChange, RefreshBitmapParticleInitializerRendererEvent );
+	    addViewListener( UpdateProjectRendererEvent.UPDATE, dispatch, UpdateProjectRendererEvent );
+	    addContextListener( RefreshBitmapParticleInitializerRendererEvent.TYPE, handleSourceBDChange, RefreshBitmapParticleInitializerRendererEvent );
     }
 
     private function handleStartSim( event : StartSimEvent ) : void

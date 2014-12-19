@@ -3,6 +3,7 @@
                 xmlns:s="library://ns.adobe.com/flex/spark" xmlns:components="com.plumbee.stardust.view.components.*" >
 
     <fx:Script><![CDATA[
+        import com.plumbee.stardust.controller.events.UpdateProjectRendererEvent;
         import com.plumbee.stardust.view.events.LoadEmitterImageFromFileReferenceEvent;
 
         import idv.cjcat.stardustextended.twoD.display.bitmapParticle.BitmapParticle;
@@ -58,6 +59,7 @@
         public function updateUI() : void
         {
             data = super.data;
+
         }
 
         private function validateTextInputRange() : void
@@ -99,6 +101,7 @@
             initializer.spriteSheetSliceHeight = parseInt(heightTextInput.text);
             initializer.spriteSheetAnimationSpeed = parseInt(speedTextInput.text);
             initializer.spriteSheetStartAtRandomFrame = randomFrameCB.selected;
+            dispatchEvent(new UpdateProjectRendererEvent(UpdateProjectRendererEvent.UPDATE));
         }
         ]]></fx:Script>
 
