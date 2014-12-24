@@ -41,11 +41,7 @@ public class MainEnterFrameLoopCommand implements ICommand
 			return;
 		}
 
-		if (project.emitterInFocus.emitter.particleHandler is DisplayObjectHandler)
-		{
-			simPlayer.stepSimulation();
-		}
-		else if (project.emitterInFocus.emitter.particleHandler is StarlingHandler)
+		if (isParticleHandlerStarlingOrDisplayList())
 		{
 			simPlayer.stepSimulation();
 		}
@@ -62,8 +58,13 @@ public class MainEnterFrameLoopCommand implements ICommand
 			bData.unlock();
 		}
 
-		calcTime = (getTimer() - startTime);
-		view.infoLabel.text = "num particles: " + project.stadustSim.numberOfParticles + " sim time: " + calcTime + "ms";
+		updateParticleLabelInformation(startTime, view);
+
+		drawZonesIfNeeded(view);
+	}
+
+	private function drawZonesIfNeeded(view : StardusttoolMainView) : void
+	{
 		if (view.zonesVisibleCheckBox.selected)
 		{
 			ZoneDrawer.drawZones();
@@ -72,6 +73,17 @@ public class MainEnterFrameLoopCommand implements ICommand
 		{
 			view.previewGroup.graphics.clear();
 		}
+	}
+
+	private function updateParticleLabelInformation(startTime : Number, view : StardusttoolMainView) : void
+	{
+		calcTime = (getTimer() - startTime);
+		view.infoLabel.text = "num particles: " + project.stadustSim.numberOfParticles + " sim time: " + calcTime + "ms";
+	}
+
+	private function isParticleHandlerStarlingOrDisplayList() : Boolean
+	{
+		return project.emitterInFocus.emitter.particleHandler is DisplayObjectHandler || project.emitterInFocus.emitter.particleHandler is StarlingHandler;
 	}
 }
 }
