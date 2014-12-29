@@ -4,20 +4,16 @@ package com.plumbee.stardust.controller
 import com.plumbee.stardust.controller.events.ChangeEmitterInFocusEvent;
 import com.plumbee.stardust.controller.events.StartSimEvent;
 import com.plumbee.stardust.controller.events.UpdateProjectRendererEvent;
-import com.plumbee.stardust.helpers.Globals;
 import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardustplayer.SimPlayer;
 import com.plumbee.stardustplayer.emitter.DisplayListEmitterValueObject;
 import com.plumbee.stardustplayer.emitter.EmitterBuilder;
-import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 
 import flash.display.BitmapData;
 
 import flash.events.IEventDispatcher;
 
 import idv.cjcat.stardustextended.sd;
-import idv.cjcat.stardustextended.twoD.handlers.DisplayObjectHandler;
-import idv.cjcat.stardustextended.twoD.starling.StarlingHandler;
 
 import robotlegs.bender.extensions.commandCenter.api.ICommand;
 
@@ -100,18 +96,8 @@ public class AddEmitterCommand implements ICommand
         }
         projectSettings.stadustSim.emitters[emitterData.id] = emitterData;
 
-	    //set the simulation for the new emitter
-        if (emitterData.emitter.particleHandler is DisplayObjectHandler)
-        {
-            simPlayer.setSimulation( projectSettings.stadustSim, Globals.canvas);
-        }else if (emitterData.emitter.particleHandler is StarlingHandler)
-	    {
-		    simPlayer.setSimulation( projectSettings.stadustSim, Globals.starlingCanvas);
-	    }
-        else
-        {
-            simPlayer.setSimulation( projectSettings.stadustSim, Globals.bitmapData);
-        }
+	    var renderTarget:Object = new StardustRenderTargetResolver().resolve(emitterData.emitter.particleHandler);
+	    simPlayer.setSimulation( projectSettings.stadustSim, renderTarget);
 
         // display data for the new emitter
         dispatcher.dispatchEvent( new ChangeEmitterInFocusEvent( ChangeEmitterInFocusEvent.CHANGE, emitterData ) );
