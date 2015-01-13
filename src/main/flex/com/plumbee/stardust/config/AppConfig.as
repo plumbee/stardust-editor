@@ -77,6 +77,7 @@ import com.plumbee.stardust.view.stardust.twoD.initializers.BitmapParticleInital
 import com.plumbee.stardust.view.stardust.twoD.initializers.PositionInitializer;
 import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardustplayer.SimPlayer;
+import com.plumbee.stardustplayer.SimTimeModel;
 import com.plumbee.stardustplayer.sequenceLoader.ISequenceLoader;
 import com.plumbee.stardustplayer.sequenceLoader.SequenceLoader;
 
@@ -157,6 +158,7 @@ public class AppConfig implements IConfig
         injector.map( ISequenceLoader ).toSingleton( SequenceLoader );
         injector.map( ISimLoader ).toSingleton( SimLoader );
         injector.map(SimPlayer).asSingleton();
+        injector.map(SimTimeModel).asSingleton();
 
         context.afterInitializing( init );
     }

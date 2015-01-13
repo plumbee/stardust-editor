@@ -3,6 +3,7 @@ package com.plumbee.stardust.controller
 import com.plumbee.stardust.helpers.Globals;
 import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardustplayer.SimPlayer;
+import com.plumbee.stardustplayer.SimTimeModel;
 import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 import com.plumbee.stardustplayer.emitter.DisplayListEmitterValueObject;
 import com.plumbee.stardustplayer.emitter.EmitterBuilder;
@@ -32,11 +33,16 @@ public class UpdateProjectRendererCommand implements ICommand
     [Inject]
     public var simPlayer : SimPlayer;
 
+	[Inject]
+	public var simTimeModel : SimTimeModel;
+
     [Inject]
     public var projectSettings : ProjectModel;
 
     public function execute() : void
     {
+	    simTimeModel.resetTime();
+
 	    for each(var emitterVO : BaseEmitterValueObject in projectSettings.stadustSim.emitters) {
 		    emitterVO.emitter.reset();
 

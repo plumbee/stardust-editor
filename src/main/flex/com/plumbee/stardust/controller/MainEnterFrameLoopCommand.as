@@ -7,6 +7,7 @@ import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardust.view.StardusttoolMainView;
 import com.plumbee.stardust.view.events.MainEnterFrameLoopEvent;
 import com.plumbee.stardustplayer.SimPlayer;
+import com.plumbee.stardustplayer.SimTimeModel;
 
 import flash.display.BitmapData;
 import flash.utils.getTimer;
@@ -29,6 +30,9 @@ public class MainEnterFrameLoopCommand implements ICommand
 	[Inject]
 	public var simPlayer : SimPlayer;
 
+	[Inject]
+	public var simTimeModel : SimTimeModel;
+
 	private var calcTime : uint;
 
 	public function execute() : void
@@ -41,9 +45,11 @@ public class MainEnterFrameLoopCommand implements ICommand
 			return;
 		}
 
+		simTimeModel.update();
+
 		if (isParticleHandlerStarlingOrDisplayList())
 		{
-			simPlayer.stepSimulation();
+			simPlayer.stepSimulationWithSubsteps(simTimeModel.timeStep, SimTimeModel.msFor60FPS);
 		}
 		else
 		{
@@ -54,7 +60,9 @@ public class MainEnterFrameLoopCommand implements ICommand
 			}
 			bData.lock();
 			bData.fillRect(bData.rect, 0xFFFFFF);
-			simPlayer.stepSimulation();
+
+			simPlayer.stepSimulationWithSubsteps(simTimeModel.timeStep, SimTimeModel.msFor60FPS);
+
 			bData.unlock();
 		}
 

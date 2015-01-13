@@ -10,6 +10,7 @@ import com.plumbee.stardust.controller.events.SetSmoothingCheckBoxEvent;
 import com.plumbee.stardust.helpers.Globals;
 import com.plumbee.stardust.model.ProjectModel;
 import com.plumbee.stardustplayer.SimPlayer;
+import com.plumbee.stardustplayer.SimTimeModel;
 import com.plumbee.stardustplayer.emitter.DisplayListEmitterValueObject;
 
 import flash.display.MovieClip;
@@ -36,6 +37,9 @@ public class StartSimCommand implements ICommand
     [Inject]
     public var simPlayer : SimPlayer;
 
+    [Inject]
+    public var simTimeModel : SimTimeModel;
+
     private static const LOG : ILogger = Log.getLogger( getQualifiedClassName( StartSimCommand ).replace( "::", "." ) );
 
     [Inject]
@@ -45,6 +49,7 @@ public class StartSimCommand implements ICommand
     {
         LOG.info( "Restart SIM" );
 
+        simTimeModel.resetTime();
         simPlayer.resetSimulation();
 
         if (Globals.bitmapData)
