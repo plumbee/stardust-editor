@@ -20,16 +20,14 @@
 		<dependency.plugin.version>2.8</dependency.plugin.version>
 		<flex.sdk.version>4.6.0.23201</flex.sdk.version>
         <flexmojos.version>5.1-beta-QP</flexmojos.version>
-		<hamcrest.version>1.1</hamcrest.version>
-		<asmock.version>1.0</asmock.version>
-		<flexunit.version>4.1.0</flexunit.version>
+        <client.unit.testing.version>1.87</client.unit.testing.version>
         <swf.version>18</swf.version>
         <flash.player.version>11.5</flash.player.version>
 		<flash-console.version>2.6-RC</flash-console.version>
 		<robotlegs.version>2.1.0</robotlegs.version>
 
         <includeProperties>
-            stardust.sim.loader.version,plumbee.s3.maven.plugin.version
+            stardust.sim.loader.version,plumbee.s3.maven.plugin.version, client.unit.testing.version
         </includeProperties>
 	</properties>
 	
@@ -190,38 +188,14 @@
 			<type>swc</type>
         </dependency>
 
-		<dependency>
-            <groupId>com.adobe.flexunit</groupId>
-            <artifactId>flexunit</artifactId>
-            <version>${flexunit.version}</version>
+        <dependency>
+            <groupId>com.plumbee</groupId>
+            <artifactId>client-unit-testing</artifactId>
+            <version>${client.unit.testing.version}</version>
             <type>swc</type>
             <scope>test</scope>
         </dependency>
 
-		<dependency>
-			<groupId>asmock</groupId>
-			<artifactId>asmock</artifactId>
-			<version>${asmock.version}</version>
-			<type>swc</type>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>asmock</groupId>
-			<artifactId>asmock-flexunit4.1</artifactId>
-			<version>${asmock.version}</version>
-			<type>swc</type>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-as3</artifactId>
-			<version>${hamcrest.version}</version>
-			<type>swc</type>
-			<scope>test</scope>
-		</dependency>
-		
 		<dependency>
 			<groupId>com.junkbyte</groupId>
 			<artifactId>flash-console</artifactId>
