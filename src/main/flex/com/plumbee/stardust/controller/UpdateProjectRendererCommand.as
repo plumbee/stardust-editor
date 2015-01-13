@@ -12,6 +12,7 @@ import com.plumbee.stardustplayer.project.DisplayModes;
 
 import flash.events.IEventDispatcher;
 import flash.geom.Rectangle;
+import flash.utils.Dictionary;
 
 import idv.cjcat.stardustextended.sd;
 import idv.cjcat.stardustextended.twoD.emitters.Emitter2D;
@@ -43,7 +44,7 @@ public class UpdateProjectRendererCommand implements ICommand
     {
 	    simTimeModel.resetTime();
 
-	    for each(var emitterVO : BaseEmitterValueObject in projectSettings.stadustSim.emitters) {
+	    for each(var emitterVO : BaseEmitterValueObject in getEmitters()) {
 		    emitterVO.emitter.reset();
 
 		    EmitterBuilder.removeRenderingDependencies(emitterVO.emitter);
@@ -56,6 +57,11 @@ public class UpdateProjectRendererCommand implements ICommand
 		    }
 	    }
     }
+
+	protected function getEmitters() : Dictionary
+	{
+		return projectSettings.stadustSim.emitters;
+	}
 
 	private function setupRenderingForDisplayList(emitterVO : BaseEmitterValueObject) : void
 	{
