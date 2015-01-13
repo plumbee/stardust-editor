@@ -6,7 +6,7 @@
          preinitialize="Globals.init()"
          initialize="initializeCanvasesForEmitters()"
          width="100%"
-         height="100%">
+         height="100%" implements="com.plumbee.stardust.view.IStardustToolMainView">
 
     <fx:Script><![CDATA[
         import com.plumbee.stardust.controller.events.StartSimEvent;
@@ -135,6 +135,22 @@
                     dispObj.y = 0;
                 }
             }
+        }
+
+
+        public function setInfoText(value : String) : void
+        {
+            infoLabel.text = value;
+        }
+
+        public function areZonesVisible() : Boolean
+        {
+            return zonesVisibleCheckBox.selected;
+        }
+
+        public function clearPreview() : void
+        {
+            previewGroup.graphics.clear();
         }
         ]]></fx:Script>
 

@@ -4,7 +4,7 @@ package com.plumbee.stardust.controller
 import com.plumbee.stardust.helpers.Globals;
 import com.plumbee.stardust.helpers.ZoneDrawer;
 import com.plumbee.stardust.model.ProjectModel;
-import com.plumbee.stardust.view.StardusttoolMainView;
+import com.plumbee.stardust.view.IStardustToolMainView;
 import com.plumbee.stardust.view.events.MainEnterFrameLoopEvent;
 import com.plumbee.stardustplayer.SimPlayer;
 import com.plumbee.stardustplayer.SimTimeModel;
@@ -20,7 +20,6 @@ import robotlegs.bender.extensions.commandCenter.api.ICommand;
 // TODO this needs to be a service, since calcTime needs to be preserved between runs
 public class MainEnterFrameLoopCommand implements ICommand
 {
-
 	[Inject]
 	public var event : MainEnterFrameLoopEvent;
 
@@ -37,11 +36,11 @@ public class MainEnterFrameLoopCommand implements ICommand
 
 	public function execute() : void
 	{
-		const view : StardusttoolMainView = event.view;
+		const view : IStardustToolMainView = event.view;
 		const startTime : Number = getTimer();
 		if (calcTime > 1000)
 		{
-			view.infoLabel.text = "ERROR:Simulation time above 1000ms (" + calcTime + "ms), stopping. Change the sim and restart";
+			view.setInfoText("ERROR:Simulation time above 1000ms (" + calcTime + "ms), stopping. Change the sim and restart");
 			return;
 		}
 
@@ -71,25 +70,30 @@ public class MainEnterFrameLoopCommand implements ICommand
 		drawZonesIfNeeded(view);
 	}
 
-	private function drawZonesIfNeeded(view : StardusttoolMainView) : void
+	private function drawZonesIfNeeded(view : IStardustToolMainView) : void
 	{
-		if (view.zonesVisibleCheckBox.selected)
+		if (view.areZonesVisible())
 		{
 			ZoneDrawer.drawZones();
 		}
 		else
 		{
-			view.previewGroup.graphics.clear();
+			view.clearPreview();
 		}
 	}
 
-	private function updateParticleLabelInformation(startTime : Number, view : StardusttoolMainView) : void
+	private function updateParticleLabelInformation(startTime : Number, view : IStardustToolMainView) : void
 	{
 		calcTime = (getTimer() - startTime);
-		view.infoLabel.text = "num particles: " + project.stadustSim.numberOfParticles + " sim time: " + calcTime + "ms";
+		view.setInfoText("num particles: " + getParticlesAmount() + " sim time: " + calcTime + "ms");
 	}
 
-	private function isParticleHandlerStarlingOrDisplayList() : Boolean
+	protected function getParticlesAmount() : uint
+	{
+		return project.stadustSim.numberOfParticles;
+	}
+
+	protected function isParticleHandlerStarlingOrDisplayList() : Boolean
 	{
 		return project.emitterInFocus.emitter.particleHandler is DisplayObjectHandler || project.emitterInFocus.emitter.particleHandler is StarlingHandler;
 	}

@@ -7,30 +7,30 @@
  */
 package com.plumbee.stardust.view.events
 {
-import com.plumbee.stardust.view.StardusttoolMainView;
+import com.plumbee.stardust.view.IStardustToolMainView;
 
 import flash.events.Event;
 
 public class MainEnterFrameLoopEvent extends Event
 {
-    public static const ENTER_FRAME : String = "MainEnterFrameLoopEvent_ENTER_FRAME";
+	public static const ENTER_FRAME : String = "MainEnterFrameLoopEvent_ENTER_FRAME";
 
-    private var _view : StardusttoolMainView;
+	public function MainEnterFrameLoopEvent(type : String, view : IStardustToolMainView)
+	{
+		super(type);
+		_view = view;
+	}
 
-    public function MainEnterFrameLoopEvent( type : String, view : StardusttoolMainView )
-    {
-        super( type );
-        _view = view;
-    }
+	private var _view : IStardustToolMainView;
 
-    override public function clone() : Event
-    {
-        return new MainEnterFrameLoopEvent( type, _view );
-    }
+	public function get view() : IStardustToolMainView
+	{
+		return _view;
+	}
 
-    public function get view() : StardusttoolMainView
-    {
-        return _view;
-    }
+	override public function clone() : Event
+	{
+		return new MainEnterFrameLoopEvent(type, _view);
+	}
 }
 }
