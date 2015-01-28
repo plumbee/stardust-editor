@@ -27,7 +27,9 @@
 		<robotlegs.version>2.1.0</robotlegs.version>
 
         <includeProperties>
-            stardust.sim.loader.version,plumbee.s3.maven.plugin.version, client.unit.testing.version
+            stardust.sim.loader.version,
+            plumbee.s3.maven.plugin.version,
+            client.unit.testing.version
         </includeProperties>
 	</properties>
 	
@@ -222,13 +224,6 @@
             <groupId>com.plumbee</groupId>
             <artifactId>stardust-starling-sim-loader</artifactId>
             <version>${stardust.sim.loader.version}</version>
-            <type>swc</type>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gamua</groupId>
-            <artifactId>starling-framework</artifactId>
-            <version>1.4</version>
             <type>swc</type>
         </dependency>
 
