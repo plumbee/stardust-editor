@@ -6,7 +6,7 @@ import com.plumbee.stardustplayer.SimPlayer;
 import com.plumbee.stardustplayer.SimTimeModel;
 import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 import com.plumbee.stardustplayer.emitter.DisplayListEmitterValueObject;
-import com.plumbee.stardustplayer.emitter.EmitterBuilder;
+import com.plumbee.stardustplayer.emitter.IBaseEmitter;
 import com.plumbee.stardustplayer.emitter.StarlingEmitterValueObject;
 import com.plumbee.stardustplayer.project.DisplayModes;
 
@@ -28,46 +28,66 @@ use namespace sd;
 
 public class UpdateProjectRendererCommand implements ICommand
 {
-    [Inject]
-    public var dispatcher : IEventDispatcher;
+	[Inject]
+	public var dispatcher : IEventDispatcher;
 
-    [Inject]
-    public var simPlayer : SimPlayer;
+	[Inject]
+	public var simPlayer : SimPlayer;
 
 	[Inject]
 	public var simTimeModel : SimTimeModel;
 
-    [Inject]
-    public var projectSettings : ProjectModel;
+	[Inject]
+	public var projectSettings : ProjectModel;
 
-    public function execute() : void
-    {
-	    simTimeModel.resetTime();
+	public function execute() : void
+	{
+		simTimeModel.resetTime();
 
-	    for each(var emitterVO : BaseEmitterValueObject in getEmitters()) {
-		    emitterVO.emitter.reset();
+		for each(var emitterVO : IBaseEmitter in getEmitters())
+		{
+			emitterVO.resetEmitter();
+			getEmitterRenderingSetup().prepareEmitter(emitterVO,getRenderCanvas());
+		}
+	}
 
-		    EmitterBuilder.removeRenderingDependencies(emitterVO.emitter);
-
-		    if(projectSettings.getDisplayMode() == DisplayModes.STARLING)
-		    {
-			    setupRenderingForStarling(emitterVO);
-		    } else if(projectSettings.getDisplayMode() == DisplayModes.DISPLAY_LIST) {
-			    setupRenderingForDisplayList(emitterVO);
-		    }
-	    }
-    }
+	protected function getRenderCanvas() : *
+	{
+		switch (projectSettings.getDisplayMode())
+		{
+			case DisplayModes.STARLING:
+				return Globals.starlingCanvas;
+			case DisplayModes.DISPLAY_LIST:
+				return Globals.canvas;
+		}
+		return null;
+	}
 
 	protected function getEmitters() : Dictionary
 	{
 		return projectSettings.stadustSim.emitters;
 	}
 
-	private function setupRenderingForDisplayList(emitterVO : BaseEmitterValueObject) : void
+	private function getEmitterRenderingSetup() : IEmitterRenderingSetup
 	{
-		var displayListEmitterValueObject : DisplayListEmitterValueObject = new DisplayListEmitterValueObject(emitterVO.id, emitterVO.emitter);
-		displayListEmitterValueObject.addDisplayListInitializers();
-		(displayListEmitterValueObject.emitter.particleHandler as DisplayObjectHandler).container = Globals.canvas;
+		switch (projectSettings.getDisplayMode())
+		{
+			case DisplayModes.STARLING:
+				return getStarlingDelegate();
+			case DisplayModes.DISPLAY_LIST:
+				return getDisplayListDelegate();
+		}
+		return null;
+	}
+
+	protected function getDisplayListDelegate() : IEmitterRenderingSetup
+	{
+		return new EmitterRenderingSetupDisplayList();
+	}
+
+	protected function getStarlingDelegate() : IEmitterRenderingSetup
+	{
+		return new EmitterRenderingSetupStarling();
 	}
 
 	protected function setupRenderingForStarling(emitterVO : BaseEmitterValueObject) : void
