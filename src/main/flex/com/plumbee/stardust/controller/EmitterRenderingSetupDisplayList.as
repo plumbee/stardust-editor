@@ -5,23 +5,20 @@ import com.plumbee.stardustplayer.emitter.IDisplayListEmitter;
 
 import flash.display.DisplayObjectContainer;
 
-public class EmitterRenderingSetupDisplayList implements IEmitterRenderingSetup
+public class EmitterRenderingSetupDisplayList extends EmitterRenderingSetupBase
 {
-	public function prepareEmitter(emitter : IBaseEmitter, targetRenderCanvas : *) : void
+	public function EmitterRenderingSetupDisplayList()
 	{
-		if (!(emitter is IDisplayListEmitter) ||
-			!(targetRenderCanvas is DisplayObjectContainer))
-		{
-			throw(new TypeError("type not handled"));
-		}
-		doPrepareEmitter(emitter as IDisplayListEmitter, targetRenderCanvas);
+		emitterType = IDisplayListEmitter;
+		canvasType = DisplayObjectContainer;
 	}
 
-	private function doPrepareEmitter(emitter : IDisplayListEmitter, targetRenderCanvas : DisplayObjectContainer) : void
+
+	override protected function doPrepareEmitterTemplate(emitter : IBaseEmitter, targetRenderCanvas : *) : void
 	{
-		emitter.removeRendererSpecificInitializers();
-		emitter.addDisplayListInitializers();
-		emitter.updateHandlerCanvas(targetRenderCanvas);
+		var e : IDisplayListEmitter = emitter as IDisplayListEmitter;
+		e.addDisplayListInitializers();
+		e.updateHandlerCanvas(targetRenderCanvas);
 	}
 }
 }
