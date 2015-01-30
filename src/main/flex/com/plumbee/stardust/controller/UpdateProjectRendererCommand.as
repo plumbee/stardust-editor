@@ -81,13 +81,5 @@ public class UpdateProjectRendererCommand implements ICommand
 		return new EmitterRenderingSetupStarling();
 	}
 
-//	protected function setupRenderingForStarling(emitterVO : BaseEmitterValueObject) : void
-//	{
-//		var starlingEmitterValueObject : StarlingEmitterValueObject = new StarlingEmitterValueObject(emitterVO.id, emitterVO.emitter);
-//		starlingEmitterValueObject.addStarlingInitializers(getTexturesFromBitmapParticleInit(emitterVO.emitter));
-//		(starlingEmitterValueObject.emitter.particleHandler as StarlingHandler).container = Globals.starlingCanvas;
-//	}
-
-
 }
 }
