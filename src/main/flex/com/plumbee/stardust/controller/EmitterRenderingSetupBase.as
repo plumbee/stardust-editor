@@ -1,6 +1,9 @@
 package com.plumbee.stardust.controller
 {
+import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 import com.plumbee.stardustplayer.emitter.IBaseEmitter;
+
+import idv.cjcat.stardustextended.common.utils.construct;
 
 public class EmitterRenderingSetupBase implements IEmitterRenderingSetup
 {
@@ -10,9 +13,19 @@ public class EmitterRenderingSetupBase implements IEmitterRenderingSetup
 
 	final public function prepareEmitter(emitter : IBaseEmitter, targetRenderCanvas : *) : void
 	{
-		checkTypeCompliance(emitter, targetRenderCanvas);
 		emitter.removeRendererSpecificInitializers();
-		doPrepareEmitterTemplate(emitter, targetRenderCanvas);
+		var compliantEmitter:IBaseEmitter = convertEmitterToCompliant(emitter);
+		checkTypeCompliance(compliantEmitter, targetRenderCanvas);
+		doPrepareEmitterTemplate(compliantEmitter, targetRenderCanvas);
+	}
+
+	private function convertEmitterToCompliant(emitter : IBaseEmitter) : IBaseEmitter
+	{
+		if(emitter is emitterType)
+			return emitter;
+		var obj:BaseEmitterValueObject = emitter as BaseEmitterValueObject;
+		var newEmitter:IBaseEmitter = construct(emitterType,[obj.id,obj.emitter]);
+		return newEmitter;
 	}
 
 	final protected function checkTypeCompliance(emitter : IBaseEmitter, targetRenderCanvas : *) : void

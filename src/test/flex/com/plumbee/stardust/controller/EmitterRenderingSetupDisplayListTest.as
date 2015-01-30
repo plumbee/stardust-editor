@@ -1,5 +1,6 @@
 package com.plumbee.stardust.controller
 {
+import com.plumbee.stardustplayer.emitter.DisplayListEmitterValueObject;
 import com.plumbee.stardustplayer.emitter.IDisplayListEmitter;
 
 import flash.display.DisplayObjectContainer;
@@ -13,11 +14,11 @@ public class EmitterRenderingSetupDisplayListTest
 {
 	[Rule]
 	public var rule : IMethodRule = new MockitoRule();
-	[Mock]
-	public var emitter : IDisplayListEmitter;
+	[Mock(argsList="emitterArgs")]
+	public var emitter : DisplayListEmitterValueObject;
+	public var emitterArgs:Array = [0,null];
 
 	private var setup : EmitterRenderingSetupDisplayList;
-
 
 	[Before]
 	public function setUp() : void

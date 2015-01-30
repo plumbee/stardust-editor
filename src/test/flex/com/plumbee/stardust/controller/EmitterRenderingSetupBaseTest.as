@@ -69,6 +69,13 @@ public class EmitterRenderingSetupBaseTest extends EmitterRenderingSetupBase
 	{
 		prepareEmitter(new ValidEmitter(), new ValidCanvasType());
 	}
+
+
+	[Test]
+	public function prepare_convertsEmitterToCompliant() : void
+	{
+		var invalid:IBaseEmitter = new InvalidEmitter();
+	}
 }
 }
 

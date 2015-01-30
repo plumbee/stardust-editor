@@ -1,5 +1,6 @@
 package com.plumbee.stardust.controller
 {
+import com.plumbee.stardustplayer.emitter.DisplayListEmitterValueObject;
 import com.plumbee.stardustplayer.emitter.IBaseEmitter;
 import com.plumbee.stardustplayer.emitter.IDisplayListEmitter;
 
@@ -9,7 +10,7 @@ public class EmitterRenderingSetupDisplayList extends EmitterRenderingSetupBase
 {
 	public function EmitterRenderingSetupDisplayList()
 	{
-		emitterType = IDisplayListEmitter;
+		emitterType = DisplayListEmitterValueObject;
 		canvasType = DisplayObjectContainer;
 	}
 
