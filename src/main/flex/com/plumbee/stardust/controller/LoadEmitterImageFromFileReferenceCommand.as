@@ -77,8 +77,7 @@ public class LoadEmitterImageFromFileReferenceCommand implements ICommand
             if ( bitmapParticleInit )
             {
                 const loadJob : LoadByteArrayJob = sequenceLoader.getJobByName( emitterVO.id.toString() );
-                bitmapParticleInit.bitmapData = ( loadJob.content as Bitmap ).bitmapData;
-                emitterVO.image = bitmapParticleInit.bitmapData;
+                emitterVO.image = ( loadJob.content as Bitmap ).bitmapData;
                 emitterVO.emitter.name = loadJob.fileName;
             }
         }
