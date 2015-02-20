@@ -14,6 +14,7 @@ import flash.events.IEventDispatcher;
 import flash.utils.Dictionary;
 
 import idv.cjcat.stardustextended.sd;
+import idv.cjcat.stardustextended.twoD.handlers.BlendModeHandler;
 import idv.cjcat.stardustextended.twoD.handlers.DisplayObjectHandler;
 
 import robotlegs.bender.extensions.commandCenter.api.ICommand;
@@ -51,42 +52,24 @@ public class UpdateDisplayModeCommand implements ICommand
 
 	private function setDisplayModeStarling() : void
 	{
-		const emitters : Dictionary = projectSettings.stadustSim.emitters;
-		for each(var emitterVO : BaseEmitterValueObject in emitters)
-		{
-			var blendMode : String = DisplayObjectHandler(emitterVO.emitter.particleHandler).blendMode;
-			if (!isBlendModeStarlingSafe(blendMode))
-			{
-				DisplayObjectHandler(emitterVO.emitter.particleHandler).blendMode = BlendMode.NORMAL;
-			}
-		}
-
 		projectSettings.setDisplayMode(DisplayModes.STARLING);
-		const currentBlendMode : String = DisplayObjectHandler(projectSettings.emitterInFocus.emitter.particleHandler).blendMode;
-		dispatcher.dispatchEvent(new SetBlendModeSelectedEvent(SetBlendModeSelectedEvent.STARLING, currentBlendMode));
+
+		var blendModeHandler : BlendModeHandler = projectSettings.emitterInFocus.emitter.particleHandler as BlendModeHandler;
+		if(blendModeHandler != null)
+		{
+			dispatcher.dispatchEvent(new SetBlendModeSelectedEvent(SetBlendModeSelectedEvent.STARLING, blendModeHandler.blendMode));
+		}
 	}
 
 	private function setDisplayModeDisplayList() : void
 	{
 		projectSettings.setDisplayMode(DisplayModes.DISPLAY_LIST);
-		// TODO store BlendMode in a model when switching so its remembered
-		dispatcher.dispatchEvent(new SetBlendModeSelectedEvent(SetBlendModeSelectedEvent.DISPLAY_LIST, BlendMode.NORMAL));
-	}
 
-	private function isBlendModeStarlingSafe(targetBlendMode : String) : Boolean
-	{
-		var starlingBlendModes : Array = Globals.blendModesStarling.source;
-		var numBlendModes : int = starlingBlendModes.length;
-
-		for (var i : int = 0; i < numBlendModes; i++)
+		var blendModeHandler : BlendModeHandler = projectSettings.emitterInFocus.emitter.particleHandler as BlendModeHandler;
+		if(blendModeHandler != null)
 		{
-			if (starlingBlendModes[i] == targetBlendMode)
-			{
-				return true;
-			}
+			dispatcher.dispatchEvent(new SetBlendModeSelectedEvent(SetBlendModeSelectedEvent.DISPLAY_LIST, blendModeHandler.blendMode));
 		}
-
-		return false;
 	}
 }
 }

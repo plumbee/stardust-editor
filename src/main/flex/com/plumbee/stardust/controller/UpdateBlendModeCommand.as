@@ -37,7 +37,7 @@ public class UpdateBlendModeCommand implements ICommand
         {
             (handler as DisplayObjectHandler).blendMode = event.newBlendMode;
         } else if (handler is StarlingHandler) {
-	        (handler as StarlingHandler).blendMode = event.newBlendMode;
+	        (handler as StarlingHandler).starlingBlendMode = event.newBlendMode;
         }
 
         dispatcher.dispatchEvent( new StartSimEvent() );
