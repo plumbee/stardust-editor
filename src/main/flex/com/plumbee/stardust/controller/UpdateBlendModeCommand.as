@@ -9,6 +9,7 @@ import com.plumbee.stardustplayer.emitter.BaseEmitterValueObject;
 import flash.events.IEventDispatcher;
 
 import idv.cjcat.stardustextended.common.handlers.ParticleHandler;
+import idv.cjcat.stardustextended.twoD.handlers.BlendModeParticleHandler;
 
 import idv.cjcat.stardustextended.twoD.handlers.DisplayObjectHandler;
 import idv.cjcat.stardustextended.twoD.starling.StarlingHandler;
@@ -28,17 +29,18 @@ public class UpdateBlendModeCommand implements ICommand
 
     public function execute() : void
     {
-
         var emitterVO : BaseEmitterValueObject = projectSettings.emitterInFocus;
 
         var handler : ParticleHandler = emitterVO.emitter.particleHandler;
 
-        if ( handler is DisplayObjectHandler )
-        {
-            (handler as DisplayObjectHandler).blendMode = event.newBlendMode;
-        } else if (handler is StarlingHandler) {
-	        (handler as StarlingHandler).starlingBlendMode = event.newBlendMode;
-        }
+	    if(handler is DisplayObjectHandler)
+	    {
+		    DisplayObjectHandler(handler).blendMode = event.newBlendMode;
+	    }
+	    else if(handler is BlendModeParticleHandler)
+	    {
+		    BlendModeParticleHandler(handler).blendMode = event.newBlendMode;
+	    }
 
         dispatcher.dispatchEvent( new StartSimEvent() );
     }
