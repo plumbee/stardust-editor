@@ -14,7 +14,7 @@ import flash.events.IEventDispatcher;
 import flash.utils.Dictionary;
 
 import idv.cjcat.stardustextended.sd;
-import idv.cjcat.stardustextended.twoD.handlers.BlendModeHandler;
+import idv.cjcat.stardustextended.twoD.handlers.BlendModeParticleHandler;
 import idv.cjcat.stardustextended.twoD.handlers.DisplayObjectHandler;
 
 import robotlegs.bender.extensions.commandCenter.api.ICommand;
@@ -34,41 +34,32 @@ public class UpdateDisplayModeCommand implements ICommand
 
 	public function execute() : void
 	{
-		var mode : String = event.mode;
-		switch (mode)
-		{
-			case DisplayModes.DISPLAY_LIST :
-				setDisplayModeDisplayList();
-				break;
-			case DisplayModes.STARLING :
-				setDisplayModeStarling();
-				break;
-			default :
-				break;
-		}
+		setDisplayMode(event.mode);
 
 		dispatcher.dispatchEvent(new UpdateProjectRendererEvent(UpdateProjectRendererEvent.UPDATE));
 	}
 
-	private function setDisplayModeStarling() : void
+	private function setDisplayMode(displayMode : String) : void
 	{
-		projectSettings.setDisplayMode(DisplayModes.STARLING);
-
-		var blendModeHandler : BlendModeHandler = projectSettings.emitterInFocus.emitter.particleHandler as BlendModeHandler;
-		if(blendModeHandler != null)
+		var eventString : String;
+		switch (displayMode)
 		{
-			dispatcher.dispatchEvent(new SetBlendModeSelectedEvent(SetBlendModeSelectedEvent.STARLING, blendModeHandler.blendMode));
+			case DisplayModes.STARLING :
+				eventString = SetBlendModeSelectedEvent.STARLING;
+				break;
+			case DisplayModes.DISPLAY_LIST :
+				eventString = SetBlendModeSelectedEvent.DISPLAY_LIST;
+				break;
+			default :
+				return;
 		}
-	}
 
-	private function setDisplayModeDisplayList() : void
-	{
-		projectSettings.setDisplayMode(DisplayModes.DISPLAY_LIST);
+		projectSettings.setDisplayMode(displayMode);
 
-		var blendModeHandler : BlendModeHandler = projectSettings.emitterInFocus.emitter.particleHandler as BlendModeHandler;
+		var blendModeHandler : BlendModeParticleHandler = projectSettings.emitterInFocus.emitter.particleHandler as BlendModeParticleHandler;
 		if(blendModeHandler != null)
 		{
-			dispatcher.dispatchEvent(new SetBlendModeSelectedEvent(SetBlendModeSelectedEvent.DISPLAY_LIST, blendModeHandler.blendMode));
+			dispatcher.dispatchEvent(new SetBlendModeSelectedEvent(eventString, blendModeHandler.blendMode));
 		}
 	}
 }
