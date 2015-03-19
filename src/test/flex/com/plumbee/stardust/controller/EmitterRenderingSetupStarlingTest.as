@@ -15,9 +15,11 @@ public class EmitterRenderingSetupStarlingTest
 {
 	[Rule]
 	public var rule : IMethodRule = new MockitoRule();
+
 	[Mock(argsList="emitterArgs")]
 	public var emitter : StarlingEmitterValueObject;
 	public var emitterArgs:Array = [0,null];
+
 	[Mock]
 	public var invalidEmitter : IBaseEmitter;
 
@@ -36,13 +38,6 @@ public class EmitterRenderingSetupStarlingTest
 		var target : DisplayObjectContainer = new Sprite();
 		setup.prepareEmitter(emitter, target);
 		verify().that(emitter.updateHandlerCanvas(target));
-	}
-
-	[Test]
-	public function prepare_addsStarlingInitializers() : void
-	{
-		setup.prepareEmitter(emitter, new Sprite());
-		verify().that(emitter.addStarlingInitializers());
 	}
 }
 }
