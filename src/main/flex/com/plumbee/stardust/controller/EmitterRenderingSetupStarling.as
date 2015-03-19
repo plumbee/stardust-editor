@@ -17,7 +17,6 @@ public class EmitterRenderingSetupStarling extends EmitterRenderingSetupBase
 	override protected function doPrepareEmitterTemplate(emitter : IBaseEmitter, targetRenderCanvas : *) : void
 	{
 		var e : IStarlingEmitter = emitter as IStarlingEmitter;
-		e.addStarlingInitializers();
 		e.updateHandlerCanvas(targetRenderCanvas);
 	}
 }
