@@ -60,12 +60,17 @@ public class SaveSimCommand implements ICommand
 
     private function addEmittersToProjectFile( zip : Zip ) : void
     {
+        var emittersBundle : XML = <bundle/>;
+        var emitterXML : XML;
         for each (var emitterVO : DisplayListEmitterValueObject in projectSettings.stadustSim.emitters)
         {
             var pngEncoder : PNGEncoder = new PNGEncoder();
             zip.addFile( ZipFileNames.getImageName(emitterVO.id), pngEncoder.encode( emitterVO.image ), false );
-            zip.addFileFromString( ZipFileNames.getXMLName(emitterVO.id), XMLBuilder.buildXML( emitterVO.emitter ).toString() );
+            emitterXML = XMLBuilder.buildXML( emitterVO.emitter );
+            emittersBundle.appendChild(emitterXML)
+            zip.addFileFromString( ZipFileNames.getXMLName(emitterVO.id),  emitterXML.toString());
         }
+        zip.addFileFromString("emittersBundle.xml", emittersBundle.toString());
     }
 
     private function addBackgroundToProjectFile( zip : Zip, descObj : Object ) : void

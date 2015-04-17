@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="Flex" version="4">
+  <component name="FlexBuildConfigurationManager" active="stardust-editor">
+    <configurations>
+      <configuration name="stardust-editor" main-class="com.plumbee.stardust.Stardusttool" output-file="stardust-editor.swf" output-folder="$MODULE_DIR$/target">
+        <dependencies target-player="15.0">
+          <entries>
+            <entry module-name="stardust-library" build-configuration-name="stardust-library">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:advancedgrids:swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:authoringsupport:swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:charts:swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:core:swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:flash-integration:swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:framework:swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:mx:swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:osmf:swc:1.0.0.16316" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:rpc:swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:spark:swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:spark_dmv:swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:sparkskins:swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:textLayout:swc:2.0.0.232" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:advancedgrids:rb.swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:charts:rb.swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:flash-integration:rb.swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:framework:rb.swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:mx:rb.swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:osmf:rb.swc:1.0.0.16316" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:rpc:rb.swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:spark:rb.swc:4.6.0.23201" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:textLayout:rb.swc:2.0.0.232" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flex.framework:playerglobal:swc:11.7" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.plumbee:client-unit-testing:swc:1.90" library-level="project">
+              <dependency linkage="Test" />
+            </entry>
+            <entry library-name="Maven: com.adobe.flexunit:flexunit:swc:4.1.0" library-level="project">
+              <dependency linkage="Test" />
+            </entry>
+            <entry library-name="Maven: asmock:asmock:swc:1.0" library-level="project">
+              <dependency linkage="Test" />
+            </entry>
+            <entry library-name="Maven: asmock:asmock-flexunit4.1:swc:1.0" library-level="project">
+              <dependency linkage="Test" />
+            </entry>
+            <entry library-name="Maven: org.hamcrest:hamcrest-as3:swc:1.1" library-level="project">
+              <dependency linkage="Test" />
+            </entry>
+            <entry library-name="Maven: org.osflash.signals:as3-signals:swc:0.9-BETA" library-level="project">
+              <dependency linkage="Test" />
+            </entry>
+            <entry library-name="Maven: org:mockito:swc:1.4M6" library-level="project">
+              <dependency linkage="Test" />
+            </entry>
+            <entry library-name="Maven: com.junkbyte:flash-console:swc:2.6-RC" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: org.robotlegs:robotlegs-framework:swc:2.1.0" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: org.swiftsuspenders:swiftsuspenders:swc:2.0.0-rc3" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.plumbee:stardust-starling-sim-loader:swc:2.95" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.gamua:starling-framework:swc:1.6" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: com.plumbee:stardust-sim-loader:swc:2.95" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: org.as3commons:as3commons-zip:swc:1.0-PLUMBEE" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+          </entries>
+          <sdk name="Flexmojos SDK 4.6.0.23201" />
+        </dependencies>
+        <compiler-options>
+          <map>
+            <entry key="compiler.locale" value="en_US" />
+          </map>
+          <option name="resourceFilesMode" value="None" />
+          <option name="additionalConfigFilePath" value="$MODULE_DIR$/.idea/flexmojos/stardust-editor-com.plumbee.xml" />
+        </compiler-options>
+        <packaging-air-desktop />
+        <packaging-android />
+        <packaging-ios />
+      </configuration>
+    </configurations>
+    <compiler-options />
+  </component>
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/flex" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/flex" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="jdk" jdkName="Flexmojos SDK 4.6.0.23201" jdkType="Flexmojos SDK Type" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:advancedgrids:swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:authoringsupport:swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:charts:swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:core:swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:flash-integration:swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:framework:swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:mx:swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:osmf:swc:1.0.0.16316" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:rpc:swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:spark:swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:spark_dmv:swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:sparkskins:swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:textLayout:swc:2.0.0.232" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:advancedgrids:rb.swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:charts:rb.swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:flash-integration:rb.swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:framework:rb.swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:mx:rb.swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:osmf:rb.swc:1.0.0.16316" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:rpc:rb.swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:spark:rb.swc:4.6.0.23201" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:textLayout:rb.swc:2.0.0.232" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:playerglobal:swc:11.7" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.plumbee:client-unit-testing:swc:1.90" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.adobe.flexunit:flexunit:swc:4.1.0" level="project" />
+    <orderEntry type="library" exported="" name="Maven: asmock:asmock:swc:1.0" level="project" />
+    <orderEntry type="library" exported="" name="Maven: asmock:asmock-flexunit4.1:swc:1.0" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.hamcrest:hamcrest-as3:swc:1.1" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.osflash.signals:as3-signals:swc:0.9-BETA" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org:mockito:swc:1.4M6" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.junkbyte:flash-console:swc:2.6-RC" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.robotlegs:robotlegs-framework:swc:2.1.0" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.swiftsuspenders:swiftsuspenders:swc:2.0.0-rc3" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.plumbee:stardust-starling-sim-loader:swc:2.95" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.gamua:starling-framework:swc:1.6" level="project" />
+    <orderEntry type="library" exported="" name="Maven: com.plumbee:stardust-sim-loader:swc:2.95" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.as3commons:as3commons-zip:swc:1.0-PLUMBEE" level="project" />
+    <orderEntry type="module" module-name="stardust-library" exported="" />
+  </component>
+</module>
