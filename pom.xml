@@ -4,7 +4,7 @@
 
 	<groupId>com.plumbee</groupId>
 	<artifactId>stardust-editor</artifactId>
-	<version>2.148</version>
+	<version>2.149</version>
 	<packaging>swf</packaging>
 
 	<name>Stardust editor</name>
@@ -13,7 +13,7 @@
 	<properties>
 		<maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
 
-        <stardust.sim.loader.version>2.95</stardust.sim.loader.version>
+        <stardust.sim.loader.version>2.96</stardust.sim.loader.version>
         <plumbee.s3.maven.plugin.version>2.19</plumbee.s3.maven.plugin.version>
 
         <!-- External dependencies -->
